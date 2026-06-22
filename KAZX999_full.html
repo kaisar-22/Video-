@@ -1,0 +1,2106 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>KAZ X 999 — V8 FIX</title>
+    <link href="https://fonts.googleapis.com/css2?family=Creepster&family=MedievalSharp&family=Amiri&display=swap" rel="stylesheet" />
+    <style>
+        /* ===== RESET & GLOBAL ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+        }
+        body {
+            background: #0a0000;
+            color: #fff;
+            font-family: 'MedievalSharp', cursive;
+            overflow: hidden;
+            height: 100vh;
+            width: 100vw;
+            perspective: 1800px;
+            transition: background 0.6s, color 0.6s, box-shadow 0.6s;
+        }
+
+        /* ===== BACKGROUND IMAGE (CUSTOM) ===== */
+        body.custom-bg {
+            background-size: cover !important;
+            background-position: center !important;
+            background-repeat: no-repeat !important;
+        }
+
+        /* ===== THEME 1: UNGU ===== */
+        body.theme-ungu {
+            background: #1a0a2e !important;
+            color: #e0d0ff;
+        }
+        body.theme-ungu .page { background: rgba(20, 10, 40, 0.75); backdrop-filter: blur(8px); }
+        body.theme-ungu .menu-box, body.theme-ungu .login-box, body.theme-ungu .register-box, body.theme-ungu .success-box {
+            background: rgba(30, 15, 50, 0.92) !important;
+            border-color: #8844cc !important;
+            box-shadow: 0 0 60px #8844cc44 !important;
+        }
+        body.theme-ungu .btn-send, body.theme-ungu .btn-login, body.theme-ungu .btn-register, body.theme-ungu .btn-ok, body.theme-ungu .btn-3d {
+            background: linear-gradient(145deg, #8844cc, #552288) !important;
+            border-color: #aa66ee !important;
+            box-shadow: 0 8px 0 #331155, 0 10px 30px #8844cc44 !important;
+        }
+        body.theme-ungu .menu-box h2, body.theme-ungu .login-box h1, body.theme-ungu .register-box h1, body.theme-ungu .success-box h1 {
+            color: #bb88ee !important;
+            text-shadow: 0 0 40px #8844cc88 !important;
+        }
+        body.theme-ungu .input-row input, body.theme-ungu .input-row select, body.theme-ungu .login-box input, body.theme-ungu .register-box input {
+            background: #1a0a2e !important;
+            border-color: #8844cc !important;
+            color: #e0d0ff !important;
+        }
+        body.theme-ungu .input-row label, body.theme-ungu .login-box .sub, body.theme-ungu .register-box .sub {
+            color: #bb88ee !important;
+        }
+        body.theme-ungu #bg-video { opacity: 0.5; filter: hue-rotate(280deg) brightness(0.6); }
+
+        /* ===== THEME 2: BIRU TUA ===== */
+        body.theme-birutua {
+            background: #0a0a2a !important;
+            color: #c0d0ff;
+        }
+        body.theme-birutua .page { background: rgba(10, 10, 40, 0.75); backdrop-filter: blur(8px); }
+        body.theme-birutua .menu-box, body.theme-birutua .login-box, body.theme-birutua .register-box, body.theme-birutua .success-box {
+            background: rgba(10, 10, 50, 0.92) !important;
+            border-color: #3355aa !important;
+            box-shadow: 0 0 60px #3355aa44 !important;
+        }
+        body.theme-birutua .btn-send, body.theme-birutua .btn-login, body.theme-birutua .btn-register, body.theme-birutua .btn-ok, body.theme-birutua .btn-3d {
+            background: linear-gradient(145deg, #3355aa, #1a2a66) !important;
+            border-color: #5577cc !important;
+            box-shadow: 0 8px 0 #0a1a44, 0 10px 30px #3355aa44 !important;
+        }
+        body.theme-birutua .menu-box h2, body.theme-birutua .login-box h1, body.theme-birutua .register-box h1, body.theme-birutua .success-box h1 {
+            color: #7799dd !important;
+            text-shadow: 0 0 40px #3355aa88 !important;
+        }
+        body.theme-birutua .input-row input, body.theme-birutua .input-row select, body.theme-birutua .login-box input, body.theme-birutua .register-box input {
+            background: #0a0a2a !important;
+            border-color: #3355aa !important;
+            color: #c0d0ff !important;
+        }
+        body.theme-birutua .input-row label, body.theme-birutua .login-box .sub, body.theme-birutua .register-box .sub {
+            color: #7799dd !important;
+        }
+        body.theme-birutua #bg-video { opacity: 0.4; filter: hue-rotate(220deg) brightness(0.5); }
+
+        /* ===== THEME 3: OREN ===== */
+        body.theme-oren {
+            background: #2a1a0a !important;
+            color: #ffd0a0;
+        }
+        body.theme-oren .page { background: rgba(40, 20, 10, 0.75); backdrop-filter: blur(8px); }
+        body.theme-oren .menu-box, body.theme-oren .login-box, body.theme-oren .register-box, body.theme-oren .success-box {
+            background: rgba(50, 25, 10, 0.92) !important;
+            border-color: #cc8833 !important;
+            box-shadow: 0 0 60px #cc883344 !important;
+        }
+        body.theme-oren .btn-send, body.theme-oren .btn-login, body.theme-oren .btn-register, body.theme-oren .btn-ok, body.theme-oren .btn-3d {
+            background: linear-gradient(145deg, #cc8833, #885522) !important;
+            border-color: #eeaa55 !important;
+            box-shadow: 0 8px 0 #553311, 0 10px 30px #cc883344 !important;
+        }
+        body.theme-oren .menu-box h2, body.theme-oren .login-box h1, body.theme-oren .register-box h1, body.theme-oren .success-box h1 {
+            color: #eeaa66 !important;
+            text-shadow: 0 0 40px #cc883388 !important;
+        }
+        body.theme-oren .input-row input, body.theme-oren .input-row select, body.theme-oren .login-box input, body.theme-oren .register-box input {
+            background: #2a1a0a !important;
+            border-color: #cc8833 !important;
+            color: #ffd0a0 !important;
+        }
+        body.theme-oren .input-row label, body.theme-oren .login-box .sub, body.theme-oren .register-box .sub {
+            color: #eeaa66 !important;
+        }
+        body.theme-oren #bg-video { opacity: 0.5; filter: hue-rotate(30deg) brightness(0.7); }
+
+        /* ===== THEME 4: BIRU MUDA ===== */
+        body.theme-birumuda {
+            background: #0a1a2a !important;
+            color: #a0d0ff;
+        }
+        body.theme-birumuda .page { background: rgba(10, 20, 40, 0.70); backdrop-filter: blur(8px); }
+        body.theme-birumuda .menu-box, body.theme-birumuda .login-box, body.theme-birumuda .register-box, body.theme-birumuda .success-box {
+            background: rgba(10, 30, 50, 0.90) !important;
+            border-color: #44aadd !important;
+            box-shadow: 0 0 60px #44aadd44 !important;
+        }
+        body.theme-birumuda .btn-send, body.theme-birumuda .btn-login, body.theme-birumuda .btn-register, body.theme-birumuda .btn-ok, body.theme-birumuda .btn-3d {
+            background: linear-gradient(145deg, #44aadd, #226688) !important;
+            border-color: #66ccee !important;
+            box-shadow: 0 8px 0 #114466, 0 10px 30px #44aadd44 !important;
+        }
+        body.theme-birumuda .menu-box h2, body.theme-birumuda .login-box h1, body.theme-birumuda .register-box h1, body.theme-birumuda .success-box h1 {
+            color: #66ccee !important;
+            text-shadow: 0 0 40px #44aadd88 !important;
+        }
+        body.theme-birumuda .input-row input, body.theme-birumuda .input-row select, body.theme-birumuda .login-box input, body.theme-birumuda .register-box input {
+            background: #0a1a2a !important;
+            border-color: #44aadd !important;
+            color: #a0d0ff !important;
+        }
+        body.theme-birumuda .input-row label, body.theme-birumuda .login-box .sub, body.theme-birumuda .register-box .sub {
+            color: #66ccee !important;
+        }
+        body.theme-birumuda #bg-video { opacity: 0.4; filter: hue-rotate(190deg) brightness(0.7); }
+
+        /* ===== THEME 5: HIJAU MUDA ===== */
+        body.theme-hijaumuda {
+            background: #0a1a0a !important;
+            color: #a0ffa0;
+        }
+        body.theme-hijaumuda .page { background: rgba(10, 30, 10, 0.70); backdrop-filter: blur(8px); }
+        body.theme-hijaumuda .menu-box, body.theme-hijaumuda .login-box, body.theme-hijaumuda .register-box, body.theme-hijaumuda .success-box {
+            background: rgba(10, 40, 10, 0.90) !important;
+            border-color: #44dd66 !important;
+            box-shadow: 0 0 60px #44dd6644 !important;
+        }
+        body.theme-hijaumuda .btn-send, body.theme-hijaumuda .btn-login, body.theme-hijaumuda .btn-register, body.theme-hijaumuda .btn-ok, body.theme-hijaumuda .btn-3d {
+            background: linear-gradient(145deg, #44dd66, #228844) !important;
+            border-color: #66ee88 !important;
+            box-shadow: 0 8px 0 #115522, 0 10px 30px #44dd6644 !important;
+        }
+        body.theme-hijaumuda .menu-box h2, body.theme-hijaumuda .login-box h1, body.theme-hijaumuda .register-box h1, body.theme-hijaumuda .success-box h1 {
+            color: #66ee88 !important;
+            text-shadow: 0 0 40px #44dd6688 !important;
+        }
+        body.theme-hijaumuda .input-row input, body.theme-hijaumuda .input-row select, body.theme-hijaumuda .login-box input, body.theme-hijaumuda .register-box input {
+            background: #0a1a0a !important;
+            border-color: #44dd66 !important;
+            color: #a0ffa0 !important;
+        }
+        body.theme-hijaumuda .input-row label, body.theme-hijaumuda .login-box .sub, body.theme-hijaumuda .register-box .sub {
+            color: #66ee88 !important;
+        }
+        body.theme-hijaumuda #bg-video { opacity: 0.4; filter: hue-rotate(110deg) brightness(0.7); }
+
+        /* ===== THEME 6: PELANGI ===== */
+        body.theme-pelangi {
+            background: linear-gradient(135deg, #ff0000, #ff8800, #ffff00, #00ff00, #0088ff, #8800ff, #ff0088) !important;
+            background-size: 400% 400% !important;
+            animation: rainbowBG 8s ease infinite;
+            color: #fff;
+        }
+        @keyframes rainbowBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        body.theme-pelangi .page { background: rgba(0,0,0,0.50); backdrop-filter: blur(10px); }
+        body.theme-pelangi .menu-box, body.theme-pelangi .login-box, body.theme-pelangi .register-box, body.theme-pelangi .success-box {
+            background: rgba(0,0,0,0.75) !important;
+            border-color: #ffffff88 !important;
+            box-shadow: 0 0 80px #ffffff44 !important;
+        }
+        body.theme-pelangi .btn-send, body.theme-pelangi .btn-login, body.theme-pelangi .btn-register, body.theme-pelangi .btn-ok, body.theme-pelangi .btn-3d {
+            background: linear-gradient(145deg, #ff4488, #8844ff) !important;
+            border-color: #ff88cc !important;
+            box-shadow: 0 8px 0 #442266, 0 10px 30px #ff448844 !important;
+        }
+        body.theme-pelangi .menu-box h2, body.theme-pelangi .login-box h1, body.theme-pelangi .register-box h1, body.theme-pelangi .success-box h1 {
+            color: #ff88cc !important;
+            text-shadow: 0 0 60px #ff448888 !important;
+        }
+        body.theme-pelangi .input-row input, body.theme-pelangi .input-row select, body.theme-pelangi .login-box input, body.theme-pelangi .register-box input {
+            background: rgba(0,0,0,0.6) !important;
+            border-color: #ff88cc !important;
+            color: #fff !important;
+        }
+        body.theme-pelangi .input-row label, body.theme-pelangi .login-box .sub, body.theme-pelangi .register-box .sub {
+            color: #ff88cc !important;
+        }
+        body.theme-pelangi #bg-video { opacity: 0.2; filter: saturate(0); }
+
+        /* ===== THEME 7: 3D BIRU MUDA ===== */
+        body.theme-3dbiru {
+            background: #0a1a2a !important;
+            color: #80c0ff;
+            transform-style: preserve-3d;
+        }
+        body.theme-3dbiru .page {
+            transform: rotateY(2deg) rotateX(1deg) translateZ(20px);
+            background: rgba(10, 20, 40, 0.60);
+            backdrop-filter: blur(6px);
+        }
+        body.theme-3dbiru .menu-box, body.theme-3dbiru .login-box, body.theme-3dbiru .register-box, body.theme-3dbiru .success-box {
+            background: rgba(10, 30, 60, 0.85) !important;
+            border-color: #44aadd !important;
+            box-shadow: 0 0 80px #44aadd66, 0 30px 60px rgba(0,0,0,0.8) !important;
+            transform: rotateY(3deg) rotateX(2deg) translateZ(40px);
+        }
+        body.theme-3dbiru .btn-send, body.theme-3dbiru .btn-login, body.theme-3dbiru .btn-register, body.theme-3dbiru .btn-ok, body.theme-3dbiru .btn-3d {
+            background: linear-gradient(145deg, #44aadd, #226688) !important;
+            border-color: #66ccee !important;
+            box-shadow: 0 12px 0 #114466, 0 20px 50px #44aadd66 !important;
+            transform: rotateX(4deg) rotateY(2deg) translateZ(10px);
+        }
+        body.theme-3dbiru .menu-box h2, body.theme-3dbiru .login-box h1, body.theme-3dbiru .register-box h1, body.theme-3dbiru .success-box h1 {
+            color: #66ccee !important;
+            text-shadow: 0 0 60px #44aadd88 !important;
+        }
+        body.theme-3dbiru #bg-video { opacity: 0.3; filter: hue-rotate(190deg) brightness(0.6); transform: rotateY(1deg) scale(1.05); }
+
+        /* ===== THEME 8: TRANSPARAN 3D ===== */
+        body.theme-transparan {
+            background: transparent !important;
+            color: #fff;
+        }
+        body.theme-transparan .page {
+            background: rgba(0,0,0,0.20) !important;
+            backdrop-filter: blur(2px);
+            transform: rotateY(1deg) rotateX(1deg) translateZ(10px);
+        }
+        body.theme-transparan .menu-box, body.theme-transparan .login-box, body.theme-transparan .register-box, body.theme-transparan .success-box {
+            background: rgba(0,0,0,0.40) !important;
+            border-color: #ffffff44 !important;
+            box-shadow: 0 0 60px #ffffff22 !important;
+            backdrop-filter: blur(4px);
+            transform: rotateY(2deg) rotateX(1deg) translateZ(20px);
+        }
+        body.theme-transparan .btn-send, body.theme-transparan .btn-login, body.theme-transparan .btn-register, body.theme-transparan .btn-ok, body.theme-transparan .btn-3d {
+            background: rgba(255,255,255,0.15) !important;
+            border-color: #ffffff66 !important;
+            box-shadow: 0 8px 0 rgba(0,0,0,0.3), 0 10px 40px rgba(255,255,255,0.1) !important;
+            backdrop-filter: blur(4px);
+            transform: rotateX(3deg) rotateY(1deg) translateZ(5px);
+        }
+        body.theme-transparan .menu-box h2, body.theme-transparan .login-box h1, body.theme-transparan .register-box h1, body.theme-transparan .success-box h1 {
+            color: #ffffffcc !important;
+            text-shadow: 0 0 40px #ffffff44 !important;
+        }
+        body.theme-transparan .input-row input, body.theme-transparan .input-row select, body.theme-transparan .login-box input, body.theme-transparan .register-box input {
+            background: rgba(255,255,255,0.08) !important;
+            border-color: #ffffff44 !important;
+            color: #fff !important;
+            backdrop-filter: blur(4px);
+        }
+        body.theme-transparan .input-row label, body.theme-transparan .login-box .sub, body.theme-transparan .register-box .sub {
+            color: #ffffffaa !important;
+        }
+        body.theme-transparan #bg-video { opacity: 1 !important; filter: brightness(1) contrast(1.2) saturate(1.4); }
+        body.theme-transparan #blood-overlay { opacity: 0.1; }
+        body.theme-transparan #scanline { opacity: 0.1; }
+        body.theme-transparan #profile-btn { background: rgba(255,255,255,0.10) !important; backdrop-filter: blur(10px); border-color: #ffffff44 !important; }
+        body.theme-transparan #hamburger-btn { background: rgba(255,255,255,0.10) !important; backdrop-filter: blur(10px); border-color: #ffffff44 !important; }
+        body.theme-transparan #dropdown-menu { background: rgba(0,0,0,0.60) !important; backdrop-filter: blur(20px); border-color: #ffffff44 !important; }
+
+        /* ===== DEFAULT THEME (GELAP) ===== */
+        body:not(.theme-ungu):not(.theme-birutua):not(.theme-oren):not(.theme-birumuda):not(.theme-hijaumuda):not(.theme-pelangi):not(.theme-3dbiru):not(.theme-transparan) {
+            background: #0a0000;
+        }
+
+        /* ===== SCANLINE GLITCH ===== */
+        #scanline {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+            pointer-events: none;
+            background: repeating-linear-gradient(0deg, rgba(0,0,0,0.03) 0px, rgba(0,0,0,0.03) 2px, transparent 2px, transparent 6px);
+            animation: scanMove 0.1s linear infinite;
+        }
+        @keyframes scanMove {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(6px); }
+        }
+
+        /* ===== GLITCH TEXT ===== */
+        .glitch {
+            animation: glitch 0.3s infinite alternate;
+        }
+        @keyframes glitch {
+            0% { text-shadow: 3px 0 red, -3px 0 blue; }
+            25% { text-shadow: -5px 0 cyan, 5px 0 magenta; }
+            50% { text-shadow: 7px 0 lime, -7px 0 purple; }
+            75% { text-shadow: -4px 0 yellow, 4px 0 orange; }
+            100% { text-shadow: 2px 0 white, -2px 0 black; }
+        }
+
+        /* ===== SEMUA HALAMAN ===== */
+        .page {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 10;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.60);
+            backdrop-filter: blur(6px);
+            animation: fadeIn3D 0.7s ease;
+            transform-style: preserve-3d;
+            transition: background 0.6s, backdrop-filter 0.6s, transform 0.6s;
+        }
+        .page.active {
+            display: flex;
+        }
+        @keyframes fadeIn3D {
+            0% { opacity: 0; transform: rotateY(10deg) scale(0.9) translateZ(-200px); }
+            100% { opacity: 1; transform: rotateY(0deg) scale(1) translateZ(0); }
+        }
+
+        /* ===== TOMBOL 3D ===== */
+        .btn-3d {
+            padding: 16px 36px;
+            border: none;
+            border-radius: 60px;
+            font-size: 1.3rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.15s;
+            font-family: 'Creepster', cursive;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            background: linear-gradient(145deg, #cc0000, #550000);
+            color: #fff;
+            border: 2px solid #ff3333;
+            box-shadow: 0 12px 0 #330000, 0 20px 40px rgba(255,0,0,0.5);
+            transform: rotateX(4deg) rotateY(2deg);
+            transform-style: preserve-3d;
+        }
+        .btn-3d:active {
+            transform: translateY(8px) rotateX(2deg) rotateY(1deg);
+            box-shadow: 0 4px 0 #330000, 0 10px 30px rgba(255,0,0,0.6);
+        }
+
+        /* ===== INTRO FULL LAYAR ===== */
+        #intro-page {
+            padding: 0 !important;
+            background: #000 !important;
+            backdrop-filter: none !important;
+        }
+        #intro-page .video-wrapper {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            aspect-ratio: unset;
+            border: none;
+            border-radius: 0;
+            box-shadow: none;
+            transform: none;
+            background: #000;
+            z-index: 5;
+        }
+        #intro-page .video-wrapper video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            background: #000;
+            cursor: pointer;
+            filter: contrast(1.2) saturate(1.3);
+        }
+        #intro-page .video-wrapper .crt-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            background: repeating-linear-gradient(0deg, rgba(0,0,0,0.05) 0px, rgba(0,0,0,0.05) 2px, transparent 2px, transparent 6px);
+            mix-blend-mode: overlay;
+            z-index: 5;
+        }
+        #intro-page .skip-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(0,0,0,0.85);
+            color: #ff4444;
+            padding: 14px 32px;
+            border-radius: 40px;
+            border: 2px solid #ff2222;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 20;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 0 30px #ff000088;
+            font-family: 'MedievalSharp', cursive;
+        }
+        #intro-page .skip-btn:active {
+            transform: scale(0.9);
+        }
+        #intro-page .title-overlay {
+            position: fixed;
+            bottom: 40px;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            font-size: 3rem;
+            font-weight: bold;
+            color: #ff3333;
+            text-shadow: 0 0 40px #ff0000, 0 0 80px #880000, 8px 8px 0 #220000;
+            font-family: 'Creepster', cursive;
+            letter-spacing: 6px;
+            background: linear-gradient(transparent, #000000dd);
+            padding: 40px 0 30px;
+            z-index: 6;
+            pointer-events: none;
+        }
+        #intro-page .title-overlay small {
+            display: block;
+            font-size: 1.3rem;
+            color: #ff7777;
+            text-shadow: 0 0 30px #ff2222;
+            font-family: 'MedievalSharp', cursive;
+        }
+
+        /* ===== PROFIL (kiri atas) ===== */
+        #profile-btn {
+            position: fixed;
+            top: 16px;
+            left: 16px;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            background: rgba(0,0,0,0.6);
+            padding: 6px 16px 6px 6px;
+            border-radius: 40px;
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: 0.3s;
+            color: #fff;
+            font-family: 'MedievalSharp', cursive;
+        }
+        #profile-btn:hover {
+            background: rgba(0,0,0,0.8);
+            border-color: #ff3333;
+            box-shadow: 0 0 30px rgba(255,0,0,0.2);
+        }
+        #profile-btn .avatar-small {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid #ff3333;
+            object-fit: cover;
+            background: #1a0000;
+        }
+        #profile-btn .avatar-small.placeholder {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            color: #882222;
+            background: #110000;
+        }
+        #profile-btn .profile-name {
+            font-size: 0.95rem;
+            font-weight: bold;
+            max-width: 120px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        #profile-btn .profile-name .greeting {
+            color: #ff8888;
+            margin-right: 4px;
+        }
+
+        /* ===== HAMBURGER (kanan atas) ===== */
+        #hamburger-btn {
+            position: fixed;
+            top: 16px;
+            right: 16px;
+            z-index: 100;
+            background: rgba(0,0,0,0.6);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 40px;
+            padding: 10px 16px;
+            cursor: pointer;
+            backdrop-filter: blur(8px);
+            transition: 0.3s;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        #hamburger-btn:hover {
+            background: rgba(0,0,0,0.8);
+            border-color: #ff3333;
+        }
+        #hamburger-btn .bar {
+            width: 28px;
+            height: 3px;
+            background: #fff;
+            border-radius: 4px;
+            transition: 0.3s;
+        }
+
+        /* ===== DROPDOWN MENU ===== */
+        #dropdown-menu {
+            position: fixed;
+            top: 70px;
+            right: 16px;
+            z-index: 99;
+            background: rgba(10,0,0,0.92);
+            backdrop-filter: blur(14px);
+            border: 1px solid #882222;
+            border-radius: 20px;
+            padding: 8px 0;
+            min-width: 200px;
+            display: none;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.9), 0 0 40px rgba(255,0,0,0.1);
+            animation: dropIn 0.25s ease;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        #dropdown-menu.open {
+            display: block;
+        }
+        @keyframes dropIn {
+            0% { opacity: 0; transform: translateY(-10px) scale(0.95); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        #dropdown-menu .menu-item {
+            padding: 10px 20px;
+            color: #fff;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: 0.2s;
+            font-family: 'MedievalSharp', cursive;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        #dropdown-menu .menu-item:last-child {
+            border-bottom: none;
+        }
+        #dropdown-menu .menu-item:hover {
+            background: rgba(255,0,0,0.15);
+            color: #ff6666;
+        }
+        #dropdown-menu .menu-item .theme-dot {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            border: 1px solid rgba(255,255,255,0.2);
+            display: inline-block;
+            flex-shrink: 0;
+        }
+
+        /* ===== NOTIFIKASI ===== */
+        #notification {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: rgba(0, 20, 0, 0.95);
+            backdrop-filter: blur(14px);
+            border: 2px solid #44ff88;
+            border-radius: 20px;
+            padding: 16px 32px;
+            z-index: 200;
+            font-family: 'MedievalSharp', cursive;
+            font-size: 1.2rem;
+            color: #88ffbb;
+            box-shadow: 0 0 60px #00ff6644;
+            transition: transform 0.5s ease, opacity 0.5s ease;
+            opacity: 0;
+            pointer-events: none;
+            text-align: center;
+        }
+        #notification.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+        #notification .notif-icon {
+            font-size: 1.6rem;
+            margin-right: 10px;
+        }
+
+        /* ===== SURAT ===== */
+        #surat-page .surat-box {
+            background: rgba(10, 0, 0, 0.92);
+            border-radius: 30px 20px 30px 20px;
+            border: 3px solid #44aa88;
+            box-shadow: 0 0 80px #44aa8844, inset 0 0 40px #114422;
+            padding: 24px 20px;
+            width: 95%;
+            max-width: 500px;
+            max-height: 80vh;
+            overflow-y: auto;
+            backdrop-filter: blur(14px);
+            transform: rotateY(3deg) rotateX(2deg) translateZ(20px);
+            transition: 0.3s;
+            font-family: 'Amiri', serif;
+            text-align: right;
+        }
+        #surat-page .surat-box:hover {
+            transform: rotateY(1deg) rotateX(1deg) translateZ(40px);
+            box-shadow: 0 0 120px #44aa8866;
+        }
+        #surat-page .surat-box h1 {
+            font-family: 'Creepster', cursive;
+            font-size: 2.2rem;
+            color: #66ddbb;
+            text-shadow: 0 0 40px #44aa88;
+            text-align: center;
+            margin-bottom: 16px;
+            letter-spacing: 4px;
+        }
+        #surat-page .surat-box .surat-item {
+            border-bottom: 1px solid #225544;
+            padding: 16px 0;
+        }
+        #surat-page .surat-box .surat-item:last-child {
+            border-bottom: none;
+        }
+        #surat-page .surat-box .surat-item .arab {
+            font-size: 1.4rem;
+            color: #88ffdd;
+            line-height: 2;
+            text-align: right;
+            font-family: 'Amiri', serif;
+        }
+        #surat-page .surat-box .surat-item .arti {
+            font-size: 0.9rem;
+            color: #88ccbb;
+            text-align: left;
+            font-family: 'MedievalSharp', cursive;
+            margin-top: 4px;
+            border-top: 1px solid #225544;
+            padding-top: 6px;
+        }
+        #surat-page .surat-box .surat-item .nama-surat {
+            font-size: 1.1rem;
+            color: #66ddbb;
+            font-weight: bold;
+            text-align: center;
+            font-family: 'Amiri', serif;
+            margin-bottom: 6px;
+        }
+        #surat-page .surat-box .back-btn {
+            margin-top: 16px;
+            width: 100%;
+            padding: 14px;
+            border-radius: 40px;
+            background: linear-gradient(145deg, #22aa88, #116655);
+            border: 2px solid #44ddbb;
+            color: #fff;
+            font-size: 1.2rem;
+            font-family: 'Creepster', cursive;
+            cursor: pointer;
+            box-shadow: 0 8px 0 #004422, 0 10px 30px #44aa8844;
+            text-align: center;
+            letter-spacing: 2px;
+        }
+        #surat-page .surat-box .back-btn:active {
+            transform: translateY(6px);
+            box-shadow: 0 4px 0 #004422, 0 10px 30px #44aa8844;
+        }
+
+        /* ===== LOGIN ===== */
+        #login-page .login-box {
+            background: rgba(16, 0, 0, 0.92);
+            padding: 30px 24px;
+            border-radius: 60px 20px 60px 20px;
+            border: 3px solid #aa2222;
+            box-shadow: 0 0 100px #ff000055, inset 0 0 60px #440000, 0 30px 50px rgba(0,0,0,0.8);
+            width: 95%;
+            max-width: 440px;
+            text-align: center;
+            backdrop-filter: blur(14px);
+            transform: rotateY(4deg) rotateX(2deg) translateZ(30px);
+            transition: 0.3s;
+        }
+        #login-page .login-box:hover {
+            transform: rotateY(2deg) rotateX(1deg) translateZ(50px);
+            box-shadow: 0 0 140px #ff000066;
+        }
+        #login-page .login-box h1 {
+            font-family: 'Creepster', cursive;
+            font-size: 3.6rem;
+            color: #ff3333;
+            text-shadow: 0 0 50px #ff0000, 0 0 100px #aa0000, 8px 8px 0 #330000;
+            letter-spacing: 8px;
+            margin-bottom: 6px;
+            transform: translateZ(20px);
+        }
+        #login-page .login-box .sub {
+            color: #ff7777;
+            font-size: 0.9rem;
+            margin-bottom: 16px;
+            border-bottom: 1px solid #882222;
+            padding-bottom: 10px;
+            letter-spacing: 2px;
+        }
+        #login-page .avatar-box {
+            width: 140px;
+            height: 140px;
+            margin: 0 auto 18px;
+            border-radius: 40px;
+            border: 4px solid #cc3333;
+            box-shadow: 0 0 60px #ff000066, inset 0 0 30px #aa2222, 0 10px 30px rgba(0,0,0,0.7);
+            overflow: hidden;
+            background: #1a0000;
+            cursor: pointer;
+            position: relative;
+            transition: 0.3s;
+            transform: rotateY(2deg) translateZ(10px);
+        }
+        #login-page .avatar-box:hover {
+            border-color: #ff5555;
+            box-shadow: 0 0 100px #ff2222, 0 10px 40px #000;
+            transform: rotateY(0deg) translateZ(30px);
+        }
+        #login-page .avatar-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        #login-page .avatar-box .placeholder {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+            font-size: 4rem;
+            color: #882222;
+            background: #110000;
+        }
+        #login-page .input-group {
+            width: 100%;
+            margin: 8px 0;
+            text-align: left;
+        }
+        #login-page .input-group label {
+            font-size: 0.9rem;
+            color: #ff9999;
+            display: block;
+            margin-bottom: 4px;
+            letter-spacing: 2px;
+        }
+        #login-page .input-group input {
+            width: 100%;
+            padding: 14px 20px;
+            border-radius: 50px;
+            border: 2px solid #882222;
+            background: #1a0a0a;
+            color: #fff;
+            font-size: 1rem;
+            outline: none;
+            transition: 0.3s;
+            font-family: 'MedievalSharp', cursive;
+            box-shadow: inset 0 4px 10px rgba(0,0,0,0.6);
+        }
+        #login-page .input-group input:focus {
+            border-color: #ff3333;
+            box-shadow: 0 0 40px #ff000066, inset 0 4px 10px #000;
+        }
+        #login-page .btn-login {
+            width: 100%;
+            padding: 18px;
+            margin: 18px 0 10px;
+            font-size: 1.8rem;
+            border-radius: 60px;
+            background: linear-gradient(145deg, #cc1111, #770000);
+            border: 3px solid #ff4444;
+            box-shadow: 0 12px 0 #330000, 0 20px 50px #ff000066;
+            font-family: 'Creepster', cursive;
+            letter-spacing: 6px;
+            transform: rotateX(3deg);
+        }
+        #login-page .btn-login:active {
+            transform: translateY(8px) rotateX(1deg);
+            box-shadow: 0 4px 0 #330000, 0 10px 40px #ff000066;
+        }
+        #login-page .register-link {
+            color: #ff8888;
+            text-decoration: underline;
+            cursor: pointer;
+            font-size: 0.9rem;
+            text-shadow: 0 0 20px #ff000066;
+        }
+        #login-page .dev-note {
+            margin-top: 18px;
+            font-size: 0.8rem;
+            color: #665555;
+            border-top: 1px solid #331111;
+            padding-top: 12px;
+        }
+        #login-page .dev-note span {
+            color: #aa4444;
+            font-weight: bold;
+            text-shadow: 0 0 20px #ff000066;
+        }
+
+        /* ===== REGISTER ===== */
+        #register-page .register-box {
+            background: rgba(16, 0, 0, 0.92);
+            padding: 30px 24px;
+            border-radius: 60px 20px 60px 20px;
+            border: 3px solid #22aa44;
+            box-shadow: 0 0 100px #00ff4466, inset 0 0 60px #004422, 0 30px 50px rgba(0,0,0,0.8);
+            width: 95%;
+            max-width: 440px;
+            text-align: center;
+            backdrop-filter: blur(14px);
+            transform: rotateY(4deg) rotateX(2deg) translateZ(30px);
+            transition: 0.3s;
+        }
+        #register-page .register-box:hover {
+            transform: rotateY(2deg) rotateX(1deg) translateZ(50px);
+            box-shadow: 0 0 140px #00ff4466;
+        }
+        #register-page .register-box h1 {
+            font-family: 'Creepster', cursive;
+            font-size: 2.8rem;
+            color: #44ff88;
+            text-shadow: 0 0 50px #00ff66, 8px 8px 0 #004422;
+            letter-spacing: 4px;
+            margin-bottom: 6px;
+        }
+        #register-page .register-box .sub {
+            color: #88ffbb;
+            font-size: 0.9rem;
+            margin-bottom: 16px;
+            border-bottom: 1px solid #228844;
+            padding-bottom: 10px;
+        }
+        #register-page .register-box .input-group {
+            width: 100%;
+            margin: 8px 0;
+            text-align: left;
+        }
+        #register-page .register-box .input-group label {
+            font-size: 0.9rem;
+            color: #88ffbb;
+            display: block;
+            margin-bottom: 4px;
+            letter-spacing: 2px;
+        }
+        #register-page .register-box .input-group input {
+            width: 100%;
+            padding: 14px 20px;
+            border-radius: 50px;
+            border: 2px solid #228844;
+            background: #0a1a0a;
+            color: #fff;
+            font-size: 1rem;
+            outline: none;
+            transition: 0.3s;
+            font-family: 'MedievalSharp', cursive;
+            box-shadow: inset 0 4px 10px rgba(0,0,0,0.6);
+        }
+        #register-page .register-box .input-group input:focus {
+            border-color: #44ff88;
+            box-shadow: 0 0 40px #00ff6666, inset 0 4px 10px #000;
+        }
+        #register-page .register-box .btn-register {
+            width: 100%;
+            padding: 18px;
+            margin: 18px 0 10px;
+            font-size: 1.6rem;
+            border-radius: 60px;
+            background: linear-gradient(145deg, #22aa44, #116622);
+            border: 3px solid #44ff88;
+            box-shadow: 0 12px 0 #004422, 0 20px 50px #00ff4466;
+            font-family: 'Creepster', cursive;
+            letter-spacing: 4px;
+            transform: rotateX(3deg);
+        }
+        #register-page .register-box .btn-register:active {
+            transform: translateY(8px) rotateX(1deg);
+            box-shadow: 0 4px 0 #004422, 0 10px 40px #00ff4466;
+        }
+        #register-page .register-box .back-link {
+            color: #88ffbb;
+            text-decoration: underline;
+            cursor: pointer;
+            font-size: 0.9rem;
+            text-shadow: 0 0 20px #00ff6666;
+        }
+
+        /* ===== MENU BUG — TANPA VIDEO ===== */
+        #menu-page .menu-box {
+            background: rgba(10, 0, 0, 0.92);
+            border-radius: 50px 20px 50px 20px;
+            border: 3px solid #992222;
+            box-shadow: 0 0 100px #ff000033, inset 0 0 50px #331111, 0 30px 50px rgba(0,0,0,0.8);
+            padding: 30px 24px 32px;
+            width: 95%;
+            max-width: 500px;
+            backdrop-filter: blur(14px);
+            transform: rotateY(3deg) rotateX(2deg) translateZ(20px);
+            transition: 0.3s;
+        }
+        #menu-page .menu-box:hover {
+            transform: rotateY(1deg) rotateX(1deg) translateZ(40px);
+            box-shadow: 0 0 140px #ff000044;
+        }
+        #menu-page .menu-box h2 {
+            font-family: 'Creepster', cursive;
+            font-size: 2.8rem;
+            color: #ff3333;
+            text-shadow: 0 0 40px #ff0000, 6px 6px 0 #330000;
+            text-align: center;
+            margin-bottom: 6px;
+            transform: translateZ(20px);
+        }
+        #menu-page .menu-box .submenu {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin: 12px 0 16px;
+        }
+        #menu-page .menu-box .submenu button {
+            flex: 1;
+            padding: 12px;
+            border-radius: 40px;
+            border: 2px solid #882222;
+            background: #1a0808;
+            color: #ff9999;
+            font-weight: bold;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.3s;
+            font-family: 'MedievalSharp', cursive;
+            box-shadow: inset 0 4px 10px rgba(0,0,0,0.5);
+            transform: rotateX(2deg);
+        }
+        #menu-page .menu-box .submenu button.active {
+            background: #881111;
+            color: #fff;
+            border-color: #ff3333;
+            box-shadow: 0 0 40px #ff000066, inset 0 4px 10px #550000;
+            transform: rotateX(0deg) translateZ(10px);
+        }
+        .menu-content {
+            display: none;
+            flex-direction: column;
+            gap: 14px;
+            margin-top: 10px;
+        }
+        .menu-content.active {
+            display: flex;
+        }
+        .menu-content .input-row {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .menu-content .input-row label {
+            font-size: 0.85rem;
+            color: #cc7777;
+            letter-spacing: 2px;
+        }
+        .menu-content .input-row input,
+        .menu-content .input-row select {
+            padding: 14px 18px;
+            border-radius: 40px;
+            border: 2px solid #662222;
+            background: #0f0505;
+            color: #fff;
+            font-size: 1rem;
+            outline: none;
+            font-family: 'MedievalSharp', cursive;
+            box-shadow: inset 0 4px 12px rgba(0,0,0,0.7);
+        }
+        .menu-content .input-row input:focus,
+        .menu-content .input-row select:focus {
+            border-color: #ff3333;
+            box-shadow: 0 0 30px #ff000044, inset 0 4px 12px #000;
+        }
+        .menu-content .btn-send {
+            width: 100%;
+            padding: 18px;
+            border-radius: 50px;
+            background: linear-gradient(145deg, #bb1111, #660000);
+            border: 2px solid #ff4444;
+            color: #fff;
+            font-size: 1.6rem;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 10px 0 #330000, 0 20px 50px #ff000055;
+            font-family: 'Creepster', cursive;
+            letter-spacing: 4px;
+            margin-top: 6px;
+            transform: rotateX(3deg);
+        }
+        .menu-content .btn-send:active {
+            transform: translateY(6px) rotateX(1deg);
+            box-shadow: 0 4px 0 #330000, 0 10px 40px #ff000055;
+        }
+
+        /* ===== STATISTIK ===== */
+        #stats-page .stats-box {
+            background: rgba(10, 0, 0, 0.92);
+            border-radius: 50px 20px 50px 20px;
+            border: 3px solid #44aadd;
+            box-shadow: 0 0 80px #44aadd44, inset 0 0 40px #114466;
+            padding: 30px 24px;
+            width: 95%;
+            max-width: 440px;
+            backdrop-filter: blur(14px);
+            transform: rotateY(3deg) rotateX(2deg) translateZ(20px);
+            transition: 0.3s;
+            text-align: center;
+        }
+        #stats-page .stats-box:hover {
+            transform: rotateY(1deg) rotateX(1deg) translateZ(40px);
+            box-shadow: 0 0 120px #44aadd66;
+        }
+        #stats-page .stats-box h1 {
+            font-family: 'Creepster', cursive;
+            font-size: 2.4rem;
+            color: #66ccee;
+            text-shadow: 0 0 40px #44aadd88;
+            margin-bottom: 16px;
+        }
+        #stats-page .stats-box .stat-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #225566;
+            font-size: 1.1rem;
+        }
+        #stats-page .stats-box .stat-item:last-child {
+            border-bottom: none;
+        }
+        #stats-page .stats-box .stat-item .label {
+            color: #88ccdd;
+        }
+        #stats-page .stats-box .stat-item .value {
+            color: #66ddff;
+            font-weight: bold;
+        }
+        #stats-page .stats-box .back-btn {
+            margin-top: 16px;
+            width: 100%;
+            padding: 14px;
+            border-radius: 40px;
+            background: linear-gradient(145deg, #22aadd, #116688);
+            border: 2px solid #44ddff;
+            color: #fff;
+            font-size: 1.2rem;
+            font-family: 'Creepster', cursive;
+            cursor: pointer;
+            box-shadow: 0 8px 0 #004466, 0 10px 30px #44aadd44;
+            text-align: center;
+            letter-spacing: 2px;
+        }
+        #stats-page .stats-box .back-btn:active {
+            transform: translateY(6px);
+            box-shadow: 0 4px 0 #004466, 0 10px 30px #44aadd44;
+        }
+
+        /* ===== SUCCESS ===== */
+        #success-page .success-box {
+            background: rgba(0, 20, 0, 0.92);
+            border-radius: 70px 20px 70px 20px;
+            border: 4px solid #22aa44;
+            box-shadow: 0 0 140px #00ff4466, inset 0 0 60px #004422, 0 30px 50px rgba(0,0,0,0.8);
+            padding: 44px 30px;
+            text-align: center;
+            width: 92%;
+            max-width: 420px;
+            backdrop-filter: blur(14px);
+            transform: rotateY(4deg) rotateX(2deg) translateZ(30px);
+            transition: 0.3s;
+        }
+        #success-page .success-box:hover {
+            transform: rotateY(1deg) rotateX(1deg) translateZ(50px);
+            box-shadow: 0 0 180px #00ff4466;
+        }
+        #success-page .success-box h1 {
+            font-family: 'Creepster', cursive;
+            font-size: 4rem;
+            color: #44ff88;
+            text-shadow: 0 0 60px #00ff66, 0 0 120px #00aa44, 4px 4px 0 #004422;
+        }
+        #success-page .success-box p {
+            font-size: 1.6rem;
+            color: #88ffbb;
+            margin: 20px 0;
+            text-shadow: 0 0 30px #00ff66;
+        }
+        #success-page .success-box .btn-ok {
+            background: #22aa44;
+            border-color: #66ff88;
+            box-shadow: 0 12px 0 #004422, 0 20px 60px #00ff4466;
+            padding: 18px 56px;
+            font-size: 1.8rem;
+            font-family: 'Creepster', cursive;
+            transform: rotateX(3deg);
+        }
+        #success-page .success-box .btn-ok:active {
+            transform: translateY(8px) rotateX(1deg);
+            box-shadow: 0 4px 0 #004422, 0 10px 40px #00ff4466;
+        }
+        #success-page .success-box .speed {
+            margin-top: 12px;
+            font-size: 0.9rem;
+            color: #88aa88;
+            letter-spacing: 3px;
+            opacity: 0.6;
+        }
+
+        @media (max-width: 480px) {
+            #login-page .login-box h1 { font-size: 2.6rem; }
+            #menu-page .menu-box h2 { font-size: 2.2rem; }
+            #intro-page .title-overlay { font-size: 2rem; }
+            #intro-page .skip-btn { padding: 10px 20px; font-size: 1rem; top: 10px; right: 10px; }
+            #login-page .avatar-box { width: 110px; height: 110px; }
+            .btn-3d { padding: 12px 24px; font-size: 1rem; }
+            #success-page .success-box h1 { font-size: 3rem; }
+            .menu-content .btn-send { font-size: 1.2rem; padding: 14px; }
+            #profile-btn .profile-name { max-width: 70px; font-size: 0.75rem; }
+            #profile-btn .avatar-small { width: 32px; height: 32px; }
+            #hamburger-btn { padding: 6px 12px; }
+            #hamburger-btn .bar { width: 20px; height: 2px; }
+            #dropdown-menu { right: 8px; min-width: 170px; }
+            #profile-btn { top: 10px; left: 10px; padding: 4px 12px 4px 4px; }
+            #profile-btn .profile-name .greeting { display: none; }
+            #surat-page .surat-box { padding: 16px 12px; }
+            #surat-page .surat-box h1 { font-size: 1.6rem; }
+            #surat-page .surat-box .surat-item .arab { font-size: 1.1rem; }
+            #stats-page .stats-box { padding: 20px 16px; }
+            #stats-page .stats-box h1 { font-size: 1.8rem; }
+            #stats-page .stats-box .stat-item { font-size: 0.9rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== BACKGROUND VIDEO LOOP (MUTE) ===== -->
+    <video id="bg-video" autoplay loop muted playsinline>
+        <source src="https://files.catbox.moe/n6bhmk.mp4" type="video/mp4" />
+    </video>
+
+    <!-- ===== OVERLAY DARAH & SCANLINE ===== -->
+    <div id="blood-overlay"></div>
+    <div id="scanline"></div>
+
+    <!-- ===== PROFIL (kiri atas) ===== -->
+    <div id="profile-btn" style="display:none;">
+        <div class="avatar-small placeholder" id="profileAvatarSmall">👤</div>
+        <span class="profile-name" id="profileNameDisplay"><span class="greeting">Hai👋</span><span id="profileUsername">User</span></span>
+    </div>
+
+    <!-- ===== HAMBURGER (kanan atas) ===== -->
+    <div id="hamburger-btn">
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+    </div>
+
+    <!-- ===== DROPDOWN MENU ===== -->
+    <div id="dropdown-menu">
+        <div class="menu-item" id="menu-profile">🖼️ Ganti Profil</div>
+        <div class="menu-item" id="menu-bg">🖼️ Custom Background</div>
+        <div class="menu-item" id="menu-surat">📖 Surat (Alfatihah - Al Yusuf)</div>
+        <div class="menu-item" id="menu-stats">📊 Statistik Serangan</div>
+        <div class="menu-item" id="menu-music">🎵 Ganti Musik</div>
+        <div class="menu-item" id="menu-theme-default"><span class="theme-dot" style="background:#333;"></span> Default (Gelap)</div>
+        <div class="menu-item" id="menu-theme-ungu"><span class="theme-dot" style="background:#8844cc;"></span> Ungu</div>
+        <div class="menu-item" id="menu-theme-birutua"><span class="theme-dot" style="background:#3355aa;"></span> Biru Tua</div>
+        <div class="menu-item" id="menu-theme-oren"><span class="theme-dot" style="background:#cc8833;"></span> Oren</div>
+        <div class="menu-item" id="menu-theme-birumuda"><span class="theme-dot" style="background:#44aadd;"></span> Biru Muda</div>
+        <div class="menu-item" id="menu-theme-hijaumuda"><span class="theme-dot" style="background:#44dd66;"></span> Hijau Muda</div>
+        <div class="menu-item" id="menu-theme-pelangi"><span class="theme-dot" style="background:linear-gradient(135deg,#ff0000,#ff8800,#ffff00,#00ff00,#0088ff,#8800ff);"></span> Pelangi</div>
+        <div class="menu-item" id="menu-theme-3dbiru"><span class="theme-dot" style="background:#44aadd;box-shadow:0 0 10px #44aadd;"></span> 3D Biru Muda</div>
+        <div class="menu-item" id="menu-theme-transparan"><span class="theme-dot" style="background:transparent;border:2px solid #fff;"></span> Transparan 3D</div>
+    </div>
+
+    <!-- ===== NOTIFIKASI ===== -->
+    <div id="notification">
+        <span class="notif-icon">✅</span>
+        <span id="notif-text">Bug berhasil dikirim!</span>
+    </div>
+
+    <!-- ========================================================= -->
+    <!-- PAGE 1 – INTRO FULL LAYAR -->
+    <!-- ========================================================= -->
+    <div id="intro-page" class="page active">
+        <div class="video-wrapper">
+            <video id="intro-video" playsinline preload="auto" loop>
+                <source src="https://files.catbox.moe/u6xyu9.mp4" type="video/mp4" />
+            </video>
+            <div class="crt-overlay"></div>
+            <button class="skip-btn" id="skip-intro">LEWATI &gt;</button>
+            <div class="title-overlay glitch">
+                KAZ X 999
+                <small>Developer kaisar</small>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================================= -->
+    <!-- PAGE 2 – LOGIN -->
+    <!-- ========================================================= -->
+    <div id="login-page" class="page">
+        <div class="login-box">
+            <h1 class="glitch">KAZ X 999</h1>
+            <div class="sub">⚡ login ke zona kematian ⚡</div>
+
+            <div class="avatar-box" id="avatar-login" onclick="document.getElementById('avatar-input').click()">
+                <div class="placeholder" id="avatar-placeholder">👹</div>
+                <img id="avatar-preview" style="display:none;" alt="avatar" />
+            </div>
+            <input type="file" id="avatar-input" accept="image/*" style="display:none;" />
+
+            <div class="input-group">
+                <label>👤 USERNAME</label>
+                <input type="text" id="username-input" placeholder="Username" />
+            </div>
+            <div class="input-group">
+                <label>🔑 PASSWORD</label>
+                <input type="password" id="password-input" placeholder="Password" />
+            </div>
+
+            <button class="btn-3d btn-login" id="btn-login">MASUK</button>
+            <div class="register-link" id="register-link">📝 buat akses baru</div>
+            <div class="dev-note">📱 dev <span>085194279722</span></div>
+        </div>
+    </div>
+
+    <!-- ========================================================= -->
+    <!-- PAGE 3 – REGISTER -->
+    <!-- ========================================================= -->
+    <div id="register-page" class="page">
+        <div class="register-box">
+            <h1 class="glitch">📝 DAFTAR AKSES</h1>
+            <div class="sub">buat username & password sendiri</div>
+
+            <div class="input-group">
+                <label>👤 USERNAME BARU</label>
+                <input type="text" id="reg-username" placeholder="pilih username" />
+            </div>
+            <div class="input-group">
+                <label>🔑 PASSWORD BARU</label>
+                <input type="password" id="reg-password" placeholder="pilih password" />
+            </div>
+            <div class="input-group">
+                <label>🔒 KONFIRMASI PASSWORD</label>
+                <input type="password" id="reg-confirm" placeholder="ulangi password" />
+            </div>
+
+            <button class="btn-3d btn-register" id="btn-register">DAFTAR</button>
+            <div class="back-link" id="back-to-login">← kembali ke login</div>
+        </div>
+    </div>
+
+    <!-- ========================================================= -->
+    <!-- PAGE 4 – MENU BUG (TANPA VIDEO) -->
+    <!-- ========================================================= -->
+    <div id="menu-page" class="page">
+        <div class="menu-box">
+            <h2 class="glitch">KAZ X 999</h2>
+            <div class="submenu">
+                <button class="tab-btn active" data-tab="tab-number">BUG NOMOR</button>
+                <button class="tab-btn" data-tab="tab-group">BUG GRUP</button>
+            </div>
+
+            <!-- TAB BUG NOMOR -->
+            <div id="tab-number" class="menu-content active">
+                <div class="input-row">
+                    <label>📱 NOMOR TARGET</label>
+                    <input type="text" id="target-number" placeholder="+6285148162990" value="+6285148162990" />
+                </div>
+                <div class="input-row">
+                    <label>⚙️ PILIH BUG</label>
+                    <select id="bug-type">
+                        <option value="hard">DELAY HARD</option>
+                        <option value="new">DELAY NEW</option>
+                        <option value="invisible">DELAY INVISIBLE</option>
+                    </select>
+                </div>
+                <button class="btn-send" id="send-bug-number">🚀 SEND BUG ATTACK</button>
+            </div>
+
+            <!-- TAB BUG GRUP -->
+            <div id="tab-group" class="menu-content">
+                <div class="input-row">
+                    <label>🔗 LINK GRUP TARGET</label>
+                    <input type="text" id="group-link" placeholder="https://chat.whatsapp.com/xxxxx" />
+                </div>
+                <div class="input-row">
+                    <label>⚙️ PILIH BUG GRUP</label>
+                    <select id="bug-group-type">
+                        <option value="kill">KILL GRUP</option>
+                        <option value="delay">DELAY GRUP</option>
+                    </select>
+                </div>
+                <button class="btn-send" id="send-bug-group">💀 SEND BUG GRUP</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================================= -->
+    <!-- PAGE 5 – SURAT -->
+    <!-- ========================================================= -->
+    <div id="surat-page" class="page">
+        <div class="surat-box">
+            <h1>📖 ALFATIHAH - AL YUSUF</h1>
+            <div id="surat-content"></div>
+            <button class="back-btn" id="surat-back">← KEMBALI</button>
+        </div>
+    </div>
+
+    <!-- ========================================================= -->
+    <!-- PAGE 6 – STATISTIK -->
+    <!-- ========================================================= -->
+    <div id="stats-page" class="page">
+        <div class="stats-box">
+            <h1>📊 STATISTIK</h1>
+            <div class="stat-item"><span class="label">Total Bug Terkirim</span><span class="value" id="total-bug">0</span></div>
+            <div class="stat-item"><span class="label">Target Terakhir</span><span class="value" id="last-target">-</span></div>
+            <div class="stat-item"><span class="label">Bug Terakhir</span><span class="value" id="last-bug">-</span></div>
+            <div class="stat-item"><span class="label">Total Serangan Hari Ini</span><span class="value" id="today-bug">0</span></div>
+            <button class="back-btn" id="stats-back">← KEMBALI</button>
+        </div>
+    </div>
+
+    <!-- ========================================================= -->
+    <!-- PAGE 7 – SUCCESS -->
+    <!-- ========================================================= -->
+    <div id="success-page" class="page">
+        <div class="success-box">
+            <h1 class="glitch">🔥 SUCCESS 🔥</h1>
+            <p>Bug berhasil dikirim!</p>
+            <button class="btn-3d btn-ok" id="btn-ok">OK</button>
+            <div class="speed">0.5x</div>
+        </div>
+    </div>
+
+    <script>
+        // =========================================================
+        // 1. ELEMEN REFS
+        // =========================================================
+        const pages = {
+            intro: document.getElementById('intro-page'),
+            login: document.getElementById('login-page'),
+            register: document.getElementById('register-page'),
+            menu: document.getElementById('menu-page'),
+            surat: document.getElementById('surat-page'),
+            stats: document.getElementById('stats-page'),
+            success: document.getElementById('success-page')
+        };
+
+        const introVideo = document.getElementById('intro-video');
+        const bgVideo = document.getElementById('bg-video');
+        const skipBtn = document.getElementById('skip-intro');
+
+        const avatarInput = document.getElementById('avatar-input');
+        const avatarPreview = document.getElementById('avatar-preview');
+        const avatarPlaceholder = document.getElementById('avatar-placeholder');
+
+        const usernameInput = document.getElementById('username-input');
+        const passwordInput = document.getElementById('password-input');
+        const btnLogin = document.getElementById('btn-login');
+        const registerLink = document.getElementById('register-link');
+
+        const regUsername = document.getElementById('reg-username');
+        const regPassword = document.getElementById('reg-password');
+        const regConfirm = document.getElementById('reg-confirm');
+        const btnRegister = document.getElementById('btn-register');
+        const backToLogin = document.getElementById('back-to-login');
+
+        const tabBtns = document.querySelectorAll('.tab-btn');
+        const tabContents = {
+            number: document.getElementById('tab-number'),
+            group: document.getElementById('tab-group')
+        };
+        const sendNumberBtn = document.getElementById('send-bug-number');
+        const sendGroupBtn = document.getElementById('send-bug-group');
+        const targetNumber = document.getElementById('target-number');
+        const groupLink = document.getElementById('group-link');
+        const bugType = document.getElementById('bug-type');
+        const bugGroupType = document.getElementById('bug-group-type');
+
+        const btnOk = document.getElementById('btn-ok');
+
+        // ===== ELEMEN BARU =====
+        const profileBtn = document.getElementById('profile-btn');
+        const profileAvatarSmall = document.getElementById('profileAvatarSmall');
+        const profileUsername = document.getElementById('profileUsername');
+        const hamburgerBtn = document.getElementById('hamburger-btn');
+        const dropdownMenu = document.getElementById('dropdown-menu');
+        const menuProfile = document.getElementById('menu-profile');
+        const menuBg = document.getElementById('menu-bg');
+        const menuSurat = document.getElementById('menu-surat');
+        const menuStats = document.getElementById('menu-stats');
+        const menuMusic = document.getElementById('menu-music');
+        const notification = document.getElementById('notification');
+        const notifText = document.getElementById('notif-text');
+
+        const suratBack = document.getElementById('surat-back');
+        const statsBack = document.getElementById('stats-back');
+
+        // ===== TEMA =====
+        const themeMap = {
+            'default': '',
+            'ungu': 'theme-ungu',
+            'birutua': 'theme-birutua',
+            'oren': 'theme-oren',
+            'birumuda': 'theme-birumuda',
+            'hijaumuda': 'theme-hijaumuda',
+            'pelangi': 'theme-pelangi',
+            '3dbiru': 'theme-3dbiru',
+            'transparan': 'theme-transparan'
+        };
+
+        const themeItems = {
+            default: document.getElementById('menu-theme-default'),
+            ungu: document.getElementById('menu-theme-ungu'),
+            birutua: document.getElementById('menu-theme-birutua'),
+            oren: document.getElementById('menu-theme-oren'),
+            birumuda: document.getElementById('menu-theme-birumuda'),
+            hijaumuda: document.getElementById('menu-theme-hijaumuda'),
+            pelangi: document.getElementById('menu-theme-pelangi'),
+            '3dbiru': document.getElementById('menu-theme-3dbiru'),
+            transparan: document.getElementById('menu-theme-transparan')
+        };
+
+        // ===== SURAT DATA =====
+        const suratData = [{
+            nama: 'Al-Fatihah',
+            arab: 'بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ\nالْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ\nالرَّحْمَٰنِ الرَّحِيمِ\nمَالِكِ يَوْمِ الدِّينِ\nإِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ\nاهْدِنَا الصِّرَاطَ الْمُسْتَقِيمَ\nصِرَاطَ الَّذِينَ أَنْعَمْتَ عَلَيْهِمْ غَيْرِ الْمَغْضُوبِ عَلَيْهِمْ وَلَا الضَّالِّينَ',
+            arti: 'Dengan nama Allah Yang Maha Pengasih lagi Maha Penyayang. Segala puji bagi Allah, Tuhan seluruh alam. Yang Maha Pengasih lagi Maha Penyayang. Pemilik hari pembalasan. Hanya kepada Engkaulah kami menyembah dan hanya kepada Engkaulah kami memohon pertolongan. Tunjukilah kami jalan yang lurus. (Yaitu) jalan orang-orang yang telah Engkau beri nikmat kepadanya, bukan (jalan) mereka yang dimurkai dan bukan (pula jalan) mereka yang sesat.'
+        }, {
+            nama: 'Al-Baqarah (1-5)',
+            arab: 'الم\nذَٰلِكَ الْكِتَابُ لَا رَيْبَ ۛ فِيهِ ۛ هُدًى لِّلْمُتَّقِينَ\nالَّذِينَ يُؤْمِنُونَ بِالْغَيْبِ وَيُقِيمُونَ الصَّلَاةَ وَمِمَّا رَزَقْنَاهُمْ يُنفِقُونَ\nوَالَّذِينَ يُؤْمِنُونَ بِمَا أُنزِلَ إِلَيْكَ وَمَا أُنزِلَ مِن قَبْلِكَ وَبِالْآخِرَةِ هُمْ يُوقِنُونَ\nأُولَٰئِكَ عَلَىٰ هُدًى مِّن رَّبِّهِمْ ۖ وَأُولَٰئِكَ هُمُ الْمُفْلِحُونَ',
+            arti: 'Alif Lam Mim. Kitab (Al-Qur\'an) ini tidak ada keraguan padanya, petunjuk bagi mereka yang bertakwa. (Yaitu) mereka yang beriman kepada yang gaib, melaksanakan salat, dan menginfakkan sebagian rezeki yang Kami berikan kepada mereka. Dan mereka yang beriman kepada (Al-Qur\'an) yang diturunkan kepadamu (Muhammad) dan (kitab-kitab) yang diturunkan sebelum engkau, dan mereka yakin akan adanya akhirat. Merekalah yang mendapat petunjuk dari Tuhannya, dan merekalah orang-orang yang beruntung.'
+        }, {
+            nama: 'Ali \'Imran (1-4)',
+            arab: 'الم\nاللَّهُ لَا إِلَٰهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ\nنَزَّلَ عَلَيْكَ الْكِتَابَ بِالْحَقِّ مُصَدِّقًا لِّمَا بَيْنَ يَدَيْهِ وَأَنزَلَ التَّوْرَاةَ وَالْإِنجِيلَ\nمِن قَبْلُ هُدًى لِّلنَّاسِ وَأَنزَلَ الْفُرْقَانَ',
+            arti: 'Alif Lam Mim. Allah, tidak ada tuhan selain Dia. Yang Maha Hidup lagi Maha Berdiri Sendiri. Dia menurunkan Kitab (Al-Qur\'an) kepadamu (Muhammad) dengan hak, membenarkan (kitab-kitab) sebelumnya, dan menurunkan Taurat dan Injil. Sebelumnya sebagai petunjuk bagi manusia, dan Dia menurunkan Al-Furqan (pembeda antara yang hak dan batil).'
+        }, {
+            nama: 'An-Nisa\' (1-4)',
+            arab: 'يَا أَيُّهَا النَّاسُ اتَّقُوا رَبَّكُمُ الَّذِي خَلَقَكُم مِّن نَّفْسٍ وَاحِدَةٍ وَخَلَقَ مِنْهَا زَوْجَهَا وَبَثَّ مِنْهُمَا رِجَالًا كَثِيرًا وَنِسَاءً',
+            arti: 'Wahai manusia! Bertakwalah kepada Tuhanmu yang telah menciptakan kamu dari diri yang satu (Adam) dan (darinya) Dia menciptakan pasangannya (Hawa). Dan dari keduanya Dia memperkembangbiakkan laki-laki dan perempuan yang banyak.'
+        }, {
+            nama: 'Al-Ma\'idah (1-4)',
+            arab: 'يَا أَيُّهَا الَّذِينَ آمَنُوا أَوْفُوا بِالْعُقُودِ\nأُحِلَّتْ لَكُم بَهِيمَةُ الْأَنْعَامِ إِلَّا مَا يُتْلَىٰ عَلَيْكُمْ غَيْرَ مُحِلِّي الصَّيْدِ وَأَنتُمْ حُرُمٌ',
+            arti: 'Wahai orang-orang yang beriman! Penuhilah janji-janji. Dihalalkan bagimu hewan ternak, kecuali yang akan disebutkan kepadamu, dengan tidak menghalalkan berburu ketika kamu sedang berihram (haji atau umrah).'
+        }, {
+            nama: 'Al-An\'am (1-4)',
+            arab: 'الْحَمْدُ لِلَّهِ الَّذِي خَلَقَ السَّمَاوَاتِ وَالْأَرْضَ وَجَعَلَ الظُّلُمَاتِ وَالنُّورَ',
+            arti: 'Segala puji bagi Allah yang menciptakan langit dan bumi dan menjadikan gelap dan terang.'
+        }, {
+            nama: 'Al-A\'raf (1-4)',
+            arab: 'المص\nكِتَابٌ أُنزِلَ إِلَيْكَ فَلَا يَكُن فِي صَدْرِكَ حَرَجٌ مِّنْهُ لِتُنذِرَ بِهِ وَذِكْرَىٰ لِلْمُؤْمِنِينَ',
+            arti: 'Alif Lam Mim Sad. (Ini adalah) Kitab yang diturunkan kepadamu (Muhammad), maka janganlah ada kesempitan di dadamu karenanya, agar engkau memberi peringatan dengan (Kitab) itu dan menjadi pelajaran bagi orang-orang mukmin.'
+        }, {
+            nama: 'Al-Anfal (1-4)',
+            arab: 'يَسْأَلُونَكَ عَنِ الْأَنفَالِ ۖ قُلِ الْأَنفَالُ لِلَّهِ وَالرَّسُولِ',
+            arti: 'Mereka bertanya kepadamu (Muhammad) tentang (pembagian) harta rampasan perang. Katakanlah, "Harta rampasan perang itu milik Allah dan Rasul."'
+        }, {
+            nama: 'At-Taubah (1-4)',
+            arab: 'بَرَاءَةٌ مِّنَ اللَّهِ وَرَسُولِهِ إِلَى الَّذِينَ عَاهَدتُّم مِّنَ الْمُشْرِكِينَ',
+            arti: '(Inilah) pernyataan pemutusan hubungan dari Allah dan Rasul-Nya (yang ditujukan) kepada orang-orang musyrik yang telah kamu adakan perjanjian (dengan mereka).'
+        }, {
+            nama: 'Yunus (1-4)',
+            arab: 'الر ۚ تِلْكَ آيَاتُ الْكِتَابِ الْحَكِيمِ\nأَكَانَ لِلنَّاسِ عَجَبًا أَنْ أَوْحَيْنَا إِلَىٰ رَجُلٍ مِّنْهُمْ أَنْ أَنذِرِ النَّاسَ وَبَشِّرِ الَّذِينَ آمَنُوا أَنَّ لَهُمْ قَدَمَ صِدْقٍ عِندَ رَبِّهِمْ',
+            arti: 'Alif Lam Ra. Inilah ayat-ayat Kitab yang penuh hikmah. Apakah manusia merasa heran bahwa Kami mewahyukan kepada seorang laki-laki di antara mereka, "Berilah peringatan kepada manusia dan sampaikanlah kabar gembira kepada orang-orang beriman bahwa bagi mereka ada kedudukan yang mulia di sisi Tuhan mereka."'
+        }, {
+            nama: 'Hud (1-4)',
+            arab: 'الر ۚ كِتَابٌ أُحْكِمَتْ آيَاتُهُ ثُمَّ فُصِّلَتْ مِن لَّدُنْ حَكِيمٍ خَبِيرٍ',
+            arti: 'Alif Lam Ra. (Inilah) Kitab yang ayat-ayatnya disusun dengan rapi, kemudian dijelaskan secara terperinci, (yang diturunkan) dari (Allah) Yang Mahabijaksana lagi Mahateliti.'
+        }, {
+            nama: 'Yusuf (1-4)',
+            arab: 'الر ۚ تِلْكَ آيَاتُ الْكِتَابِ الْمُبِينِ\nإِنَّا أَنزَلْنَاهُ قُرْآنًا عَرَبِيًّا لَّعَلَّكُمْ تَعْقِلُونَ',
+            arti: 'Alif Lam Ra. Inilah ayat-ayat Kitab (Al-Qur\'an) yang jelas. Sesungguhnya Kami menurunkannya sebagai Al-Qur\'an berbahasa Arab agar kamu mengerti.'
+        }];
+
+        // =========================================================
+        // 2. SWITCH PAGE
+        // =========================================================
+        function showPage(name) {
+            Object.keys(pages).forEach(key => {
+                pages[key].classList.toggle('active', key === name);
+            });
+        }
+
+        // =========================================================
+        // 3. SET VOLUME & LOOP — MUSIK TETAP JALAN
+        // =========================================================
+        function setupMusic(video) {
+            video.preload = 'auto';
+            video.loop = true;
+            video.volume = 0.8;
+            video.muted = false;
+            // Loop mulus tanpa jeda
+            video.addEventListener('ended', function() {
+                if (video.loop) {
+                    video.currentTime = 0;
+                    video.play().catch(() => {});
+                }
+            });
+        }
+        setupMusic(introVideo);
+        // BG video dimute biar gak dobel
+        bgVideo.muted = true;
+        bgVideo.volume = 0;
+        bgVideo.loop = true;
+        bgVideo.preload = 'auto';
+
+        introVideo.addEventListener('loadedmetadata', function() {
+            introVideo.volume = 0.8;
+        });
+        bgVideo.addEventListener('loadedmetadata', function() {
+            bgVideo.muted = true;
+            bgVideo.volume = 0;
+            bgVideo.loop = true;
+            bgVideo.play().catch(() => {});
+        });
+
+        // =========================================================
+        // 4. INTRO – FULL LAYAR, LOOP, SKIP (MUSIK TETAP JALAN)
+        // =========================================================
+        let introPlayed = false;
+
+        // Auto play intro saat halaman siap
+        introVideo.addEventListener('canplaythrough', function() {
+            introVideo.play().catch(() => {});
+        });
+
+        introVideo.addEventListener('click', function() {
+            if (!introPlayed) {
+                introVideo.play().catch(() => {});
+                introPlayed = true;
+            } else {
+                if (introVideo.paused) {
+                    introVideo.play().catch(() => {});
+                } else {
+                    introVideo.pause();
+                }
+            }
+        });
+
+        function finishIntro() {
+            // MUSIK TETAP JALAN — ga di-pause, ga di-mute
+            showPage('login');
+            bgVideo.play().catch(() => {});
+        }
+
+        skipBtn.addEventListener('click', function() {
+            finishIntro();
+        });
+
+        // =========================================================
+        // 5. AVATAR LOGIN
+        // =========================================================
+        avatarInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(ev) {
+                    avatarPreview.src = ev.target.result;
+                    avatarPreview.style.display = 'block';
+                    avatarPlaceholder.style.display = 'none';
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // =========================================================
+        // 6. REGISTER + LOGIN + AUTO-LOGIN
+        // =========================================================
+        let registeredUsers = JSON.parse(localStorage.getItem('kazx999_users') || '[]');
+        let currentUser = JSON.parse(localStorage.getItem('kazx999_current') || 'null');
+
+        function updateProfile() {
+            if (currentUser) {
+                profileBtn.style.display = 'flex';
+                profileUsername.textContent = currentUser.username || 'User';
+                if (currentUser.avatar) {
+                    profileAvatarSmall.src = currentUser.avatar;
+                    profileAvatarSmall.classList.remove('placeholder');
+                    profileAvatarSmall.textContent = '';
+                } else {
+                    profileAvatarSmall.src = '';
+                    profileAvatarSmall.classList.add('placeholder');
+                    profileAvatarSmall.textContent = '👤';
+                }
+            } else {
+                profileBtn.style.display = 'none';
+            }
+        }
+
+        if (currentUser) {
+            const originalFinish = finishIntro;
+            finishIntro = function() {
+                // MUSIK TETAP JALAN
+                showPage('menu');
+                bgVideo.play().catch(() => {});
+                updateProfile();
+            };
+            skipBtn.onclick = finishIntro;
+            introVideo.addEventListener('timeupdate', function handler() {
+                if (introVideo.currentTime >= 23) {
+                    introVideo.removeEventListener('timeupdate', handler);
+                    finishIntro();
+                }
+            });
+        }
+
+        registerLink.addEventListener('click', function() { showPage('register'); });
+        backToLogin.addEventListener('click', function() { showPage('login'); });
+
+        btnRegister.addEventListener('click', function() {
+            const user = regUsername.value.trim();
+            const pass = regPassword.value.trim();
+            const confirm = regConfirm.value.trim();
+
+            if (!user || !pass || !confirm) { alert('⚠️ Semua field harus diisi!'); return; }
+            if (pass !== confirm) { alert('❌ Password dan konfirmasi tidak sama!'); return; }
+            if (registeredUsers.find(u => u.username === user)) { alert('❌ Username sudah terdaftar!'); return; }
+
+            let avatar = '';
+            if (avatarPreview.style.display !== 'none' && avatarPreview.src) { avatar = avatarPreview.src; }
+
+            registeredUsers.push({ username: user, password: pass, avatar: avatar });
+            localStorage.setItem('kazx999_users', JSON.stringify(registeredUsers));
+            alert('✅ Pendaftaran berhasil! Silakan login.');
+            showPage('login');
+        });
+
+        btnLogin.addEventListener('click', function() {
+            const user = usernameInput.value.trim();
+            const pass = passwordInput.value.trim();
+            const found = registeredUsers.find(u => u.username === user && u.password === pass);
+            if (found) {
+                currentUser = found;
+                localStorage.setItem('kazx999_current', JSON.stringify(currentUser));
+                showPage('menu');
+                updateProfile();
+            } else {
+                alert('❌ Username atau password salah!');
+            }
+        });
+
+        // =========================================================
+        // 7. TAB SWITCH
+        // =========================================================
+        tabBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                tabBtns.forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                const tab = this.dataset.tab;
+                Object.keys(tabContents).forEach(key => {
+                    tabContents[key].classList.toggle('active', key === tab.replace('tab-', ''));
+                });
+            });
+        });
+
+        // =========================================================
+        // 8. PESAN BUG LENGKAP
+        // =========================================================
+        function getBugMessage(type) {
+            const bug1 = `★~🔥👺Angin🔥👺~★:*9999999* ুৌগৈগৈদশ *9999999* *9999999* ুৌগৈগৈদশ *9999999* *9999999* ুৌগৈগৈদশ *9999999* *9999999* ুৌগৈগৈদশ *9999999* *9999999* ুৌগৈগ@່ ‍ ‍‍ ‍ ‍ ‍:★~🔥👺Angin🔥👺~★:*9999999* ুৌগৈগৈদশ *9999999* *9999999* ুৌগৈগৈদশ *9999999* *9999999* ুৌগৈগৈদশ *9999999* *9999999* ুৌগৈগৈদশ *9999999* *9999999* ুৌগৈগ@່ ‍ ‍‍ ‍ ‍ ‍:★~🔥👺Angin🔥👺~★:*9999999* ুৌগৈগৈদশ *9999999* *9999999* ুৌগৈগৈদশ *9999999* *9999999* ুৌগৈগৈদশ *9999999* *9999999* ুৌগৈগৈদশ *9999999* *9999999* ুৌগৈগ@່ ‍ ‍‍ ‍ ‍ ‍:★~🔥👺Angin🔥👺~★:*9999999* ুৌগৈগৈদশ *9999999* *9999999* ুৌগৈগৈদশ *9999999* *9999999* ুৌগৈগৈদশ *9999999* *9999999* ুৌগৈগৈদশ *9999999* *9999999* ুৌগৈগ@່ ‍ ‍‍ ‍ ‍ ‍:★~🔥👺Angin🔥👺~★:*9999999* ুৌগৈগৈদশ *9999999* *9999999* ুৌগৈগৈদশ *9999999* *9999999* ুৌগৈগৈদশ *9999999* *9999999* ুৌগৈগৈদশ *9999999* *9999999* ুৌগৈগ@່ ‍ ‍‍ ‍ ‍ ‍:★~🔥👺Angin🔥👺~★:*9999999* ুৌগৈগৈদশ *9999999* *9999999* ুৌগৈগৈদশ *9999999* *9999999* ুৌগৈগৈদশ *9999999* *9999999* ুৌগৈগৈদশ *9999999* *9999999* ুৌগৈগ@່ ‍ ‍‍ ‍ ‍ ‍:★~🔥👺Angin🔥👺~★:*9999999* ুৌগৈগৈদশ *9999999* *9999999* ুৌগৈগৈদশ *9999999* *9999999* ুৌগৈগৈদশ *9999999* *9999999* ুৌগৈগৈদশ *9999999* *9999999* ুৌগৈগ@່ ‍ ‍‍ ‍ ‍ ‍:★~🔥👺Angin🔥👺~★:*9999999* ুৌগৈগৈদশ *9999999* *9999999* ুৌগৈগৈদশ *9999999* *9999999* ুৌগৈগৈদশ *9999999* *9999999* ুৌগৈগৈদশ *9999999* *9999999* ুৌগৈগ@່ ‍ ‍‍ ‍ ‍ ‍:★~🔥👺Angin🔥👺~★:*9999999* ুৌগৈগৈদশ *9999999* *9999999* ুৌগৈগৈদশ *9999999* *9999999* ুৌগৈগৈদশ *9999999* *9999999* ুৌগৈগৈদশ *9999999* *9999999* ুৌগৈগ@່ ‍ ‍‍ ‍ ‍ ‍`;
+
+            const bug2 = `🫀:☠️𝕂𝕀𝕃𝕃𝔼𝔻-𝕀𝕆𝕊☠️☠️𝕂𝕀𝕃𝕃𝔼𝔻-𝕀𝕆𝕊☠️❗❗❗👿👿😈😈 ͢͢͢͢͢͢͢͢͢͢🥶𑜞͢VEGETA•ID°∆�͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢☠️𝕂𝕀𝕃𝕃𝔼𝔻-𝕀𝕆𝕊☠️☠️𝕂𝕀𝕃𝕃𝔼𝔻-𝕀𝕆𝕊☠️❗❗❗👿👿😈😈 ͢͢͢͢͢͢͢͢͢͢🥶𑜞͢VEGETA•ID°∆�͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢☠️𝕂𝕀𝕃𝕃𝔼𝔻-𝕀𝕆𝕊☠️☠️𝕂𝕀𝕃𝕃𝔼𝔻-𝕀𝕆𝕊☠️❗❗❗👿👿😈😈 ͢͢͢͢͢͢͢͢͢͢🥶𑜞͢VEGETA•ID°∆�͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢☠️𝕂𝕀𝕃𝕃𝔼𝔻-𝕀𝕆𝕊☠️☠️𝕂𝕀𝕃𝕃𝔼𝔻-𝕀𝕆𝕊☠️❗❗❗👿👿😈😈 ͢͢͢͢͢͢͢͢͢͢🥶𑜞͢☠️𝕂𝕀𝕃𝕃𝔼𝔻-𝕀𝕆𝕊☠️☠️𝕂𝕀𝕃𝕃𝔼𝔻-𝕀𝕆𝕊☠️❗❗❗👿👿😈😈 ͢͢͢͢͢͢͢͢͢͢🥶𑜞͢VEGETA•ID°∆�͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢•ID°∆�͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢☠️𝕂𝕀𝕃𝕃𝔼𝔻-𝕀𝕆𝕊☠️☠️𝕂𝕀𝕃𝕃𝔼𝔻-𝕀𝕆𝕊☠️❗❗❗👿👿😈😈 ͢͢͢͢͢͢͢͢͢͢🥶𑜞͢VEGETA•ID°∆�͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢͢`;
+
+            const bug3 = `A̷̸̷̸̷m̷̸̷̸̷a̷̸̷̸̷n̷̸̷̸̷ ̷̸̷̸̷b̷̸̷̸̷a̷̸̷̸̷n̷̸̷̸̷g̷̸̷̸̷?̷̸̷̸̷ — ════╬═╬═╬═╬═══╬═╬═╬═╬═╬\n\nA̶̸̶̸̶m̶̸̶̸̶a̶̸̶̸̶n̶̸̶̸̶ ̶̸̶̸̶b̶̸̶̸̶a̶̸̶̸̶n̶̸̶̸̶g̶̸̶̸̶?̶̸̶̸̶ — ░▒▓█▓▒░▒▓█▓▒░▒▓█▓▒\n\nA̷̛̛̛̛m̷̛̛̛̛a̷̛̛̛̛n̷̛̛̛̛ ̷̛̛̛̛b̷̛̛̛̛a̷̛̛̛̛n̷̛̛̛̛g̷̛̛̛̛?̷̛̛̛̛ — ҉҉҉҉҉҉҉҉҉҉҉҉҉҉҉҉҉\n\nA̶̛̛̛̛m̶̛̛̛̛a̶̛̛̛̛n̶̛̛̛̛ ̶̛̛̛̛b̶̛̛̛̛a̶̛̛̛̛n̶̛̛̛̛g̶̛̛̛̛?̶̛̛̛̛ — ⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡀⡁⡂⡃⡄⡅⡆⡇⡈⡉⡊⡋⡌⡍⡎⡏⡐⡑⡒⡓⡔⡕⡖⡗⡘⡙⡚⡛⡜⡝⡞⡟⡠⡡⡢⡣⡤⡥⡦⡧⡨⡩⡪⡫⡬⡭⡮⡯⡰⡱⡲⡳⡴⡵⡶⡷⡸⡹⡺⡻⡼⡽⡾⡿⢀⢁⢂⢃⢄⢅⢆⢇⢈⢉⢊⢋⢌⢍⢎⢏⢐⢑⢒⢓⢔⢕⢖⢗⢘⢙⢚⢛⢜⢝⢞⢟⢠⢡⢢⢣⢤⢥⢦⢧⢨⢩⢪⢫⢬⢭⢮⢯⢰⢱⢲⢳⢴⢵⢶⢷⢸⢹⢺⢻⢼⢽⢾⢿⣀⣁⣂⣃⣄⣅⣆⣇⣈⣉⣊⣋⣌⣍⣎⣏⣐⣑⣒⣓⣔⣕⣖⣗⣘⣙⣚⣛⣜⣝⣞⣟⣠⣡⣢⣣⣤⣥⣦⣧⣨⣩⣪⣫⣬⣭⣮⣯⣰⣱⣲⣳⣴⣵⣶⣷⣸⣹⣺⣻⣼⣽⣾⣿Ś̷̢̨̢̧̢̡̨̧̡̡̨̨̧̨̨̡̡̡̢̨̢̡̢̡̢̧̧̨̛̜̥̰̭̝͖̱̥̟̬̜̻̺̙̹͚̞̱̩̝̬̦̩̺̬̹̥̤̩̺͔̘̻͔̗̰̘͕̪̘͉̖̫̱̼̗̤̟̟̪̖̲̫̪̙̱͈̤̙̱̘̦̫̥̥̥̻̱̝̜̭̼̖̫̘̮̹̫̯̺̘̩͔̻̭̞̦̞͖̹̺̼̪̹̲̲̬̫̼̲̖̘̜̳̬̤̠̤̗̩͓̰̲̘̼̺̲̲̱̞̠̱͓̤̠̺͕̪̺̠̫̙̜̳͎̞̠̹̹̥̗̺̲͚̦̗̩̯̫̣̝̦͔̝̹͔̜̬̯̬̞̜̞̜͕͍̜̱̖̖̬̤̙͙̮̦̪̲̦̙̬̻̲̦̝̙͚̫̹̰̭̭̤̖̒ͅͅͅÁ̸̢̨̢̧̢̡̨̧̡̡̨̨̧̨̨̡̡̡̢̨̢̡̢̡̢̧̧̨̛̛̜̥̰̭̝͖̱̥̟̬̜̻̺̙̹͚̞̱̩̝̬̦̩̺̬̹̥̤̩̺͔̘̻͔̗̰̘͕̪̘͉̖̫̱̼̗̤̟̟̪̖̲̫̪̙̱͈̤̙̱̘̦̫̥̥̥̻̱̝̜̭̼̖̫̘̮̹̫̯̺̘̩͔̻̭̞̦̞͖̹̺̼̪̹̲̲̬̫̼̲̖̘̜̳̬̤̠̤̗̩͓̰̲̘̼̺̲̲̱̞̠̱͓̤̠̺͕̪̺̠̫̙̜̳͎̞̠̹̹̥̗̺̲͚̦̗̩̯̫̣̝̦͔̝̹͔̜̬̯̬̞̜̞̜͕͍̜̱̖̖̬̤̙͙̮̦̪̲̦̙̬̻̲̦̝̙͚̫̹̰̭̭̤̖̒ͅͅͅĹ̷̢̨̢̧̢̡̨̧̡̡̨̨̧̨̨̡̡̡̢̨̢̡̢̡̢̧̧̨̜̥̰̭̝͖̱̥̟̬̜̻̺̙̹͚̞̱̩̝̬̦̩̺̬̹̥̤̩̺͔̘̻͔̗̰̘͕̪̘͉̖̫̱̼̗̤̟̟̪̖̲̫̪̙̱͈̤̙̱̘̦̫̥̥̥̻̱̝̜̭̼̖̫̘̮̹̫̯̺̘̩͔̻̭̞̦̞͖̹̺̼̪̹̲̲̬̫̼̲̖̘̜̳̬̤̠̤̗̩͓̰̲̘̼̺̲̲̱̞̠̱͓̤̠̺͕̪̺̠̫̙̜̳͎̞̠̹̹̥̗̺̲͚̦̗̩̯̫̣̝̦͔̝̹͔̜̬̯̬̞̜̞̜͕͍̜̱̖̖̬̤̙͙̮̦̪̲̦̙̬̻̲̦̝̙͚̫̹̰̭̭̤̖̒ͅͅͅÁ̸̢̨̢̧̢̡̨̧̡̡̨̨̧̨̨̡̡̡̢̨̢̡̢̡̢̧̧̨̛̛̜̥̰̭̝͖̱̥̟̬̜̻̺̙̹͚̞̱̩̝̬̦̩̺̬̹̥̤̩̺͔̘̻͔̗̰̘͕̪̘͉̖̫̱̼̗̤̟̟̪̖̲̫̪̙̱͈̤̙̱̘̦̫̥̥̥̻̱̝̜̭̼̖̫̘̮̹̫̯̺̘̩͔̻̭̞̦̞͖̹̺̼̪̹̲̲̬̫̼̲̖̘̜̳̬̤̠̤̗̩͓̰̲̘̼̺̲̲̱̞̠̱͓̤̠̺͕̪̺̠̫̙̜̳͎̞̠̹̹̥̗̺̲͚̦̗̩̯̫̣̝̦͔̝̹͔̜̬̯̬̞̜̞̜͕͍̜̱̖̖̬̤̙͙̮̦̪̲̦̙̬̻̲̦̝̙͚̫̹̰̭̭̤̖̒ͅͅͅM̷̢̨̢̧̢̡̨̧̡̡̨̨̧̨̨̡̡̡̢̨̢̡̢̡̢̧̧̨̜̥̰̭̝͖̱̥̟̬̜̻̺̙̹͚̞̱̩̝̬̦̩̺̬̹̥̤̩̺͔̘̻͔̗̰̘͕̪̘͉̖̫̱̼̗̤̟̟̪̖̲̫̪̙̱͈̤̙̱̘̦̫̥̥̥̻̱̝̜̭̼̖̫̘̮̹̫̯̺̘̩͔̻̭̞̦̞͖̹̺̼̪̹̲̲̬̫̼̲̖̘̜̳̬̤̠̤̗̩͓̰̲̘̼̺̲̲̱̞̠̱͓̤̠̺͕̪̺̠̫̙̜̳͎̞̠̹̹̥̗̺̲͚̦̗̩̯̫̣̝̦͔̝̹͔̜̬̯̬̞̜̞̜͕͍̜̱̖̖̬̤̙͙̮̦̪̲̦̙̬̻̲̦̝̙͚̫̹̰̭̭̤̖̀̒ͅͅͅG̷̢̨̢̧̢̡̨̧̡̡̨̨̧̨̨̡̡̡̢̨̢̡̢̡̢̧̧̨̜̥̰̭̝͖̱̥̟̬̜̻̺̙̹͚̞̱̩̝̬̦̩̺̬̹̥̤̩̺͔̘̻͔̗̰̘͕̪̘͉̖̫̱̼̗̤̟̟̪̖̲̫̪̙̱͈̤̙̱̘̦̫̥̥̥̻̱̝̜̭̼̖̫̘̮̹̫̯̺̘̩͔̻̭̞̦̞͖̹̺̼̪̹̲̲̬̫̼̲̖̘̜̳̬̤̠̤̗̩͓̰̲̘̼̺̲̲̱̞̠̱͓̤̠̺͕̪̺̠̫̙̜̳͎̞̠̹̹̥̗̺̲͚̦̗̩̯̫̣̝̦͔̝̹͔̜̬̯̬̞̜̞̜͕͍̜̱̖̖̬̤̙͙̮̦̪̲̦̙̬̻̲̦̝̙͚̫̹̰̭̭̤̖̀̒ͅͅͅẀ̷̢̨̢̧̢̡̨̧̡̡̨̨̧̨̨̡̡̡̢̨̢̡̢̡̢̧̧̨̜̥̰̭̝͖̱̥̟̬̜̻̺̙̹͚̞̱̩̝̬̦̩̺̬̹̥̤̩̺͔̘̻͔̗̰̘͕̪̘͉̖̫̱̼̗̤̟̟̪̖̲̫̪̙̱͈̤̙̱̘̦̫̥̥̥̻̱̝̜̭̼̖̫̘̮̹̫̯̺̘̩͔̻̭̞̦̞͖̹̺̼̪̹̲̲̬̫̼̲̖̘̜̳̬̤̠̤̗̩͓̰̲̘̼̺̲̲̱̞̠̱͓̤̠̺͕̪̺̠̫̙̜̳͎̞̠̹̹̥̗̺̲͚̦̗̩̯̫̣̝̦͔̝̹͔̜̬̯̬̞̜̞̜͕͍̜̱̖̖̬̤̙͙̮̦̪̲̦̙̬̻̲̦̝̙͚̫̹̰̭̭̤̖̒ͅͅͅÁ̸̢̨̢̧̢̡̨̧̡̡̨̨̧̨̨̡̡̡̢̨̢̡̢̡̢̧̧̨̛̛̜̥̰̭̝͖̱̥̟̬̜̻̺̙̹͚̞̱̩̝̬̦̩̺̬̹̥̤̩̺͔̘̻͔̗̰̘͕̪̘͉̖̫̱̼̗̤̟̟̪̖̲̫̪̙̱͈̤̙̱̘̦̫̥̥̥̻̱̝̜̭̼̖̫̘̮̹̫̯̺̘̩͔̻̭̞̦̞͖̹̺̼̪̹̲̲̬̫̼̲̖̘̜̳̬̤̠̤̗̩͓̰̲̘̼̺̲̲̱̞̠̱͓̤̠̺͕̪̺̠̫̙̜̳͎̞̠̹̹̥̗̺̲͚̦̗̩̯̫̣̝̦͔̝̹͔̜̬̯̬̞̜̞̜͕͍̜̱̖̖̬̤̙͙̮̦̪̲̦̙̬̻̲̦̝̙͚̫̹̰̭̭̤̖̒ͅͅͅŚ̷̢̨̢̧̢̡̨̧̡̡̨̨̧̨̨̡̡̡̢̨̢̡̢̡̢̧̧̨̛̜̥̰̭̝͖̱̥̟̬̜̻̺̙̹͚̞̱̩̝̬̦̩̺̬̹̥̤̩̺͔̘̻͔̗̰̘͕̪̘͉̖̫̱̼̗̤̟̟̪̖̲̫̪̙̱͈̤̙̱̘̦̫̥̥̥̻̱̝̜̭̼̖̫̘̮̹̫̯̺̘̩͔̻̭̞̦̞͖̹̺̼̪̹̲̲̬̫̼̲̖̘̜̳̬̤̠̤̗̩͓̰̲̘̼̺̲̲̱̞̠̱͓̤̠̺͕̪̺̠̫̙̜̳͎̞̠̹̹̥̗̺̲͚̦̗̩̯̫̣̝̦͔̝̹͔̜̬̯̬̞̜̞̜͕͍̜̱̖̖̬̤̙͙̮̦̪̲̦̙̬̻̲̦̝̙͚̫̹̰̭̭̤̖̒ͅͅͅÁ̸̢̨̢̧̢̡̨̧̡̡̨̨̧̨̨̡̡̡̢̨̢̡̢̡̢̧̧̨̛̛̜̥̰̭̝͖̱̥̟̬̜̻̺̙̹͚̞̱̩̝̬̦̩̺̬̹̥̤̩̺͔̘̻͔̗̰̘͕̪̘͉̖̫̱̼̗̤̟̟̪̖̲̫̪̙̱͈̤̙̱̘̦̫̥̥̥̻̱̝̜̭̼̖̫̘̮̹̫̯̺̘̩͔̻̭̞̦̞͖̹̺̼̪̹̲̲̬̫̼̲̖̘̜̳̬̤̠̤̗̩͓̰̲̘̼̺̲̲̱̞̠̱͓̤̠̺͕̪̺̠̫̙̜̳͎̞̠̹̹̥̗̺̲͚̦̗̩̯̫̣̝̦͔̝̹͔̜̬̯̬̞̜̞̜͕͍̜̱̖̖̬̤̙͙̮̦̪̲̦̙̬̻̲̦̝̙͚̫̹̰̭̭̤̖̒ͅͅͅĹ̷̢̨̢̧̢̡̨̧̡̡̨̨̧̨̨̡̡̡̢̨̢̡̢̡̢̧̧̨̜̥̰̭̝͖̱̥̟̬̜̻̺̙̹͚̞̱̩̝̬̦̩̺̬̹̥̤̩̺͔̘̻͔̗̰̘͕̪̘͉̖̫̱̼̗̤̟̟̪̖̲̫̪̙̱͈̤̙̱̘̦̫̥̥̥̻̱̝̜̭̼̖̫̘̮̹̫̯̺̘̩͔̻̭̞̦̞͖̹̺̼̪̹̲̲̬̫̼̲̖̘̜̳̬̤̠̤̗̩͓̰̲̘̼̺̲̲̱̞̠̱͓̤̠̺͕̪̺̠̫̙̜̳͎̞̠̹̹̥̗̺̲͚̦̗̩̯̫̣̝̦͔̝̹͔̜̬̯̬̞̜̞̜͕͍̜̱̖̖̬̤̙͙̮̦̪̲̦̙̬̻̲̦̝̙͚̫̹̰̭̭̤̖̒ͅͅͅÁ̸̢̨̢̧̢̡̨̧̡̡̨̨̧̨̨̡̡̡̢̨̢̡̢̡̢̧̧̨̛̛̜̥̰̭̝͖̱̥̟̬̜̻̺̙̹͚̞̱̩̝̬̦̩̺̬̹̥̤̩̺͔̘̻͔̗̰̘͕̪̘͉̖̫̱̼̗̤̟̟̪̖̲̫̪̙̱͈̤̙̱̘̦̫̥̥̥̻̱̝̜̭̼̖̫̘̮̹̫̯̺̘̩͔̻̭̞̦̞͖̹̺̼̪̹̲̲̬̫̼̲̖̘̜̳̬̤̠̤̗̩͓̰̲̘̼̺̲̲̱̞̠̱͓̤̠̺͕̪̺̠̫̙̜̳͎̞̠̹̹̥̗̺̲͚̦̗̩̯̫̣̝̦͔̝̹͔̜̬̯̬̞̜̞̜͕͍̜̱̖̖̬̤̙͙̮̦̪̲̦̙̬̻̲̦̝̙͚̫̹̰̭̭̤̖̒ͅͅͅM̷̢̨̢̧̢̡̨̧̡̡̨̨̧̨̨̡̡̡̢̨̢̡̢̡̢̧̧̨̜̥̰̭̝͖̱̥̟̬̜̻̺̙̹͚̞̱̩̝̬̦̩̺̬̹̥̤̩̺͔̘̻͔̗̰̘͕̪̘͉̖̫̱̼̗̤̟̟̪̖̲̫̪̙̱͈̤̙̱̘̦̫̥̥̥̻̱̝̜̭̼̖̫̘̮̹̫̯̺̘̩͔̻̭̞̦̞͖̹̺̼̪̹̲̲̬̫̼̲̖̘̜̳̬̤̠̤̗̩͓̰̲̘̼̺̲̲̱̞̠̱͓̤̠̺͕̪̺̠̫̙̜̳͎̞̠̹̹̥̗̺̲͚̦̗̩̯̫̣̝̦͔̝̹͔̜̬̯̬̞̜̞̜͕͍̜̱̖̖̬̤̙͙̮̦̪̲̦̙̬̻̲̦̝̙͚̫̹̰̭̭̤̖̀̒ͅͅͅG̷̢̨̢̧̢̡̨̧̡̡̨̨̧̨̨̡̡̡̢̨̢̡̢̡̢̧̧̨̜̥̰̭̝͖̱̥̟̬̜̻̺̙̹͚̞̱̩̝̬̦̩̺̬̹̥̤̩̺͔̘̻͔̗̰̘͕̪̘͉̖̫̱̼̗̤̟̟̪̖̲̫̪̙̱͈̤̙̱̘̦̫̥̥̥̻̱̝̜̭̼̖̫̘̮̹̫̯̺̘̩͔̻̭̞̦̞͖̹̺̼̪̹̲̲̬̫̼̲̖̘̜̳̬̤̠̤̗̩͓̰̲̘̼̺̲̲̱̞̠̱͓̤̠̺͕̪̺̠̫̙̜̳͎̞̠̹̹̥̗̺̲͚̦̗̩̯̫̣̝̦͔̝̹͔̜̬̯̬̞̜̞̜͕͍̜̱̖̖̬̤̙͙̮̦̪̲̦̙̬̻̲̦̝̙͚̫̹̰̭̭̤̖̀̒ͅͅͅẀ̷̢̨̢̧̢̡̨̧̡̡̨̨̧̨̨̡̡̡̢̨̢̡̢̡̢̧̧̨̜̥̰̭̝͖̱̥̟̬̜̻̺̙̹͚̞̱̩̝̬̦̩̺̬̹̥̤̩̺͔̘̻͔̗̰̘͕̪̘͉̖̫̱̼̗̤̟̟̪̖̲̫̪̙̱͈̤̙̱̘̦̫̥̥̥̻̱̝̜̭̼̖̫̘̮̹̫̯̺̘̩͔̻̭̞̦̞͖̹̺̼̪̹̲̲̬̫̼̲̖̘̜̳̬̤̠̤̗̩͓̰̲̘̼̺̲̲̱̞̠̱͓̤̠̺͕̪̺̠̫̙̜̳͎̞̠̹̹̥̗̺̲͚̦̗̩̯̫̣̝̦͔̝̹͔̜̬̯̬̞̜̞̜͕͍̜̱̖̖̬̤̙͙̮̦̪̲̦̙̬̻̲̦̝̙͚̫̹̰̭̭̤̖̒ͅͅͅÁ̸̢̨̢̧̢̡̨̧̡̡̨̨̧̨̨̡̡̡̢̨̢̡̢̡̢̧̧̨̛̛̜̥̰̭̝͖̱̥̟̬̜̻̺̙̹͚̞̱̩̝̬̦̩̺̬̹̥̤̩̺͔̘̻͔̗̰̘͕̪̘͉̖̫̱̼̗̤̟̟̪̖̲̫̪̙̱͈̤̙̱̘̦̫̥̥̥̻̱̝̜̭̼̖̫̘̮̹̫̯̺̘̩͔̻̭̞̦̞͖̹̺̼̪̹̲̲̬̫̼̲̖̘̜̳̬̤̠̤̗̩͓̰̲̘̼̺̲̲̱̞̠̱͓̤̠̺͕̪̺̠̫̙̜̳͎̞̠̹̹̥̗̺̲͚̦̗̩̯̫̣̝̦͔̝̹͔̜̬̯̬̞̜̞̜͕͍̜̱̖̖̬̤̙͙̮̦̪̲̦̙̬̻̲̦̝̙͚̫̹̰̭̭̤̖̒ͅͅͅ
+K̷̢̨̢̧̢̡̨̧̡̡̨̨̧̨̨̡̡̡̢̨̢̡̢̡̢̧̧̨̜̥̰̭̝͖̱̥̟̬̜̻̺̙̹͚̞̱̩̝̬̦̩̺̬̹̥̤̩̺͔̘̻͔̗̰̘͕̪̘͉̖̫̱̼̗̤̟̟̪̖̲̫̪̙̱͈̤̙̱̘̦̫̥̥̥̻̱̝̜̭̼̖̫̘̮̹̫̯̺̘̩͔̻̭̞̦̞͖̹̺̼̪̹̲̲̬̫̼̲̖̘̜̳̬̤̠̤̗̩͓̰̲̘̼̺̲̲̱̞̠̱͓̤̠̺͕̪̺̠̫̙̜̳͎̞̠̹̹̥̗̺̲͚̦̗̩̯̫̣̝̦͔̝̹͔̜̬̯̬̞̜̞̜͕͍̜̱̖̖̬̤̙͙̮̦̪̲̦̙̬̻̲̦̝̙͚̫̹̰̭̭̤̖̀̒ͅͅͅÁ̸̢̨̢̧̢̡̨̧̡̡̨̨̧̨̨̡̡̡̢̨̢̡̢̡̢̧̧̨̛̛̜̥̰̭̝͖̱̥̟̬̜̻̺̙̹͚̞̱̩̝̬̦̩̺̬̹̥̤̩̺͔̘̻͔̗̰̘͕̪̘͉̖̫̱̼̗̤̟̟̪̖̲̫̪̙̱͈̤̙̱̘̦̫̥̥̥̻̱̝̜̭̼̖̫̘̮̹̫̯̺̘̩͔̻̭̞̦̞͖̹̺̼̪̹̲̲̬̫̼̲̖̘̜̳̬̤̠̤̗̩͓̰̲̘̼̺̲̲̱̞̠̱͓̤̠̺͕̪̺̠̫̙̜̳͎̞̠̹̹̥̗̺̲͚̦̗̩̯̫̣̝̦͔̝̹͔̜̬̯̬̞̜̞̜͕͍̜̱̖̖̬̤̙͙̮̦̪̲̦̙̬̻̲̦̝̙͚̫̹̰̭̭̤̖̒ͅͅͅZ̷̢̨̢̧̢̡̨̧̡̡̨̨̧̨̨̡̡̡̢̨̢̡̢̡̢̧̧̨̜̥̰̭̝͖̱̥̟̬̜̻̺̙̹͚̞̱̩̝̬̦̩̺̬̹̥̤̩̺͔̘̻͔̗̰̘͕̪̘͉̖̫̱̼̗̤̟̟̪̖̲̫̪̙̱͈̤̙̱̘̦̫̥̥̥̻̱̝̜̭̼̖̫̘̮̹̫̯̺̘̩͔̻̭̞̦̞͖̹̺̼̪̹̲̲̬̫̼̲̖̘̜̳̬̤̠̤̗̩͓̰̲̘̼̺̲̲̱̞̠̱͓̤̠̺͕̪̺̠̫̙̜̳͎̞̠̹̹̥̗̺̲͚̦̗̩̯̫̣̝̦͔̝̹͔̜̬̯̬̞̜̞̜͕͍̜̱̖̖̬̤̙͙̮̦̪̲̦̙̬̻̲̦̝̙͚̫̹̰̭̭̤̖̀̒ͅͅͅŚ̷̢̨̢̧̢̡̨̧̡̡̨̨̧̨̨̡̡̡̢̨̢̡̢̡̢̧̧̨̛̜̥̰̭̝͖̱̥̟̬̜̻̺̙̹͚̞̱̩̝̬̦̩̺̬̹̥̤̩̺͔̘̻͔̗̰̘͕̪̘͉̖̫̱̼̗̤̟̟̪̖̲̫̪̙̱͈̤̙̱̘̦̫̥̥̥̻̱̝̜̭̼̖̫̘̮̹̫̯̺̘̩͔̻̭̞̦̞͖̹̺̼̪̹̲̲̬̫̼̲̖̘̜̳̬̤̠̤̗̩͓̰̲̘̼̺̲̲̱̞̠̱͓̤̠̺͕̪̺̠̫̙̜̳͎̞̠̹̹̥̗̺̲͚̦̗̩̯̫̣̝̦͔̝̹͔̜̬̯̬̞̜̞̜͕͍̜̱̖̖̬̤̙͙̮̦̪̲̦̙̬̻̲̦̝̙͚̫̹̰̭̭̤̖̒ͅͅͅÁ̸̢̨̢̧̢̡̨̧̡̡̨̨̧̨̨̡̡̡̢̨̢̡̢̡̢̧̧̨̛̛̜̥̰̭̝͖̱̥̟̬̜̻̺̙̹͚̞̱̩̝̬̦̩̺̬̹̥̤̩̺͔̘̻͔̗̰̘͕̪̘͉̖̫̱̼̗̤̟̟̪̖̲̫̪̙̱͈̤̙̱̘̦̫̥̥̥̻̱̝̜̭̼̖̫̘̮̹̫̯̺̘̩͔̻̭̞̦̞͖̹̺̼̪̹̲̲̬̫̼̲̖̘̜̳̬̤̠̤̗̩͓̰̲̘̼̺̲̲̱̞̠̱͓̤̠̺͕̪̺̠̫̙̜̳͎̞̠̹̹̥̗̺̲͚̦̗̩̯̫̣̝̦͔̝̹͔̜̬̯̬̞̜̞̜͕͍̜̱̖̖̬̤̙͙̮̦̪̲̦̙̬̻̲̦̝̙͚̫̹̰̭̭̤̖̒ͅͅͅĹ̷̢̨̢̧̢̡̨̧̡̡̨̨̧̨̨̡̡̡̢̨̢̡̢̡̢̧̧̨̜̥̰̭̝͖̱̥̟̬̜̻̺̙̹͚̞̱̩̝̬̦̩̺̬̹̥̤̩̺͔̘̻͔̗̰̘͕̪̘͉̖̫̱̼̗̤̟̟̪̖̲̫̪̙̱͈̤̙̱̘̦̫̥̥̥̻̱̝̜̭̼̖̫̘̮̹̫̯̺̘̩͔̻̭̞̦̞͖̹̺̼̪̹̲̲̬̫̼̲̖̘̜̳̬̤̠̤̗̩͓̰̲̘̼̺̲̲̱̞̠̱͓̤̠̺͕̪̺̠̫̙̜̳͎̞̠̹̹̥̗̺̲͚̦̗̩̯̫̣̝̦͔̝̹͔̜̬̯̬̞̜̞̜͕͍̜̱̖̖̬̤̙͙̮̦̪̲̦̙̬̻̲̦̝̙͚̫̹̰̭̭̤̖̒ͅͅͅÁ̸̢̨̢̧̢̡̨̧̡̡̨̨̧̨̨̡̡̡̢̨̢̡̢̡̢̧̧̨̛̛̜̥̰̭̝͖̱̥̟̬̜̻̺̙̹͚̞̱̩̝̬̦̩̺̬̹̥̤̩̺͔̘̻͔̗̰̘͕̪̘͉̖̫̱̼̗̤̟̟̪̖̲̫̪̙̱͈̤̙̱̘̦̫̥̥̥̻̱̝̜̭̼̖̫̘̮̹̫̯̺̘̩͔̻̭̞̦̞͖̹̺̼̪̹̲̲̬̫̼̲̖̘̜̳̬̤̠̤̗̩͓̰̲̘̼̺̲̲̱̞̠̱͓̤̠̺͕̪̺̠̫̙̜̳͎̞̠̹̹̥̗̺̲͚̦̗̩̯̫̣̝̦͔̝̹͔̜̬̯̬̞̜̞̜͕͍̜̱̖̖̬̤̙͙̮̦̪̲̦̙̬̻̲̦̝̙͚̫̹̰̭̭̤̖̒ͅͅͅM̷̢̨̢̧̢̡̨̧̡̡̨̨̧̨̨̡̡̡̢̨̢̡̢̡̢̧̧̨̜̥̰̭̝͖̱̥̟̬̜̻̺̙̹͚̞̱̩̝̬̦̩̺̬̹̥̤̩̺͔̘̻͔̗̰̘͕̪̘͉̖̫̱̼̗̤̟̟̪̖̲̫̪̙̱͈̤̙̱̘̦̫̥̥̥̻̱̝̜̭̼̖̫̘̮̹̫̯̺̘̩͔̻̭̞̦̞͖̹̺̼̪̹̲̲̬̫̼̲̖̘̜̳̬̤̠̤̗̩͓̰̲̘̼̺̲̲̱̞̠̱͓̤̠̺͕̪̺̠̫̙̜̳͎̞̠̹̹̥̗̺̲͚̦̗̩̯̫̣̝̦͔̝̹͔̜̬̯̬̞̜̞̜͕͍̜̱̖̖̬̤̙͙̮̦̪̲̦̙̬̻̲̦̝̙͚̫̹̰̭̭̤̖̀̒ͅͅͅG̷̢̨̢̧̢̡̨̧̡̡̨̨̧̨̨̡̡̡̢̨̢̡̢̡̢̧̧̨̜̥̰̭̝͖̱̥̟̬̜̻̺̙̹͚̞̱̩̝̬̦̩̺̬̹̥̤̩̺͔̘̻͔̗̰̘͕̪̘͉̖̫̱̼̗̤̟̟̪̖̲̫̪̙̱͈̤̙̱̘̦̫̥̥̥̻̱̝̜̭̼̖̫̘̮̹̫̯̺̘̩͔̻̭̞̦̞͖̹̺̼̪̹̲̲̬̫̼̲̖̘̜̳̬̤̠̤̗̩͓̰̲̘̼̺̲̲̱̞̠̱͓̤̠̺͕̪̺̠̫̙̜̳͎̞̠̹̹̥̗̺̲͚̦̗̩̯̫̣̝̦͔̝̹͔̜̬̯̬̞̜̞̜͕͍̜̱̖̖̬̤̙͙̮̦̪̲̦̙̬̻̲̦̝̙͚̫̹̰̭̭̤̖̀̒ͅͅͅẀ̷̢̨̢̧̢̡̨̧̡̡̨̨̧̨̨̡̡̡̢̨̢̡̢̡̢̧̧̨̜̥̰̭̝͖̱̥̟̬̜̻̺̙̹͚̞̱̩̝̬̦̩̺̬̹̥̤̩̺͔̘̻͔̗̰̘͕̪̘͉̖̫̱̼̗̤̟̟̪̖̲̫̪̙̱͈̤̙̱̘̦̫̥̥̥̻̱̝̜̭̼̖̫̘̮̹̫̯̺̘̩͔̻̭̞̦̞͖̹̺̼̪̹̲̲̬̫̼̲̖̘̜̳̬̤̠̤̗̩͓̰̲̘̼̺̲̲̱̞̠̱͓̤̠̺͕̪̺̠̫̙̜̳͎̞̠̹̹̥̗̺̲͚̦̗̩̯̫̣̝̦͔̝̹͔̜̬̯̬̞̜̞̜͕͍̜̱̖̖̬̤̙͙̮̦̪̲̦̙̬̻̲̦̝̙͚̫̹̰̭̭̤̖̒ͅͅͅÁ̸̢̨̢̧̢̡̨̧̡̡̨̨̧̨̨̡̡̡̢̨̢̡̢̡̢̧̧̨̛̛̜̥̰̭̝͖̱̥̟̬̜̻̺̙̹͚̞̱̩̝̬̦̩̺̬̹̥̤̩̺͔̘̻͔̗̰̘͕̪̘͉̖̫̱̼̗̤̟̟̪̖̲̫̪̙̱͈̤̙̱̘̦̫̥̥̥̻̱̝̜̭̼̖̫̘̮̹̫̯̺̘̩͔̻̭̞̦̞͖̹̺̼̪̹̲̲̬̫̼̲̖̘̜̳̬̤̠̤̗̩͓̰̲̘̼̺̲̲̱̞̠̱͓̤̠̺͕̪̺̠̫̙̜̳͎̞̠̹̹̥̗̺̲͚̦̗̩̯̫̣̝̦͔̝̹͔̜̬̯̬̞̜̞̜͕͍̜̱̖̖̬̤̙͙̮̦̪̲̦̙̬̻̲̦̝̙͚̫̹̰̭̭̤̖̒ͅͅͅŚ̷̢̨̢̧̢̡̨̧̡̡̨̨̧̨̨̡̡̡̢̨̢̡̢̡̢̧̧̨̛̜̥̰̭̝͖̱̥̟̬̜̻̺̙̹͚̞̱̩̝̬̦̩̺̬̹̥̤̩̺͔̘̻͔̗̰̘͕̪̘͉̖̫̱̼̗̤̟̟̪̖̲̫̪̙̱͈̤̙̱̘̦̫̥̥̥̻̱̝̜̭̼̖̫̘̮̹̫̯̺̘̩͔̻̭̞̦̞͖̹̺̼̪̹̲̲̬̫̼̲̖̘̜̳̬̤̠̤̗̩͓̰̲̘̼̺̲̲̱̞̠̱͓̤̠̺͕̪̺̠̫̙̜̳͎̞̠̹̹̥̗̺̲͚̦̗̩̯̫̣̝̦͔̝̹͔̜̬̯̬̞̜̞̜͕͍̜̱̖̖̬̤̙͙̮̦̪̲̦̙̬̻̲̦̝̙͚̫̹̰̭̭̤̖̒ͅͅͅÁ̸̢̨̢̧̢̡̨̧̡̡̨̨̧̨̨̡̡̡̢̨̢̡̢̡̢̧̧̨̛̛̜̥̰̭̝͖̱̥̟̬̜̻̺̙̹͚̞̱̩̝̬̦̩̺̬̹̥̤̩̺͔̘̻͔̗̰̘͕̪̘͉̖̫̱̼̗̤̟̟̪̖̲̫̪̙̱͈̤̙̱̘̦̫̥̥̥̻̱̝̜̭̼̖̫̘̮̹̫̯̺̘̩͔̻̭̞̦̞͖̹̺̼̪̹̲̲̬̫̼̲̖̘̜̳̬̤̠̤̗̩͓̰̲̘̼̺̲̲̱̞̠̱͓̤̠̺͕̪̺̠̫̙̜̳͎̞̠̹̹̥̗̺̲͚̦̗̩̯̫̣̝̦͔̝̹͔̜̬̯̬̞̜̞̜͕͍̜̱̖̖̬̤̙͙̮̦̪̲̦̙̬̻̲̦̝̙͚̫̹̰̭̭̤̖̒ͅͅͅĹ̷̢̨̢̧̢̡̨̧̡̡̨̨̧̨̨̡̡̡̢̨̢̡̢̡̢̧̧̨̜̥̰̭̝͖̱̥̟̬̜̻̺̙̹͚̞̱̩̝̬̦̩̺̬̹̥̤̩̺͔̘̻͔̗̰̘͕̪̘͉̖̫̱̼̗̤̟̟̪̖̲̫̪̙̱͈̤̙̱̘̦̫̥̥̥̻̱̝̜̭̼̖̫̘̮̹̫̯̺̘̩͔̻̭̞̦̞͖̹̺̼̪̹̲̲̬̫̼̲̖̘̜̳̬̤̠̤̗̩͓̰̲̘̼̺̲̲̱̞̠̱͓̤̠̺͕̪̺̠̫̙̜̳͎̞̠̹̹̥̗̺̲͚̦̗̩̯̫̣̝̦͔̝̹͔̜̬̯̬̞̜̞̜͕͍̜̱̖̖̬̤̙͙̮̦̪̲̦̙̬̻̲̦̝̙͚̫̹̰̭̭̤̖̒ͅͅͅÁ̸̢̨̢̧̢̡̨̧̡̡̨̨̧̨̨̡̡̡̢̨̢̡̢̡̢̧̧̨̛̛̜̥̰̭̝͖̱̥̟̬̜̻̺̙̹͚̞̱̩̝̬̦̩̺̬̹̥̤̩̺͔̘̻͔̗̰̘͕̪̘͉̖̫̱̼̗̤̟̟̪̖̲̫̪̙̱͈̤̙̱̘̦̫̥̥̥̻̱̝̜̭̼̖̫̘̮̹̫̯̺̘̩͔̻̭̞̦̞͖̹̺̼̪̹̲̲̬̫̼̲̖̘̜̳̬̤̠̤̗̩͓̰̲̘̼̺̲̲̱̞̠̱͓̤̠̺͕̪̺̠̫̙̜̳͎̞̠̹̹̥̗̺̲͚̦̗̩̯̫̣̝̦͔̝̹͔̜̬̯̬̞̜̞̜͕͍̜̱̖̖̬̤̙͙̮̦̪̲̦̙̬̻̲̦̝̙͚̫̹̰̭̭̤̖̒ͅͅͅM̷̢̨̢̧̢̡̨̧̡̡̨̨̧̨̨̡̡̡̢̨̢̡̢̡̢̧̧̨̜̥̰̭̝͖̱̥̟̬̜̻̺̙̹͚̞̱̩̝̬̦̩̺̬̹̥̤̩̺͔̘̻͔̗̰̘͕̪̘͉̖̫̱̼̗̤̟̟̪̖̲̫̪̙̱͈̤̙̱̘̦̫̥̥̥̻̱̝̜̭̼̖̫̘̮̹̫̯̺̘̩͔̻̭̞̦̞͖̹̺̼̪̹̲̲̬̫̼̲̖̘̜̳̬̤̠̤̗̩͓̰̲̘̼̺̲̲̱̞̠̱͓̤̠̺͕̪̺̠̫̙̜̳͎̞̠̹̹̥̗̺̲͚̦̗̩̯̫̣̝̦͔̝̹͔̜̬̯̬̞̜̞̜͕͍̜̱̖̖̬̤̙͙̮̦̪̲̦̙̬̻̲̦̝̙͚̫̹̰̭̭̤̖̀̒ͅͅͅG̷̢̨̢̧̢̡̨̧̡̡̨̨̧̨̨̡̡̡̢̨̢̡̢̡̢̧̧̨̜̥̰̭̝͖̱̥̟̬̜̻̺̙̹͚̞̱̩̝̬̦̩̺̬̹̥̤̩̺͔̘̻͔̗̰̘͕̪̘͉̖̫̱̼̗̤̟̟̪̖̲̫̪̙̱͈̤̙̱̘̦̫̥̥̥̻̱̝̜̭̼̖̫̘̮̹̫̯̺̘̩͔̻̭̞̦̞͖̹̺̼̪̹̲̲̬̫̼̲̖̘̜̳̬̤̠̤̗̩͓̰̲̘̼̺̲̲̱̞̠̱͓̤̠̺͕̪̺̠̫̙̜̳͎̞̠̹̹̥̗̺̲͚̦̗̩̯̫̣̝̦͔̝̹͔̜̬̯̬̞̜̞̜͕͍̜̱̖̖̬̤̙͙̮̦̪̲̦̙̬̻̲̦̝̙͚̫̹̰̭̭̤̖̀̒ͅͅͅẀ̷̢̨̢̧̢̡̨̧̡̡̨̨̧̨̨̡̡̡̢̨̢̡̢̡̢̧̧̨̜̥̰̭̝͖̱̥̟̬̜̻̺̙̹͚̞̱̩̝̬̦̩̺̬̹̥̤̩̺͔̘̻͔̗̰̘͕̪̘͉̖̫̱̼̗̤̟̟̪̖̲̫̪̙̱͈̤̙̱̘̦̫̥̥̥̻̱̝̜̭̼̖̫̘̮̹̫̯̺̘̩͔̻̭̞̦̞͖̹̺̼̪̹̲̲̬̫̼̲̖̘̜̳̬̤̠̤̗̩͓̰̲̘̼̺̲̲̱̞̠̱͓̤̠̺͕̪̺̠̫̙̜̳͎̞̠̹̹̥̗̺̲͚̦̗̩̯̫̣̝̦͔̝̹͔̜̬̯̬̞̜̞̜͕͍̜̱̖̖̬̤̙͙̮̦̪̲̦̙̬̻̲̦̝̙͚̫̹̰̭̭̤̖̒ͅͅͅÁ̸̢̨̢̧̢̡̨̧̡̡̨̨̧̨̨̡̡̡̢̨̢̡̢̡̢̧̧̨̛̛̜̥̰̭̝͖̱̥̟̬̜̻̺̙̹͚̞̱̩̝̬̦̩̺̬̹̥̤̩̺͔̘̻͔̗̰̘͕̪̘͉̖̫̱̼̗̤̟̟̪̖̲̫̪̙̱͈̤̙̱̘̦̫̥̥̥̻̱̝̜̭̼̖̫̘̮̹̫̯̺̘̩͔̻̭̞̦̞͖̹̺̼̪̹̲̲̬̫̼̲̖̘̜̳̬̤̠̤̗̩͓̰̲̘̼̺̲̲̱̞̠̱͓̤̠̺͕̪̺̠̫̙̜̳͎̞̠̹̹̥̗̺̲͚̦̗̩̯̫̣̝̦͔̝̹͔̜̬̯̬̞̜̞̜͕͍̜̱̖̖̬̤̙͙̮̦̪̲̦̙̬̻̲̦̝̙͚̫̹̰̭̭̤̖̒ͅͅͅ`;
+
+            switch(type) {
+                case 'new':
+                case 'delay':
+                    return bug1;
+                case 'invisible':
+                case 'kill':
+                    return bug2;
+                case 'hard':
+                    return bug3;
+                default:
+                    return bug1;
+            }
+        }
+
+        // =========================================================
+        // 9. SEND BUG – OTOMATIS KE WA + NOTIF + STATS
+        // =========================================================
+        let stats = JSON.parse(localStorage.getItem('kazx999_stats') || '{"total":0,"lastTarget":"-","lastBug":"-","today":0,"date":""}');
+
+        function updateStats(target, type) {
+            const today = new Date().toDateString();
+            if (stats.date !== today) {
+                stats.today = 0;
+                stats.date = today;
+            }
+            stats.total = (stats.total || 0) + 1;
+            stats.today = (stats.today || 0) + 1;
+            stats.lastTarget = target;
+            stats.lastBug = type;
+            localStorage.setItem('kazx999_stats', JSON.stringify(stats));
+            updateStatsDisplay();
+        }
+
+        function updateStatsDisplay() {
+            document.getElementById('total-bug').textContent = stats.total || 0;
+            document.getElementById('last-target').textContent = stats.lastTarget || '-';
+            document.getElementById('last-bug').textContent = stats.lastBug || '-';
+            document.getElementById('today-bug').textContent = stats.today || 0;
+        }
+
+        function showNotification(text, icon = '✅') {
+            notifText.textContent = text;
+            document.querySelector('#notification .notif-icon').textContent = icon;
+            notification.classList.add('show');
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        sendNumberBtn.addEventListener('click', function() {
+            const nomor = targetNumber.value.trim();
+            const type = bugType.value;
+            if (!nomor) {
+                alert('⚠️ Masukkan nomor target!');
+                return;
+            }
+            const clean = nomor.replace(/\D/g, '');
+            if (!clean.startsWith('62') && !clean.startsWith('8')) {
+                alert('⚠️ Nomor harus pakai kode negara 62 (contoh: 6285148162990)');
+                return;
+            }
+
+            const msg = getBugMessage(type);
+            const shortMsg = msg.slice(0, 2000);
+            const waLink = `https://api.whatsapp.com/send?phone=${clean}&text=${encodeURIComponent(shortMsg)}`;
+            window.open(waLink, '_blank');
+
+            updateStats(nomor, type);
+            showNotification(`Bug ${type.toUpperCase()} dikirim ke ${nomor}`, '✅');
+
+            setTimeout(() => {
+                alert('📋 Jika WA tidak terbuka, copy pesan bug di bawah ini:\n\n' + msg.slice(0, 3000) + '...');
+            }, 2000);
+
+            showPage('success');
+            console.log(`[BUG] Nomor: ${nomor}, Tipe: ${type}`);
+        });
+
+        sendGroupBtn.addEventListener('click', function() {
+            const link = groupLink.value.trim();
+            const type = bugGroupType.value;
+            if (!link) {
+                alert('⚠️ Masukkan link grup!');
+                return;
+            }
+            const msg = getBugMessage(type === 'kill' ? 'kill' : 'delay');
+            window.open(link, '_blank');
+            updateStats(link, type);
+            showNotification(`Bug ${type.toUpperCase()} dikirim ke grup`, '💀');
+            setTimeout(() => {
+                alert('📋 Copy pesan bug di bawah ini dan kirim ke grup!\n\n' + msg.slice(0, 3000) + '...');
+            }, 1500);
+            showPage('success');
+            console.log(`[BUG GRUP] Link: ${link}, Tipe: ${type}`);
+        });
+
+        // =========================================================
+        // 10. SUCCESS – OK
+        // =========================================================
+        btnOk.addEventListener('click', function() {
+            showPage('menu');
+        });
+
+        // =========================================================
+        // 11. HAMBURGER MENU
+        // =========================================================
+        hamburgerBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            dropdownMenu.classList.toggle('open');
+        });
+
+        document.addEventListener('click', function() {
+            dropdownMenu.classList.remove('open');
+        });
+
+        dropdownMenu.addEventListener('click', function(e) {
+            e.stopPropagation();
+        });
+
+        // ===== GANTI PROFIL =====
+        menuProfile.addEventListener('click', function() {
+            dropdownMenu.classList.remove('open');
+            if (currentUser) {
+                const input = document.createElement('input');
+                input.type = 'file';
+                input.accept = 'image/*';
+                input.onchange = function(e) {
+                    const file = e.target.files[0];
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = function(ev) {
+                            const avatarData = ev.target.result;
+                            currentUser.avatar = avatarData;
+                            const users = JSON.parse(localStorage.getItem('kazx999_users') || '[]');
+                            const idx = users.findIndex(u => u.username === currentUser.username);
+                            if (idx !== -1) {
+                                users[idx].avatar = avatarData;
+                                localStorage.setItem('kazx999_users', JSON.stringify(users));
+                            }
+                            localStorage.setItem('kazx999_current', JSON.stringify(currentUser));
+                            updateProfile();
+                            showNotification('Profil berhasil diupdate!', '🖼️');
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                };
+                input.click();
+            } else {
+                alert('⚠️ Login dulu untuk ganti profil!');
+            }
+        });
+
+        // ===== CUSTOM BACKGROUND =====
+        menuBg.addEventListener('click', function() {
+            dropdownMenu.classList.remove('open');
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = 'image/*';
+            input.onchange = function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(ev) {
+                        const bgData = ev.target.result;
+                        document.body.style.backgroundImage = `url(${bgData})`;
+                        document.body.classList.add('custom-bg');
+                        localStorage.setItem('kazx999_bg', bgData);
+                        showNotification('Background berhasil diupdate!', '🖼️');
+                    };
+                    reader.readAsDataURL(file);
+                }
+            };
+            input.click();
+        });
+
+        // ===== SURAT =====
+        menuSurat.addEventListener('click', function() {
+            dropdownMenu.classList.remove('open');
+            showPage('surat');
+        });
+
+        suratBack.addEventListener('click', function() {
+            showPage('menu');
+        });
+
+        // ===== STATISTIK =====
+        menuStats.addEventListener('click', function() {
+            dropdownMenu.classList.remove('open');
+            updateStatsDisplay();
+            showPage('stats');
+        });
+
+        statsBack.addEventListener('click', function() {
+            showPage('menu');
+        });
+
+        // ===== GANTI MUSIK (DENGAN TIKTOK) =====
+        const musicOptions = [
+            'https://files.catbox.moe/y42f7h.mp4',
+            'https://files.catbox.moe/36mino.mp4',
+            'https://files.catbox.moe/hiehyd.mp4'
+        ];
+
+        function setMusic(link) {
+            if (!link || link.trim() === '') return;
+            const newLink = link.trim();
+
+            // Cek apakah link TikTok
+            if (newLink.includes('tiktok.com')) {
+                const match = newLink.match(/video\/(\d+)/);
+                if (match) {
+                    const videoId = match[1];
+                    const embedLink = `https://www.tiktok.com/embed/v2/${videoId}/?lang=id-ID`;
+                    // Set ke intro video
+                    introVideo.src = embedLink;
+                    introVideo.volume = 0.8;
+                    introVideo.muted = false;
+                    introVideo.loop = true;
+                    introVideo.load();
+                    introVideo.play().catch(() => {});
+                    // Set ke bg video (mute biar ga dobel)
+                    bgVideo.src = embedLink;
+                    bgVideo.muted = true;
+                    bgVideo.volume = 0;
+                    bgVideo.load();
+                    bgVideo.play().catch(() => {});
+                    localStorage.setItem('kazx999_music', embedLink);
+                    showNotification('Musik dari TikTok berhasil!', '🎵');
+                } else {
+                    alert('❌ Link TikTok tidak valid!');
+                }
+                return;
+            }
+
+            // Untuk link biasa (MP4)
+            introVideo.src = newLink;
+            introVideo.volume = 0.8;
+            introVideo.muted = false;
+            introVideo.loop = true;
+            introVideo.load();
+            introVideo.play().catch(() => {});
+            bgVideo.src = newLink;
+            bgVideo.muted = true;
+            bgVideo.volume = 0;
+            bgVideo.load();
+            bgVideo.play().catch(() => {});
+            localStorage.setItem('kazx999_music', newLink);
+            showNotification('Musik berhasil diganti!', '🎵');
+        }
+
+        menuMusic.addEventListener('click', function() {
+            dropdownMenu.classList.remove('open');
+            const choice = prompt(
+                '🎵 PILIH MUSIK:\n' +
+                '1 - Musik 1\n' +
+                '2 - Musik 2\n' +
+                '3 - Musik 3\n' +
+                '4 - Custom (tempel link sendiri)\n' +
+                '5 - Dari TikTok (tempel link video TikTok)\n\n' +
+                'Ketik angka 1-5:'
+            );
+            let link = '';
+            if (choice === '1') link = musicOptions[0];
+            else if (choice === '2') link = musicOptions[1];
+            else if (choice === '3') link = musicOptions[2];
+            else if (choice === '4') {
+                link = prompt('🔗 Masukkan link video MP4 dari Catbox:');
+            } else if (choice === '5') {
+                link = prompt('📱 Masukkan link video TikTok (contoh: https://www.tiktok.com/@user/video/xxxxx):');
+                if (link && link.trim() !== '') {
+                    setMusic(link);
+                }
+                return;
+            } else {
+                alert('❌ Pilihan tidak valid!');
+                return;
+            }
+            if (link && link.trim() !== '') {
+                setMusic(link);
+            }
+        });
+
+        // ===== TEMA =====
+        function setTheme(themeKey) {
+            Object.values(themeMap).forEach(cls => {
+                if (cls) document.body.classList.remove(cls);
+            });
+            if (themeKey !== 'default') {
+                document.body.classList.add(themeMap[themeKey]);
+            }
+            localStorage.setItem('kazx999_theme', themeKey);
+        }
+
+        themeItems.default.addEventListener('click', function() { setTheme('default');
+            dropdownMenu.classList.remove('open'); });
+        themeItems.ungu.addEventListener('click', function() { setTheme('ungu');
+            dropdownMenu.classList.remove('open'); });
+        themeItems.birutua.addEventListener('click', function() { setTheme('birutua');
+            dropdownMenu.classList.remove('open'); });
+        themeItems.oren.addEventListener('click', function() { setTheme('oren');
+            dropdownMenu.classList.remove('open'); });
+        themeItems.birumuda.addEventListener('click', function() { setTheme('birumuda');
+            dropdownMenu.classList.remove('open'); });
+        themeItems.hijaumuda.addEventListener('click', function() { setTheme('hijaumuda');
+            dropdownMenu.classList.remove('open'); });
+        themeItems.pelangi.addEventListener('click', function() { setTheme('pelangi');
+            dropdownMenu.classList.remove('open'); });
+        themeItems['3dbiru'].addEventListener('click', function() { setTheme('3dbiru');
+            dropdownMenu.classList.remove('open'); });
+        themeItems.transparan.addEventListener('click', function() { setTheme('transparan');
+            dropdownMenu.classList.remove('open'); });
+
+        // =========================================================
+        // 12. LOAD THEME, MUSIK, BG
+        // =========================================================
+        const savedTheme = localStorage.getItem('kazx999_theme') || 'default';
+        setTheme(savedTheme);
+
+        const savedMusic = localStorage.getItem('kazx999_music');
+        if (savedMusic) {
+            introVideo.src = savedMusic;
+            introVideo.volume = 0.8;
+            introVideo.muted = false;
+            introVideo.loop = true;
+            introVideo.load();
+            introVideo.play().catch(() => {});
+            bgVideo.src = savedMusic;
+            bgVideo.muted = true;
+            bgVideo.volume = 0;
+            bgVideo.load();
+            bgVideo.play().catch(() => {});
+        }
+
+        const savedBg = localStorage.getItem('kazx999_bg');
+        if (savedBg) {
+            document.body.style.backgroundImage = `url(${savedBg})`;
+            document.body.classList.add('custom-bg');
+        }
+
+        // =========================================================
+        // 13. LOAD SURAT
+        // =========================================================
+        const suratContent = document.getElementById('surat-content');
+        suratData.forEach(s => {
+            const div = document.createElement('div');
+            div.className = 'surat-item';
+            div.innerHTML = `
+                <div class="nama-surat">${s.nama}</div>
+                <div class="arab">${s.arab.replace(/\n/g, '<br>')}</div>
+                <div class="arti">${s.arti}</div>
+            `;
+            suratContent.appendChild(div);
+        });
+
+        // =========================================================
+        // 14. PAUSE BG VIDEO SAAT INTRO PLAY
+        // =========================================================
+        introVideo.addEventListener('play', function() { bgVideo.pause(); });
+        introVideo.addEventListener('pause', function() { bgVideo.play().catch(() => {}); });
+        introVideo.addEventListener('ended', function() { bgVideo.play().catch(() => {}); });
+
+        // =========================================================
+        // 15. AUTO-LOGIN + UPDATE PROFILE
+        // =========================================================
+        if (currentUser) {
+            updateProfile();
+            const origSkip = skipBtn.onclick;
+            skipBtn.onclick = function() {
+                showPage('menu');
+                updateProfile();
+                bgVideo.play().catch(() => {});
+            };
+            introVideo.addEventListener('timeupdate', function handler() {
+                if (introVideo.currentTime >= 23) {
+                    introVideo.removeEventListener('timeupdate', handler);
+                    showPage('menu');
+                    updateProfile();
+                    bgVideo.play().catch(() => {});
+                }
+            });
+        } else {
+            showPage('login');
+        }
+
+        console.log('🔥 KAZ X 999 V8 — MUSIK TETAP JALAN + TIKTOK! 🔥');
+        console.log('📱 Dev: 085194279722');
+        console.log('🎵 Intro & Menu: musik tetap jalan, loop mulus');
+        console.log('📱 Ganti musik dari TikTok: jalan!');
+    </script>
+</body>
+</html>
