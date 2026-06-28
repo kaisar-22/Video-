@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>💔 Untuk Kamu — Dari Kaisar</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Quicksand:wght@400;600&display=swap" rel="stylesheet" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background: linear-gradient(145deg, #1a0000, #3d0c0c);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* ===== JANTUNG BERJATUHAN ===== */
+        .hearts-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+        .heart {
+            position: absolute;
+            top: -10%;
+            font-size: 1.8rem;
+            animation: fall linear infinite;
+            opacity: 0.7;
+        }
+        @keyframes fall {
+            0% { transform: translateY(-10vh) rotate(0deg) scale(1); opacity: 0.8; }
+            100% { transform: translateY(110vh) rotate(720deg) scale(0.3); opacity: 0; }
+        }
+
+        /* ===== MUSIC PLAYER (hidden) ===== */
+        #bg-music {
+            position: fixed;
+            top: -9999px;
+            left: -9999px;
+            width: 1px;
+            height: 1px;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* ===== HALAMAN ===== */
+        .page {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            max-width: 520px;
+            min-height: 100vh;
+            padding: 24px 20px;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+            animation: fadeIn 0.8s ease;
+        }
+        .page.active {
+            display: flex;
+        }
+        @keyframes fadeIn {
+            0% { opacity: 0; transform: scale(0.95) translateY(20px); }
+            100% { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        /* ===== KOTAK PUTIH ===== */
+        .card {
+            background: rgba(255, 240, 240, 0.92);
+            backdrop-filter: blur(14px);
+            border-radius: 60px 20px 60px 20px;
+            padding: 32px 28px;
+            width: 100%;
+            max-width: 480px;
+            box-shadow: 0 20px 80px rgba(200, 0, 0, 0.3), 0 0 0 2px rgba(255, 100, 100, 0.1);
+            border: 2px solid rgba(255, 100, 100, 0.2);
+            transition: 0.3s;
+            color: #2d0a0a;
+        }
+
+        /* ===== JUDUL ===== */
+        h1 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2.6rem;
+            color: #cc1144;
+            text-shadow: 0 0 30px rgba(200, 0, 50, 0.2);
+            margin-bottom: 8px;
+        }
+        h2 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2rem;
+            color: #cc3355;
+            margin-bottom: 12px;
+        }
+        .sub {
+            font-size: 1rem;
+            color: #884466;
+            margin-bottom: 20px;
+            border-bottom: 2px dashed #ff8899;
+            padding-bottom: 12px;
+        }
+
+        /* ===== INPUT ===== */
+        input {
+            width: 100%;
+            padding: 16px 20px;
+            border-radius: 60px;
+            border: 2px solid #ff8899;
+            background: rgba(255, 200, 200, 0.15);
+            font-size: 1.2rem;
+            font-family: 'Quicksand', sans-serif;
+            color: #2d0a0a;
+            outline: none;
+            transition: 0.3s;
+            text-align: center;
+            margin-bottom: 16px;
+        }
+        input:focus {
+            border-color: #cc1144;
+            box-shadow: 0 0 30px rgba(200, 0, 50, 0.15);
+        }
+        input::placeholder {
+            color: #aa8899;
+        }
+
+        /* ===== TOMBOL ===== */
+        .btn-primary {
+            width: 100%;
+            padding: 18px;
+            border-radius: 60px;
+            border: none;
+            background: linear-gradient(145deg, #cc1144, #881133);
+            color: #fff;
+            font-size: 1.4rem;
+            font-weight: 700;
+            font-family: 'Quicksand', sans-serif;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(200, 0, 50, 0.3);
+            transition: 0.3s;
+            letter-spacing: 2px;
+        }
+        .btn-primary:hover {
+            transform: scale(1.02);
+            box-shadow: 0 15px 40px rgba(200, 0, 50, 0.4);
+        }
+        .btn-primary:active {
+            transform: scale(0.96);
+        }
+
+        /* ===== KATA-KATA ===== */
+        .love-text {
+            font-size: 1.2rem;
+            line-height: 1.9;
+            color: #2d0a0a;
+            font-weight: 400;
+            margin: 12px 0;
+            text-align: left;
+            padding: 0 4px;
+        }
+        .love-text strong {
+            color: #cc1144;
+            font-weight: 700;
+        }
+        .love-text .highlight {
+            color: #cc3355;
+            font-weight: 700;
+            background: linear-gradient(to right, #ff8899, #ff4466);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* ===== BERUANG ===== */
+        .bear-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 24px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        .bear {
+            font-size: 4.5rem;
+            position: relative;
+            display: inline-block;
+            animation: bounceBear 1.2s ease-in-out infinite;
+            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.15));
+        }
+        .bear.white {
+            animation-delay: 0s;
+        }
+        .bear.black {
+            animation-delay: 0.6s;
+        }
+        @keyframes bounceBear {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-12px) scale(1.04); }
+        }
+        .bear .cheek {
+            position: absolute;
+            width: 18px;
+            height: 12px;
+            background: radial-gradient(circle, #ff88aa, #ff5577);
+            border-radius: 50%;
+            bottom: 18px;
+            opacity: 0.8;
+            filter: blur(2px);
+        }
+        .bear .cheek.left {
+            left: 2px;
+        }
+        .bear .cheek.right {
+            right: 2px;
+        }
+
+        /* ===== TULISAN PENTING ===== */
+        .important-text {
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.8rem;
+            color: #cc1144;
+            text-shadow: 0 0 30px rgba(200, 0, 50, 0.2);
+            margin: 16px 0 8px;
+            border-top: 2px dashed #ff8899;
+            padding-top: 16px;
+        }
+        .important-text small {
+            font-size: 1rem;
+            display: block;
+            color: #884466;
+            margin-top: 4px;
+            font-family: 'Quicksand', sans-serif;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 480px) {
+            h1 { font-size: 2rem; }
+            h2 { font-size: 1.6rem; }
+            .love-text { font-size: 1rem; }
+            .bear { font-size: 3.5rem; }
+            .important-text { font-size: 1.4rem; }
+            .card { padding: 24px 16px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== JANTUNG BERJATUHAN ===== -->
+    <div class="hearts-container" id="heartsContainer"></div>
+
+    <!-- ===== MUSIK SEDIH (AUTOPLAY) ===== -->
+    <audio id="bg-music" autoplay loop>
+        <source src="https://files.catbox.moe/hiehyd.mp4" type="audio/mp4" />
+        <source src="https://files.catbox.moe/hiehyd.mp4" type="video/mp4" />
+    </audio>
+
+    <!-- ========================================================= -->
+    <!-- HALAMAN 1 — INPUT NAMA PACAR -->
+    <!-- ========================================================= -->
+    <div class="page active" id="page1">
+        <div class="card">
+            <h1>💔 Untuk Kamu</h1>
+            <div class="sub">dari seseorang yang masih berharap</div>
+            <div class="bear-container">
+                <div class="bear white">🧸<span class="cheek left"></span><span class="cheek right"></span></div>
+                <div class="bear black">🧸<span class="cheek left"></span><span class="cheek right"></span></div>
+            </div>
+            <p style="color:#884466; margin-bottom:16px; font-size:0.95rem;">
+                Sebelum kita mulai,<br />siapa nama dia yang sangat berarti untukmu?
+            </p>
+            <input type="text" id="namaPacar" placeholder="Tulis nama dia di sini..." />
+            <button class="btn-primary" id="btnMasuk">💕 MASUK</button>
+            <p style="margin-top:16px; font-size:0.8rem; color:#aa8899;">✦ ketik namanya dengan penuh cinta ✦</p>
+        </div>
+    </div>
+
+    <!-- ========================================================= -->
+    <!-- HALAMAN 2 — KATA-KATA 1 -->
+    <!-- ========================================================= -->
+    <div class="page" id="page2">
+        <div class="card">
+            <h2>🌹 Aku Tahu...</h2>
+            <div class="love-text" id="text1">
+                <p>Aku tahu aku pernah <strong>salah</strong>.</p>
+                <p>Aku tahu kata-kataku dulu <strong>menyakitkan</strong>.</p>
+                <p>Aku tahu aku sering <strong>egois</strong> dan tidak cukup menghargai <strong>kehadiranmu</strong>.</p>
+                <p>Tapi di setiap malam yang sunyi, <span class="highlight">namamu</span> selalu jadi doa terakhirku.</p>
+                <p>Aku rindu senyummu, rindu tawamu, rindu cara kamu memandangku seperti aku adalah <strong>satu-satunya</strong>.</p>
+                <p>Dan di sini, aku hanya bisa berharap...</p>
+            </div>
+            <button class="btn-primary" id="btnLanjut2">💕 Lanjutkan...</button>
+        </div>
+    </div>
+
+    <!-- ========================================================= -->
+    <!-- HALAMAN 3 — KATA-KATA 2 -->
+    <!-- ========================================================= -->
+    <div class="page" id="page3">
+        <div class="card">
+            <h2>🌙 Tanpa Kamu...</h2>
+            <div class="love-text" id="text2">
+                <p>Tanpa kamu, <strong>aku hampa</strong>.</p>
+                <p>Seperti langit tanpa bintang, seperti laut tanpa ombak.</p>
+                <p>Setiap pagi yang kujalani terasa <strong>hambar</strong>, karena tidak ada <span class="highlight">"pagi"</span> yang kau sapa.</p>
+                <p>Setiap malam yang kutiduri terasa <strong>sepi</strong>, karena tidak ada <span class="highlight">"selamat malam"</span> darimu.</p>
+                <p>Aku sadar, <strong>kamu adalah rumah</strong> yang selama ini aku cari.</p>
+                <p>Dan sekarang, rumah itu terasa <strong>jauh</strong>...</p>
+                <p>Tapi aku tidak akan berhenti <strong>menunggu</strong>.</p>
+                <p>Karena <span class="highlight">kamu</span> adalah satu-satunya alasan aku masih <strong>bertahan</strong>.</p>
+            </div>
+            <button class="btn-primary" id="btnLanjut3">💕 Lanjutkan...</button>
+        </div>
+    </div>
+
+    <!-- ========================================================= -->
+    <!-- HALAMAN 4 — KATA-KATA 3 + PERMINTAAN MAAF -->
+    <!-- ========================================================= -->
+    <div class="page" id="page4">
+        <div class="card">
+            <h2>💔 Maafin Aku...</h2>
+            <div class="bear-container">
+                <div class="bear white">🧸<span class="cheek left"></span><span class="cheek right"></span></div>
+                <div class="bear black">🧸<span class="cheek left"></span><span class="cheek right"></span></div>
+            </div>
+            <div class="important-text">
+                maafin aku ya<br />aku <span style="color:#cc1144;">Kaisar</span>
+                <small>sungguh sangat sedih jika kamu pergi lagi 😭</small>
+            </div>
+            <div class="love-text" id="text3">
+                <p>Aku tidak pernah menyangka bahwa <strong>kehilanganmu</strong> akan sebesar ini.</p>
+                <p>Setiap detik yang berlalu, aku selalu bertanya pada langit, <em>"Apakah masih ada kesempatan untukku?"</em></p>
+                <p>Aku tidak meminta <strong>segala-galanya</strong>.</p>
+                <p>Aku hanya meminta <span class="highlight">satu kesempatan</span> lagi.</p>
+                <p>Kesempatan untuk <strong>memperbaiki</strong> semua yang telah rusak.</p>
+                <p>Kesempatan untuk <strong>membuktikan</strong> bahwa aku bisa menjadi lebih baik.</p>
+                <p>Kesempatan untuk <strong>mencintaimu</strong> dengan cara yang benar.</p>
+                <p>Karena <span class="highlight">kamu</span> bukan hanya cinta pertamaku.</p>
+                <p>Kamu adalah <strong>cinta terakhirku</strong>.</p>
+                <p style="margin-top:20px; font-size:1.1rem; font-weight:600; color:#cc1144;">
+                    🌹 Aku mencintaimu. Selalu. Dan selamanya. 🌹
+                </p>
+            </div>
+            <button class="btn-primary" id="btnUlang">🔄 Baca Lagi</button>
+        </div>
+    </div>
+
+    <script>
+        // =========================================================
+        // 1. GENERATE HATI BERJATUHAN
+        // =========================================================
+        const heartsContainer = document.getElementById('heartsContainer');
+        const heartSymbols = ['❤️', '💕', '💖', '💗', '💓', '♥️', '💘', '💝'];
+        for (let i = 0; i < 35; i++) {
+            const heart = document.createElement('div');
+            heart.className = 'heart';
+            heart.textContent = heartSymbols[Math.floor(Math.random() * heartSymbols.length)];
+            heart.style.left = Math.random() * 100 + '%';
+            heart.style.fontSize = (1.2 + Math.random() * 2.2) + 'rem';
+            heart.style.animationDuration = (8 + Math.random() * 16) + 's';
+            heart.style.animationDelay = (Math.random() * 12) + 's';
+            heartsContainer.appendChild(heart);
+        }
+
+        // =========================================================
+        // 2. ELEMEN
+        // =========================================================
+        const page1 = document.getElementById('page1');
+        const page2 = document.getElementById('page2');
+        const page3 = document.getElementById('page3');
+        const page4 = document.getElementById('page4');
+
+        const namaInput = document.getElementById('namaPacar');
+        const btnMasuk = document.getElementById('btnMasuk');
+        const btnLanjut2 = document.getElementById('btnLanjut2');
+        const btnLanjut3 = document.getElementById('btnLanjut3');
+        const btnUlang = document.getElementById('btnUlang');
+
+        const text1 = document.getElementById('text1');
+        const text2 = document.getElementById('text2');
+        const text3 = document.getElementById('text3');
+
+        const audio = document.getElementById('bg-music');
+
+        // =========================================================
+        // 3. FUNGSI PINDAH HALAMAN
+        // =========================================================
+        function showPage(page) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            page.classList.add('active');
+        }
+
+        // =========================================================
+        // 4. ISI NAMA PACAR KE SEMUA HALAMAN
+        // =========================================================
+        function setNama(nama) {
+            if (!nama || nama.trim() === '') return;
+            const name = nama.trim();
+            // Halaman 2
+            text1.innerHTML = text1.innerHTML.replace(/<span class="highlight">([^<]*)<\/span>/g, (match, p1) => {
+                if (p1 === 'namamu') return `<span class="highlight">${name}</span>`;
+                return match;
+            });
+            // Halaman 3
+            text2.innerHTML = text2.innerHTML.replace(/<span class="highlight">([^<]*)<\/span>/g, (match, p1) => {
+                if (p1 === 'kamu') return `<span class="highlight">${name}</span>`;
+                return match;
+            });
+            // Halaman 4
+            text3.innerHTML = text3.innerHTML.replace(/<span class="highlight">([^<]*)<\/span>/g, (match, p1) => {
+                if (p1 === 'kamu') return `<span class="highlight">${name}</span>`;
+                return match;
+            });
+        }
+
+        // =========================================================
+        // 5. EVENT
+        // =========================================================
+        btnMasuk.addEventListener('click', function() {
+            const nama = namaInput.value.trim();
+            if (!nama) {
+                alert('💕 Tulis nama dia dulu ya... biar surat ini terasa lebih nyata.');
+                return;
+            }
+            setNama(nama);
+            // Putar musik (kalau belum jalan)
+            audio.play().catch(() => {});
+            showPage(page2);
+        });
+
+        btnLanjut2.addEventListener('click', function() {
+            showPage(page3);
+        });
+
+        btnLanjut3.addEventListener('click', function() {
+            showPage(page4);
+        });
+
+        btnUlang.addEventListener('click', function() {
+            showPage(page1);
+            namaInput.value = '';
+            audio.pause();
+            audio.currentTime = 0;
+        });
+
+        // =========================================================
+        // 6. AUTOPLAY MUSIK (jika browser mengizinkan)
+        // =========================================================
+        document.addEventListener('click', function() {
+            audio.play().catch(() => {});
+        }, { once: true });
+
+        // =========================================================
+        // 7. INIT
+        // =========================================================
+        console.log('💔 Untuk Kamu — Dari Kaisar 💔');
+        console.log('❤️ Semoga dia kembali...');
+    </script>
+</body>
+</html>
